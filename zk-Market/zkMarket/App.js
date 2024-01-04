@@ -44,7 +44,8 @@ function App() {
                         fontFamily: 'NanumSquareOTF_ac',
                         fontWeight: '700',
                         marginBottom: 0
-                  }
+                  },
+                    headerShown:false
                 })
 }>
                 <Tab.Screen name="Home" component={Home}/>
