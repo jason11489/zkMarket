@@ -3,20 +3,40 @@ import { Image, StyleSheet } from 'react-native';
 
 styles = StyleSheet.create({
     Home: {
-        width: 18.14,
-        height: 18.26
+        width: 24,
+        height: 25,
+        position: 'absolute',
+        top: 22
+    },
+    rectangle: {
+        width: 10,
+        height: 10,
+        backgroundColor: "red",
+        top: 22
     },
     Search: {
-        width: 17.15,
-        height: 17.15
+        width: 19.15,
+        height: 19.15,
+        position: 'absolute',
+        top: 25
     },
     Sell: {
-        width: 16.12,
-        height: 18.14
+        width: 24.18,
+        height: 24.18,
+        position: 'absolute',
+        top: 22
     },
     Library: {
-        width: 18.89,
-        height: 18.89
+        width: 25.19,
+        height: 25.19,
+        position: 'absolute',
+        top: 22
+    },
+    rectangle: {
+        width: 60.46,
+        height: 4.03,
+        background: '#0055FF',
+        borderRadius: 2.02
     }
 });
 

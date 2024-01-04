@@ -6,7 +6,6 @@ import * as React from 'react';
 // import { useEffect } from 'react'; import SplashScreen from
 // 'react-native-splash-screen';
 
-import TabLabel from './src/Component/tabLabel';
 import TabBarIcon from './src/Component/tabscreen';
 import Home from './src/Screens/Home';
 import Library from './src/Screens/Library';
@@ -35,12 +34,20 @@ function App() {
                         height: '100%',
                         position: 'relative'
                     },
-
-                    tabBarLabelStyle: ({focused}) => TabLabel(focused, route.name),
-                })}>
-                <Tab.Screen
-                    name="Home"
-                    component={Home}/>
+                    tabBarStyle: {
+                        height: 95.7
+                    },
+                    tabBarActiveTintColor: "#0055FF",
+                    inactiveTintColor: "#232323",
+                    tabBarLabelStyle: {
+                        fontSize: 12.09,
+                        fontFamily: 'NanumSquareOTF_ac',
+                        fontWeight: '700',
+                        marginBottom: 0
+                  }
+                })
+}>
+                <Tab.Screen name="Home" component={Home}/>
                 <Tab.Screen name="Search" component={Search}/>
                 <Tab.Screen name="Sell" component={Sell}/>
                 <Tab.Screen name="Library" component={Library}/>
