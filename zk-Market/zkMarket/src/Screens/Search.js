@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function Login() {
+function Search() {
     return (
         <View>
-            <Text>Login!</Text>
+            <Text>Search!</Text>
         </View>
     );
 }
 
-export default Login;
+export default Search;
