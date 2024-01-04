@@ -32,7 +32,7 @@ function App() {
                     tabBarIconStyle: {
                         width: '50%',
                         height: '100%',
-                        position: 'relative'
+                        position: 'absolute'
                     },
                     tabBarStyle: {
                         height: 95.7
@@ -43,7 +43,8 @@ function App() {
                         fontSize: 12.09,
                         fontFamily: 'NanumSquareOTF_ac',
                         fontWeight: '700',
-                        marginBottom: 0
+                      marginBottom: 0,
+                        position : 'absolute'
                   },
                     headerShown:false
                 })
