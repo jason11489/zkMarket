@@ -43,10 +43,10 @@ function App() {
                         fontSize: 12.09,
                         fontFamily: 'NanumSquareOTF_ac',
                         fontWeight: '700',
-                      marginBottom: 0,
-                        position : 'absolute'
-                  },
-                    headerShown:false
+                        marginBottom: 0,
+                        position: 'absolute'
+                    },
+                    headerShown: false
                 })
 }>
                 <Tab.Screen name="Home" component={Home}/>

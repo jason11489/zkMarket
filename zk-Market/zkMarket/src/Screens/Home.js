@@ -5,7 +5,12 @@ import GradientText from "../CSS/gradient_text";
 
 function Home({navigation}) {
     return (
-        <ScrollView>
+        <View style={home_styles.scrollViewContainer}>
+        <ScrollView
+            style={{
+                backgroundColor: 'white',
+                }}
+            >
             <ImageBackground
                 source={require('../image/Background.png')}
                 style={home_styles.backgroundImage}></ImageBackground>
@@ -43,11 +48,25 @@ function Home({navigation}) {
             </View>
             {/* <Text style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</Text> */}
             <Text style={home_styles.bestseller_text}>Bestsellers</Text>
-            <View style={home_styles.bar_2} />
-            <View style={home_styles.bar} />
+            <View style={home_styles.bar_2}/>
+            <View style={home_styles.bar}/>
             <Text style={home_styles.slider_page_num}>1/3</Text>
-            <Image style={home_styles.slider_triangle} source={require('../image/Polygon.png')} />
+            <Image
+                style={home_styles.slider_triangle}
+                source={require('../image/Polygon.png')}/>
+            <Image style={home_styles.Best_seller} source={require('../image/test.png')}/>
+            <Image
+                style={home_styles.Keyword_img}
+                source={require('../image/Keywords_for_you.png')}/>
+                {/* <Text style={{ height: 500 }}>dfd</Text>
+                <Text style={{height: 500}}>dfd</Text>
+                <Text style={{height: 500}}>dfd</Text>
+                <Text style={{height: 500}}>dfd</Text>
+                <Text style={{height: 500}}>dfd</Text> */}
+                <View style={{borderColor:'white', height:2000}}></View>
+                
         </ScrollView>
+        </View>
         // <View style={styles.container}>     <ImageBackground
         // source={require('../image/Background.png')} style={styles.backgroundImage}>
         // <Button title="Go to Login" onPress={() => navigation.navigate("Login")}/>
