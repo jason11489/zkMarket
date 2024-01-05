@@ -38,37 +38,15 @@ function Home({navigation}) {
                 style={home_styles.bookcover_4}/>
 
             <Text style={home_styles.text_6}>“Maybe we are all fools, {"\n"}one way or another.”</Text>
-            {/* <View style={home_styles.text_7}>
-                <LinearGradientText
-                    colors={['white', 'transparent']}
-                    text="2019: Undercover of darkness,
-                    Kate flees London for ramshackle
-                    Weyward Cottage, inherited from a
-                    great aunt she barely remembers.
-                    With its tumbling ivy and
-                    overgrown garden, the cottage is
-                    worlds away from the abusive
-                    partner who tormented Kate. But
-                    she begins to suspect that her great
-                    aunt had a secret. One that lurks in
-                    the bones of the cottage,"
-                    start={{
-                        x: 0,
-                        y: 0
-                    }}
-                    textStyle={{
-                        fontSize: 12
-                    }}
-                    textProps={{
-                        allowFontScaling: true
-                    }}/>
-            </View> */
-            }
             <View style={home_styles.gradient_box}>
                 <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
             </View>
             {/* <Text style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</Text> */}
             <Text style={home_styles.bestseller_text}>Bestsellers</Text>
+            <View style={home_styles.bar_2} />
+            <View style={home_styles.bar} />
+            <Text style={home_styles.slider_page_num}>1/3</Text>
+            <Image style={home_styles.slider_triangle} source={require('../image/Polygon.png')} />
         </ScrollView>
         // <View style={styles.container}>     <ImageBackground
         // source={require('../image/Background.png')} style={styles.backgroundImage}>

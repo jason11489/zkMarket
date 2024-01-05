@@ -11,6 +11,10 @@ export const home_styles = StyleSheet.create({
         backdropFilter: 'blur(3px)',
         position: 'absolute'
     },
+    slider: {
+        height: 607,
+        slideCount: 4
+    },
     shopping: {
         width: 24,
         height: 24,
@@ -177,8 +181,41 @@ export const home_styles = StyleSheet.create({
     },
     gradient_box: {
         flex: 1,
-        position:'absolute',
+        position: 'absolute',
         top: 463,
-        right: 155,
+        right: 155
+    },
+    bar: {
+        width: 111,
+        height: 4,
+        backgroundColor: '#387BFF',
+        borderRadius: 2,
+        left: 27,
+        top: 579,
+        position: 'absolute'
+    },
+    bar_2: {
+        width: 278,
+        height: 4,
+        backgroundColor: '#F8FAFF',
+        borderRadius: 2,
+        position: 'absolute',
+        left: 27,
+        top: 579
+    },
+    slider_page_num: {
+        color: '#F8FAFF',
+        fontSize: 14,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '700',
+        lineHeight: 19.60,
+        left: 317,
+        top: 571
+    }, slider_triangle: {
+        width: 13,
+        height: 13,
+        left: 350,
+        top: 574,
+        position:'absolute',
     }
 })

@@ -7751,7 +7751,7 @@ prompts@^2.0.1, prompts@^2.3.2, prompts@^2.4.2:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.7.2, prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -7946,6 +7946,18 @@ react-native-text-gradient@^0.1.7:
   version "0.1.7"
   resolved "https://registry.npmjs.org/react-native-text-gradient/-/react-native-text-gradient-0.1.7.tgz"
   integrity sha512-QuEwW8TMKBNI5ejmDFu3/SDJh5CIzOi5eL1xNzq8yBEwU5wHaloBxhQ9K0zc16GPkr3KgSUDyU4olQtiYje4mw==
+
+react-native-view-slider@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/react-native-view-slider/-/react-native-view-slider-1.1.1.tgz"
+  integrity sha512-T2242jl17cTnYHKaFK0w1SQe7OA386l5IfNNDqK5o0yPWuZWlFLv1qRMAqfsZ9lPSf4hWeO+vvrS/XP1A9ABRA==
+
+react-native-web-swiper@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.npmjs.org/react-native-web-swiper/-/react-native-web-swiper-2.2.4.tgz"
+  integrity sha512-Lq6fgCuVhEzxgWJU5t+wWhCoOfd0jfQ1Qdwyww/Kln4McPXFKQ6MaSuUHltnFOKYHej97R7avPchn+QB1wIFQg==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native@*, react-native@>=0.57, react-native@>=0.57.0, react-native@0.73.0:
   version "0.73.0"
