@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { home_styles } from "../CSS/Home_style";
+import GradientText from "../CSS/gradient_text";
 
 function Home({navigation}) {
     return (
@@ -25,17 +26,16 @@ function Home({navigation}) {
             <Image source={require('../image/star_fill.png')} style={home_styles.star_2}/>
             <Image source={require('../image/star_fill.png')} style={home_styles.star_3}/>
             <Image source={require('../image/star_fill.png')} style={home_styles.star_4}/>
-            <Image source={require('../image/star_half.png')} style={home_styles.star_5} />
-                        <Image
+            <Image source={require('../image/star_half.png')} style={home_styles.star_5}/>
+            <Image
                 source={require('../image/bookcover_05.png')}
                 style={home_styles.bookcover_5}/>
             <Image
                 source={require('../image/bookcover_03.png')}
-                style={home_styles.bookcover_3} />
+                style={home_styles.bookcover_3}/>
             <Image
                 source={require('../image/bookcover_04.png')}
-                style={home_styles.bookcover_4} />
-
+                style={home_styles.bookcover_4}/>
 
             <Text style={home_styles.text_6}>“Maybe we are all fools, {"\n"}one way or another.”</Text>
             {/* <View style={home_styles.text_7}>
@@ -62,8 +62,12 @@ function Home({navigation}) {
                     textProps={{
                         allowFontScaling: true
                     }}/>
-            </View> */}
-            <Text style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</Text>
+            </View> */
+            }
+            <View style={home_styles.gradient_box}>
+                <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
+            </View>
+            {/* <Text style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</Text> */}
             <Text style={home_styles.bestseller_text}>Bestsellers</Text>
         </ScrollView>
         // <View style={styles.container}>     <ImageBackground

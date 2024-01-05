@@ -172,21 +172,13 @@ export const home_styles = StyleSheet.create({
     },
     text_7: {
         textAlign: 'right',
-        color: '#666666',
-        fontSize: 12,
-        fontFamily: 'Noto Serif',
-        fontWeight: '300',
-        position: 'absolute',
-        top: 467,
-        right: 155,
+        fontSize: 11,
         // backgroundColor: lineargradient()
     },
     gradient_box: {
-        width: 217,
-        height: 117,
-        right: 148,
-        top: 467,
-        position: 'absolute',
-        background: 'linear-gradient(182deg, #B7B7B7 0%, rgba(0, 0, 0, 0) 86%)'
+        flex: 1,
+        position:'absolute',
+        top: 463,
+        right: 155,
     }
 })
