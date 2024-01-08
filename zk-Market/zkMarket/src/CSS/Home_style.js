@@ -232,10 +232,22 @@ export const home_styles = StyleSheet.create({
         top: 633,
     },
     Keyword_img: {
-        position: 'absolute',
+        // position: 'absolute',
+        width: 400,
+        height: 600,
+        left: -2,
+        top: 964.13,
+    },
+    Times_Best_sellers: {
         width: 400,
         height: 300,
-        left: 5,
-        top: 964.13,
+        left: -8,
+        top: 1000,
+    },
+    Award_winners: {
+        width: 400,
+        height: 300,
+        left: -2,
+        top: 1021,
     }
 })
