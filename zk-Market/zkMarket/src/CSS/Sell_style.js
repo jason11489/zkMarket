@@ -50,7 +50,7 @@ export const Sell_style = StyleSheet.create({
         alignItems: 'center',
         display: 'inline-flex',
         left: 17,
-        top : 450
+        top: 450
     },
     button_style: {
         textAlign: 'center',
@@ -58,7 +58,7 @@ export const Sell_style = StyleSheet.create({
         fontSize: 18.14,
         fontFamily: 'Pretendard',
         fontWeight: '700',
-        lineHeight: 19.65,
+        lineHeight: 19.65
     },
     gif_img: {
         flex: 1,
@@ -69,5 +69,21 @@ export const Sell_style = StyleSheet.create({
         backdropFilter: 'blur(3px)',
         position: 'absolute',
         top: 90
+    },
+    slide_bar: {
+        backgroundColor: '#E6E9EE',
+        borderRadius: 2,
+        width: 74,
+        height: 4,
+        left: 108,
+        top: 8
+    },
+    slide_bar_2: {
+        backgroundColor: '#6397FF',
+        borderRadius: 2,
+        left: 35,
+        top: 8,
+        width: 37,
+        height:4,
     }
 })

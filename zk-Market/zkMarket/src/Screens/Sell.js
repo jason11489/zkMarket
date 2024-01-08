@@ -15,17 +15,19 @@ function Sell({navigation}) {
         <SafeAreaView style={Sell_style.container}>
             <ImageBackground
                 source={require('../image/sell/sell_back.png')}
-                style={Sell_style.background} />
+                style={Sell_style.background}/>
             <ImageBackground
                 source={require('../image/sell/Sell_img.gif')}
-                style={Sell_style.gif_img}
-            />
+                style={Sell_style.gif_img}/>
             <View style={Sell_style.first_line}>
                 <TouchableOpacity onPress={() => navigation.navigate("Home")}>
                     <Image
                         style={Sell_style.back}
                         source={require('../image/sell/arrow_back_ios.png')}/>
                 </TouchableOpacity>
+                <View style={Sell_style.slide_bar}/>
+                <View style={Sell_style.slide_bar_2}/>
+
             </View>
             <View style={Sell_style.des_sell}>
                 <Text style={Sell_style.des_text}>
@@ -37,7 +39,8 @@ function Sell({navigation}) {
             </View>
             {/* <View style={Sell_style.gif_img}>
                 <Image source={require('../image/sell/Sell_img.gif')}/>
-            </View> */}
+            </View> */
+            }
             <View style={Sell_style.publish_book}>
                 <TouchableOpacity
                     title="Publishing my book"
