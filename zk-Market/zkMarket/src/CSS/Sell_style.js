@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export const Sell_style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     background: {
         flex: 1,

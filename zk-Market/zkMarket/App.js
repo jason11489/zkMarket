@@ -35,7 +35,9 @@ function App() {
                         position: 'absolute'
                     },
                     tabBarStyle: {
-                        height: 95.7
+                        height: 95.7,
+                        shadowOpacity: 0.18,
+                        shadowRadius: 7
                     },
                     tabBarActiveTintColor: "#0055FF",
                     inactiveTintColor: "#232323",

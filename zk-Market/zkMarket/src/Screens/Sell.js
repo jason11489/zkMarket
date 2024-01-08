@@ -27,7 +27,6 @@ function Sell({navigation}) {
                 </TouchableOpacity>
                 <View style={Sell_style.slide_bar}/>
                 <View style={Sell_style.slide_bar_2}/>
-
             </View>
             <View style={Sell_style.des_sell}>
                 <Text style={Sell_style.des_text}>
@@ -37,10 +36,6 @@ function Sell({navigation}) {
                     It takes about 20 minutes to register{"\n"}for book publication.
                 </Text>
             </View>
-            {/* <View style={Sell_style.gif_img}>
-                <Image source={require('../image/sell/Sell_img.gif')}/>
-            </View> */
-            }
             <View style={Sell_style.publish_book}>
                 <TouchableOpacity
                     title="Publishing my book"
