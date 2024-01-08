@@ -15,7 +15,11 @@ function Sell({navigation}) {
         <SafeAreaView style={Sell_style.container}>
             <ImageBackground
                 source={require('../image/sell/sell_back.png')}
-                style={Sell_style.background}/>
+                style={Sell_style.background} />
+            <ImageBackground
+                source={require('../image/sell/Sell_img.gif')}
+                style={Sell_style.gif_img}
+            />
             <View style={Sell_style.first_line}>
                 <TouchableOpacity onPress={() => navigation.navigate("Home")}>
                     <Image

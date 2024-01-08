@@ -50,7 +50,7 @@ export const Sell_style = StyleSheet.create({
         alignItems: 'center',
         display: 'inline-flex',
         left: 17,
-        top : 80
+        top : 450
     },
     button_style: {
         textAlign: 'center',
@@ -61,7 +61,13 @@ export const Sell_style = StyleSheet.create({
         lineHeight: 19.65,
     },
     gif_img: {
-        top: -180,
-        width:100
+        flex: 1,
+        // left:8,
+        width: 400,
+        height: '90%',
+        backgroundColor: 'transparent',
+        backdropFilter: 'blur(3px)',
+        position: 'absolute',
+        top: 90
     }
 })
