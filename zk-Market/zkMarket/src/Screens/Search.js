@@ -33,13 +33,13 @@ function Search() {
                     <TextInput
                         style={Search_stytle.Search_bar}
                         placeholder="Search for what you want"
-                        placeholderTextColor='#909398'
+                        placeholderTextColor = '#909398'
                         onChangeText={(text) => {
                             settext(text)
                         }}/>
                 </View>
                 <View style={Search_stytle.last_line}>
-                    <Image style={Search_stytle.img} source={require('../image/search_img.png')}/>
+                <Image style={Search_stytle.img} source={require('../image/search_img.png')} />
                 </View>
             </ScrollView>
         </SafeAreaView>
