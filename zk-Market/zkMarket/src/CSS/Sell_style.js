@@ -1,9 +1,16 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+let screenWidth = Dimensions
+    .get('window')
+    .width;
+let screenHeight = Dimensions
+    .get('window')
+    .height;
 
 export const Sell_style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     background: {
         flex: 1,
@@ -50,7 +57,7 @@ export const Sell_style = StyleSheet.create({
         alignItems: 'center',
         display: 'inline-flex',
         left: 17,
-        top: 450
+        top: 510
     },
     button_style: {
         textAlign: 'center',
@@ -68,7 +75,7 @@ export const Sell_style = StyleSheet.create({
         backgroundColor: 'transparent',
         backdropFilter: 'blur(3px)',
         position: 'absolute',
-        top: 90
+        left: -10
     },
     slide_bar: {
         backgroundColor: '#E6E9EE',
@@ -84,6 +91,31 @@ export const Sell_style = StyleSheet.create({
         left: 35,
         top: 8,
         width: 37,
-        height:4,
+        height: 4
+    },
+    first_view: {
+        flex: 1,
+        width: screenWidth,
+        height: screenHeight
+    },
+    second_view: {
+        flex: 1,
+        width: screenWidth,
+        height: screenHeight
+    },
+    library_text: {
+        width: 67,
+        height: 24,
+        left: 162,
+        top : 28,
+        color: '#232323',
+        fontSize: 20,
+        fontFamily: 'Pretendard',
+        fontWeight: '500',
+        letterSpacing: 0.16,
+    },
+    tab_style: {
+        // top : 58,
+        
     }
 })
