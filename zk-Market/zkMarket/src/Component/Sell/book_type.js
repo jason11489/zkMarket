@@ -3,11 +3,11 @@ import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native"
 
 import { Publish_style } from "../../CSS/Publish_style";
 
-function Book_type({navigation}) {
+function Book_type({navigation : { navigate },route}) {
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
-                <TouchableOpacity onPress={() => navigation.navigate("Basic_information")}>
+                <TouchableOpacity onPress={() => navigate("Basic_information")}>
                     <Image
                         style={Publish_style.back}
                         source={require('../../image/sell/arrow_back_ios.png')}/>

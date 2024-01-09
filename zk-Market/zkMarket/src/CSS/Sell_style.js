@@ -49,14 +49,15 @@ export const Sell_style = StyleSheet.create({
         top: 10
     },
     publish_book: {
-        width: 361,
-        height: 53,
-        backgroundColor: '#387BFF',
-        borderRadius: 6.05,
+        // width: 361,
+        // height: 53,
+        // backgroundColor: '#387BFF',
+        // // backgroundColor:'transparent',
+        // borderRadius: 6.05,
         justifyContent: 'center',
         alignItems: 'center',
         display: 'inline-flex',
-        left: 17,
+        // left: 17,
         top: 510
     },
     button_style: {
@@ -65,7 +66,8 @@ export const Sell_style = StyleSheet.create({
         fontSize: 18.14,
         fontFamily: 'Pretendard',
         fontWeight: '700',
-        lineHeight: 19.65
+        lineHeight: 19.65,
+        top : 15
     },
     gif_img: {
         flex: 1,

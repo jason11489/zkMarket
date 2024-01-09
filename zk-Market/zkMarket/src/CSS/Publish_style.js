@@ -65,7 +65,7 @@ export const Publish_style = StyleSheet.create({
         borderRadius: 2,
         width: 54,
         height: 4,
-        left: -272
+        left: -272,
     },
     slide_bar_2: {
         backgroundColor: '#6397FF',
@@ -96,15 +96,20 @@ export const Publish_style = StyleSheet.create({
         left: -272
     },
     next_button: {
-        width: 361,
-        height: 53,
-        backgroundColor: '#387BFF',
-        borderRadius: 6.05,
+        // width: 361,
+        // height: 53,
+        // backgroundColor: '#387BFF',
+        // borderRadius: 6.05,
         justifyContent: 'center',
         alignItems: 'center',
         display: 'inline-flex',
-        left: 17,
         top: 510
+    },
+    Touchable: {
+        width: 361,
+        height: 53,
+        backgroundColor: '#387BFF',
+        borderRadius: 6.05
     },
     button_style: {
         textAlign: 'center',
@@ -112,7 +117,8 @@ export const Publish_style = StyleSheet.create({
         fontSize: 18.14,
         fontFamily: 'Pretendard',
         fontWeight: '700',
-        lineHeight: 19.65
+        lineHeight: 19.65,
+        top:15
     },
     page_num: {
         color: '#6D6F75',

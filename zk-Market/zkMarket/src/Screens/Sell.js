@@ -11,10 +11,8 @@ import {
 
 import { Sell_style } from "../CSS/Sell_style";
 
-
 function Sell({navigation}) {
 
-    
     return (
         <SafeAreaView style={Sell_style.container}>
             <View style={Sell_style.first_line}>
@@ -26,7 +24,10 @@ function Sell({navigation}) {
                 <View style={Sell_style.slide_bar}/>
                 <View style={Sell_style.slide_bar_2}/>
             </View>
-            <ScrollView horizontal={true} showsHorizontalScrollIndicator={true} pagingEnabled>
+            <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={true}
+                pagingEnabled="pagingEnabled">
                 <View style={Sell_style.first_view}>
                     <ImageBackground
                         source={require('../image/sell/sell_back.png')}
@@ -45,6 +46,13 @@ function Sell({navigation}) {
                     <View style={Sell_style.publish_book}>
                         <TouchableOpacity
                             title="Publishing my book"
+                            style={{
+                                width: 361,
+                                height: 53,
+                                backgroundColor: '#387BFF',
+                                borderRadius: 6.05,
+                            }}
+                            backgroundColor='red'
                             onPress={() => navigation.navigate("Basic_information")}>
                             <Text style={Sell_style.button_style}>Publishing my book
                             </Text>
