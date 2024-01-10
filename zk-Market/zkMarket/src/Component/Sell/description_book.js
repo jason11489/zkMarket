@@ -106,7 +106,7 @@ function Description_book({navigation: {
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"
-                    onPress={() => console.log(route.params)}
+                    onPress={() => navigate("Book_price",route.params)}
                     style={Publish_style.Touchable}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>
