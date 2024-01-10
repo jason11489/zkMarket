@@ -160,7 +160,7 @@ function Book_type({navigation: {
                     }}/>
             </View>
             <View style={{
-                    height: 240
+                    height: 230
                 }}/>
 
             <View style={Publish_style.next_button}>

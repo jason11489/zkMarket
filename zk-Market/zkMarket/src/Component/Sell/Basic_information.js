@@ -183,6 +183,8 @@ function Basic_information({navigation}) {
                     }}/>
             </View>
 
+            <View style={{height:100}} />
+
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"

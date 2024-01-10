@@ -20,27 +20,28 @@ const styles = StyleSheet.create({
         top: 40,
         left: 37,
         height: 100
-    },second_text: {
+    },
+    second_text: {
         color: '#232323',
         fontSize: 16,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
         letterSpacing: 0.16,
         // lineHeight: 37,
-        top: 55,
+        top: 35,
         left: 38,
         width: 278,
         height: 25
     },
     input_box: {
-        width: 318,
+        width: 328,
         height: 52,
         backgroundColor: '#F8FAFF',
         borderRadius: 8,
         overflow: 'hidden',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        top: 60,
+        top: 40,
         left: 38,
         paddingTop: 14,
         paddingBottom: 14,
@@ -82,7 +83,7 @@ function Book_price({navigation: {
 
             <Text style={styles.first_text}>Please enter{"\n"}
                 the price of the book</Text>
-                        <Text style={styles.second_text}>Price</Text>
+            <Text style={styles.second_text}>Price</Text>
 
             <TextInput
                 style={styles.input_box}
@@ -90,13 +91,18 @@ function Book_price({navigation: {
                 placeholderTextColor='#909398'
                 onChangeText={(text) => {
                     route.params.price = text
-                }}/>
+                }} />
             
+            <Image style={{width:370,height:160,left:19,top : 100}} source={require('../../image/sell/price.png')}/>
+            
+            <View style={{
+                    height: 115
+                }}/>
 
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"
-                    onPress={() => navigate("Upload_book")}
+                    onPress={() => navigate("Upload_book",route.params)}
                     style={Publish_style.Touchable}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>

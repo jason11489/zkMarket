@@ -103,6 +103,10 @@ function Description_book({navigation: {
                 </TouchableOpacity>
             </View>
 
+            <View style={{
+                    height: 300
+                }}/>
+
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"
