@@ -77,7 +77,7 @@ function Upload_book({navigation: {
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"
-                    onPress={() => navigation.navigate("Upload_book")}style={Publish_style.Touchable}>
+                    onPress={() => navigation.navigate("Upload_book")}style={Publish_style.Touchable} >
                     <Text style={Publish_style.button_style}>Next
                     </Text>
                 </TouchableOpacity>

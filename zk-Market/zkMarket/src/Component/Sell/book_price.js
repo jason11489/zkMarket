@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
     Image,
     SafeAreaView,
@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
+import AwesomeAlert from 'react-native-awesome-alerts';
 import { Publish_style } from "../../CSS/Publish_style";
 
 const styles = StyleSheet.create({
@@ -52,12 +53,79 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         letterSpacing: 0.16,
         fontWeight: 900
+    },
+    alert_button: {
+        width: 290,
+        height: 53,
+        backgroundColor: '#387BFF',
+        borderRadius: 6.05
+    },
+    alert_button_text: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 18.14,
+        fontFamily: 'Pretendard',
+        fontWeight: '700',
+        lineHeight: 19.65,
+        top: 10
+    },
+    alert_title: {
+        color: '#232323',
+        fontSize: 24,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '600',
+        lineHeight: 29.76,
+        width: 180,
+        textAlign: 'center',
+        top: -20,
+        left:25
+    }, alert_msg: {
+        color: '#6D6F75',
+        fontSize: 18,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '600',
+        lineHeight: 25.20,
+        left:10
+    }, alert_total: {
+        color: '#232323',
+        fontSize: 18,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '800',
+        lineHeight: 25.20,
+    },
+    dollor: {
+        textAlign: 'right',
+        color: 'black',
+        fontSize: 18,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '500',
+        lineHeight: 25.20,
+        right:-80
+    },
+    dollor_2: {
+        textAlign: 'right',
+        color: 'black',
+        fontSize: 18,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '500',
+        lineHeight: 25.20,
+        left:190
+    }, dollor_total: {
+        textAlign: 'right',
+        color: '#387BFF',
+        fontSize: 24,
+        fontFamily: 'Noto Serif',
+        fontWeight: '700',
+        textTransform: 'uppercase',
+        left:105
     }
 })
 
 function Book_price({navigation: {
         navigate
     }, route}) {
+
+    const [showAlert, setShowAlert] = useState(false);
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
@@ -91,23 +159,76 @@ function Book_price({navigation: {
                 placeholderTextColor='#909398'
                 onChangeText={(text) => {
                     route.params.price = text
-                }} />
-            
-            <Image style={{width:370,height:160,left:19,top : 100}} source={require('../../image/sell/price.png')}/>
-            
+                }}/>
+
+            <Image
+                style={{
+                    width: 370,
+                    height: 160,
+                    left: 19,
+                    top: 100
+                }}
+                source={require('../../image/sell/price.png')}/>
+
             <View style={{
                     height: 115
                 }}/>
 
             <View style={Publish_style.next_button}>
-                <TouchableOpacity
-                    title="Next"
-                    onPress={() => navigate("Upload_book",route.params)}
-                    style={Publish_style.Touchable}>
+                <TouchableOpacity title="Next"
+                    // onPress={() => navigate("Upload_book",route.params)}
+                    onPress={() => setShowAlert(!showAlert)} style={Publish_style.Touchable}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>
                 </TouchableOpacity>
             </View>
+            <AwesomeAlert
+                show={showAlert}
+                contentStyle={{height:300}}
+                title={
+                    <View >
+                        <Image
+                    style={{
+                        left:100,
+                        width: 26.6,
+                                height: 30,
+                        top:-30
+                    }}
+                    source={require('../../image/sell/coin.png')}/>
+                <Text style={styles.alert_title}>Your Final Price is as follows</Text>
+            </View>}
+                // title="Your Final Price is as follows"
+                message={<View>
+                    <View style={{flexDirection: 'row',top:10}}>
+                        <Text style={styles.alert_msg}>
+                        Measured price
+                        </Text>
+                        <Text style={styles.dollor}>$ {route.params.price}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row',top:20 }}>
+                        <Text style={styles.alert_msg}>
+                        Fee
+                        </Text>
+                        <Text style={styles.dollor_2}>$ 1.99</Text>
+                    </View>
+                    <View style={{backgroundColor: '#C7C8CC', border: '#C7C8CC',width:267,height:1,top:30,left:5}} />
+                    <View style={{ flexDirection: 'row',top:50,left:10 }}>
+                        <Text style={styles.alert_total}>
+                        Subtotal
+                        </Text>
+                        <Text style={styles.dollor_total}>$ {Number(route.params.price) + 1.99}</Text>
+                    </View>
+                </View>}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                confirmText="Confirm"
+                confirmButtonColor="#DD6B55"
+                confirmButtonStyle={styles.alert_button}
+                confirmButtonTextStyle={styles.alert_button_text}
+                onConfirmPressed={() => {
+                    setShowAlert(false)
+                }}/>
         </SafeAreaView>
     );
 }
