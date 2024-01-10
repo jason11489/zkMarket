@@ -103,7 +103,7 @@ export const Publish_style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'inline-flex',
-        top: 510
+        top: 170
     },
     Touchable: {
         width: 361,
