@@ -93,7 +93,7 @@ function Book_type({navigation: {
                 <Text style={Publish_style.first_line_text_2}>
                     Basic_information
                 </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Sell_2")}>
+                <TouchableOpacity onPress={() => navigate("Sell_2")}>
                     <Image
                         style={Publish_style.x_back_2}
                         source={require('../../image/sell/X.png')}/>

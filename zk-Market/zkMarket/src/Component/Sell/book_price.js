@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         width: 180,
         textAlign: 'center',
         top: -20,
-        left:25
+        left:45
     }, alert_msg: {
         color: '#6D6F75',
         fontSize: 18,
@@ -126,6 +126,7 @@ function Book_price({navigation: {
     }, route}) {
 
     const [showAlert, setShowAlert] = useState(false);
+    const [price, setprice] = useState();
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
@@ -157,10 +158,7 @@ function Book_price({navigation: {
                 style={styles.input_box}
                 placeholder="Enter the price of book"
                 placeholderTextColor='#909398'
-                onChangeText={(text) => {
-                    route.params.price = text
-                }}/>
-
+                onChangeText={(text) => setprice(text)}/>
             <Image
                 style={{
                     width: 370,
@@ -185,25 +183,32 @@ function Book_price({navigation: {
             <AwesomeAlert
                 show={showAlert}
                 contentStyle={{height:300}}
-                title={
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showConfirmButton={true}
+                confirmText="Confirm"
+                confirmButtonColor="#DD6B55"
+                confirmButtonStyle={styles.alert_button}
+                confirmButtonTextStyle={styles.alert_button_text}
+                customView={
+                    <View>
                     <View >
                         <Image
                     style={{
-                        left:100,
+                        left:120,
                         width: 26.6,
                                 height: 30,
                         top:-30
                     }}
                     source={require('../../image/sell/coin.png')}/>
                 <Text style={styles.alert_title}>Your Final Price is as follows</Text>
-            </View>}
-                // title="Your Final Price is as follows"
-                message={<View>
+            </View>
+                    <View>
                     <View style={{flexDirection: 'row',top:10}}>
                         <Text style={styles.alert_msg}>
                         Measured price
                         </Text>
-                        <Text style={styles.dollor}>$ {route.params.price}</Text>
+                        <Text style={styles.dollor}>$ {price}</Text>
                     </View>
                     <View style={{ flexDirection: 'row',top:20 }}>
                         <Text style={styles.alert_msg}>
@@ -216,18 +221,17 @@ function Book_price({navigation: {
                         <Text style={styles.alert_total}>
                         Subtotal
                         </Text>
-                        <Text style={styles.dollor_total}>$ {Number(route.params.price) + 1.99}</Text>
+                        <Text style={styles.dollor_total}>$ {Number(price) + 1.99}</Text>
                     </View>
-                </View>}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showConfirmButton={true}
-                confirmText="Confirm"
-                confirmButtonColor="#DD6B55"
-                confirmButtonStyle={styles.alert_button}
-                confirmButtonTextStyle={styles.alert_button_text}
+                        </View>
+                        </View>
+                }
                 onConfirmPressed={() => {
                     setShowAlert(false)
+                    if (price) {
+                        route.params.price = Number(price)+1.99
+                    }
+                    navigate("Upload_book", route.params)
                 }}/>
         </SafeAreaView>
     );

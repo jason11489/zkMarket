@@ -13,14 +13,12 @@ import { useCallback } from "react";
 import DocumentPicker, { types } from 'react-native-document-picker';
 import { Publish_style } from "../../CSS/Publish_style";
 
-
 const styles = StyleSheet.create({
     first_text: {
         color: '#232323',
         fontSize: 24,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '600',
-        // lineHeight: 35,
         top: 40,
         left: 37,
         height: 100
@@ -51,20 +49,30 @@ const styles = StyleSheet.create({
         top: 16
     }
 })
+function file(fileResponse) {
+    console.log(fileResponse[0].name)
+    return (<Text style={styles.upload_text}>{fileResponse[0].name}</Text>)
+}
 
 function Description_book({navigation: {
         navigate
     }, route}) {
     const [fileResponse, setFileResponse] = useState([]);
+    const [showView1, setShowView1] = useState(false);
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({presentationStyle: 'fullScreen',type:[types.pdf]});
+            const response = await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+                type: [types.pdf]
+            });
             setFileResponse(response);
+            setShowView1(true);
         } catch (err) {
             console.warn(err);
         }
     }, []);
+
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
@@ -76,7 +84,7 @@ function Description_book({navigation: {
                 <Text style={Publish_style.first_line_text_2}>
                     Basic_information
                 </Text>
-                <TouchableOpacity onPress={() => navigation.navigate("Sell_2")}>
+                <TouchableOpacity onPress={() => navigate("Sell_2")}>
                     <Image
                         style={Publish_style.x_back_2}
                         source={require('../../image/sell/X.png')}/>
@@ -99,7 +107,22 @@ function Description_book({navigation: {
                     <Image
                         style={styles.upload_img}
                         source={require('../../image/sell/upload.png')}/>
-                    <Text style={styles.upload_text}>Upload the file (PDF / Word )</Text>
+                    <View>
+                        {
+                            showView1
+                                ? (
+                                    <View>
+                                        {file(fileResponse)}
+                                    </View>
+                                )
+                                : (
+                                    <View>
+                                        <Text style={styles.upload_text}>Upload the file (PDF / Word )</Text>
+                                    </View>
+                                )
+                        }
+
+                    </View>
                 </TouchableOpacity>
             </View>
 
@@ -110,7 +133,12 @@ function Description_book({navigation: {
             <View style={Publish_style.next_button}>
                 <TouchableOpacity
                     title="Next"
-                    onPress={() => navigate("Book_price",route.params)}
+                    onPress={() => {
+                        if (fileResponse) {
+                            route.params.description_pdf = fileResponse
+                        }
+                        navigate("Book_price", route.params)
+                    }}
                     style={Publish_style.Touchable}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>

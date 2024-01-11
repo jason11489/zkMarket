@@ -960,6 +960,10 @@ PODS:
     - React-debug
   - react-native-document-picker (9.1.0):
     - React-Core
+  - react-native-image-picker (7.1.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - react-native-linear-gradient-text (1.2.8):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1226,6 +1230,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-linear-gradient-text (from `../node_modules/react-native-linear-gradient-text`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1338,6 +1343,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-linear-gradient-text:
     :path: "../node_modules/react-native-linear-gradient-text"
   react-native-pager-view:
@@ -1446,6 +1453,7 @@ SPEC CHECKSUMS:
   React-logger: 008caec0d6a587abc1e71be21bfac5ba1662fe6a
   React-Mapbuffer: 58fe558faf52ecde6705376700f848d0293d1cef
   react-native-document-picker: b4f4a23b73f864ce17965b284c0757648993805b
+  react-native-image-picker: 6c51359eca7a7df9f07e297218c25696eb9da976
   react-native-linear-gradient-text: c2c4265b8de7edd56f5b0f254563ef13cc76cfbd
   react-native-pager-view: d81ab2060b9caf57ca8c3a0d57467ff407cdb825
   react-native-safe-area-context: 0ee144a6170530ccc37a0fd9388e28d06f516a89
