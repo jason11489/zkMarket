@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import {
+    Alert,
     Image,
     SafeAreaView,
     StyleSheet,
@@ -7,9 +8,11 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
-import DocumentPicker, { types } from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Publish_style } from "../../CSS/Publish_style";
+
+import { handlePublish } from "../../http/deeplink/register";
 
 styles = StyleSheet.create({
     first_text: {
@@ -94,11 +97,13 @@ function Upload_book({navigation: {
     const handleDocumentSelection = useCallback(async () => {
         try {
             const response = await DocumentPicker.pick({
+                copyTo : 'cachesDirectory',
                 presentationStyle: 'fullScreen',
-                type: [types.pdf]
             });
-            setFileResponse(response);
-            setShowView1(true);
+            await setFileResponse(response);
+            await setShowView1(true);
+            console.log(response);
+            route.params.book_uri = response[0].uri;
         } catch (err) {
             console.warn(err);
         }
@@ -111,12 +116,16 @@ function Upload_book({navigation: {
         console.log(pick_img["assets"]);
         setShowView1_image(true);
         setImageResponse(pick_img["assets"]);
+        const localUri = pick_img.assets[0].uri;
+        const uriPath = localUri.split("//").pop();
+        const imageName = localUri.split("/").pop();
+        route.params.cover_img = localUri;
     })
 
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
-                <TouchableOpacity onPress={() => navigate("Book_price")}>
+                <TouchableOpacity onPress={() => navigate("Book_price",route.params)}>
                     <Image
                         style={Publish_style.back}
                         source={require('../../image/sell/arrow_back_ios.png')}/>
@@ -238,7 +247,7 @@ function Upload_book({navigation: {
                                             <Image
                                                 style={styles.upload_img}
                                                 source={require('../../image/sell/upload.png')}/>
-                                            <Text style={styles.upload_text}>Upload the PDF file</Text>
+                                            <Text style={styles.upload_text}>Upload the txt file</Text>
                                         </View>
                                     </View>
 
@@ -253,8 +262,11 @@ function Upload_book({navigation: {
                     style={Publish_style.Touchable}
                     title="Next"
                     onPress={() => {
-                        route.params.cover_img = response;
-                        route.params.book_pdf = fileResponse;
+                        try{
+                            handlePublish(route.params);
+                        } catch (err) {
+                            Alert.alert(err)
+                        }
                         console.log(route.params)
                     }}>
                     <Text style={Publish_style.button_style}>Next

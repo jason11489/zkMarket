@@ -105,10 +105,10 @@ function Basic_information({navigation}) {
         page_num:null,
         book_type_1: null,
         book_type_2: null,
-        description_pdf: null,
+        description: null,
         price: null,
         cover_img: null,
-        book_pdf: null
+        book_uri: null
     }
 
     return (

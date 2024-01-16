@@ -7,10 +7,11 @@ import {
     TouchableOpacity,
     View
 } from "react-native";
+import RNFS from 'react-native-fs';
 
 import { useCallback } from "react";
 
-import DocumentPicker, { types } from 'react-native-document-picker';
+import DocumentPicker from 'react-native-document-picker';
 import { Publish_style } from "../../CSS/Publish_style";
 
 const styles = StyleSheet.create({
@@ -50,8 +51,19 @@ const styles = StyleSheet.create({
     }
 })
 function file(fileResponse) {
-    console.log(fileResponse[0].name)
-    return (<Text style={styles.upload_text}>{fileResponse[0].name}</Text>)
+    console.log(fileResponse)
+    console.log(fileResponse.name)
+    return (<Text style={styles.upload_text}>{fileResponse.name}</Text>)
+}
+
+const readtxtFile = async (filePath) => {
+    try {
+        const info = await RNFS.readFile(filePath, 'ascii')
+        console.log(info)
+        return info
+    } catch (error) {
+        console.error('Error reading file:', error);
+    }
 }
 
 function Description_book({navigation: {
@@ -62,12 +74,15 @@ function Description_book({navigation: {
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({
+            const response = await DocumentPicker.pickSingle({
+                // mode : 'open',
+                copyTo : 'cachesDirectory',
                 presentationStyle: 'fullScreen',
-                type: [types.pdf]
             });
-            setFileResponse(response);
-            setShowView1(true);
+            await setFileResponse(response);
+            await setShowView1(true);
+            console.log(fileResponse)
+            route.params.description = await RNFS.readFile(response.uri,'utf8');
         } catch (err) {
             console.warn(err);
         }
@@ -134,10 +149,9 @@ function Description_book({navigation: {
                 <TouchableOpacity
                     title="Next"
                     onPress={() => {
-                        if (fileResponse) {
-                            route.params.description_pdf = fileResponse
-                        }
+                        console.log("route check", route.params)
                         navigate("Book_price", route.params)
+                        // console.log(readtxtFile(route.params.description_pdf[0].fileCopyUri))
                     }}
                     style={Publish_style.Touchable}>
                     <Text style={Publish_style.button_style}>Next
