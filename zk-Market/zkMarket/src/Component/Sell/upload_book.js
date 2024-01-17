@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import {
-    Alert,
     Image,
     SafeAreaView,
     StyleSheet,
@@ -9,9 +8,9 @@ import {
     View
 } from "react-native";
 import DocumentPicker from 'react-native-document-picker';
+import RNFS from 'react-native-fs';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Publish_style } from "../../CSS/Publish_style";
-
 import { handlePublish } from "../../http/deeplink/register";
 
 styles = StyleSheet.create({
@@ -96,14 +95,18 @@ function Upload_book({navigation: {
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pick({
+            const response = await DocumentPicker.pickSingle({
                 copyTo : 'cachesDirectory',
                 presentationStyle: 'fullScreen',
             });
             await setFileResponse(response);
             await setShowView1(true);
-            console.log(response);
-            route.params.book_uri = response[0].uri;
+            console.log("first tiger ",response);
+            route.params.book_uri = response.fileCopyUri;
+
+            var t = await RNFS.readFile(route.params.book_uri, 'utf8');
+            console.log(t);
+            
         } catch (err) {
             console.warn(err);
         }
@@ -262,12 +265,9 @@ function Upload_book({navigation: {
                     style={Publish_style.Touchable}
                     title="Next"
                     onPress={() => {
-                        try{
-                            handlePublish(route.params);
-                        } catch (err) {
-                            Alert.alert(err)
-                        }
-                        console.log(route.params)
+                        console.log(route.params);
+                        handlePublish(route.params);
+                        navigate("Complete", route.params);
                     }}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>

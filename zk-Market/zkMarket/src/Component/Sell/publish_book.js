@@ -5,6 +5,7 @@ import Sell from "../../Screens/Sell";
 import Basic_information from "./Basic_information";
 import Book_price from "./book_price";
 import Book_type from "./book_type";
+import Complete from "./complete";
 import Description_book from "./description_book";
 import Upload_book from "./upload_book";
 
@@ -24,6 +25,7 @@ function PublishStackScreen() {
             <Publish.Screen name="Book_type" component={Book_type} />
             <Publish.Screen name="Description_book" component={Description_book} />
             <Publish.Screen name="Upload_book" component={Upload_book} />
+            <Publish.Screen name="Complete" component={Complete}/>
         </Publish.Navigator>
     );
 };
