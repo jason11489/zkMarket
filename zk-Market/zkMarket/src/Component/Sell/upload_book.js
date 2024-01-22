@@ -13,6 +13,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { Publish_style } from "../../CSS/Publish_style";
 import { handlePublish } from "../../http/deeplink/register";
 
+
 styles = StyleSheet.create({
     first_text: {
         color: '#232323',
@@ -103,9 +104,10 @@ function Upload_book({navigation: {
             await setShowView1(true);
             console.log("first tiger ",response);
             route.params.book_uri = response.fileCopyUri;
+            console.log("PDF : ", response);
 
-            var t = await RNFS.readFile(route.params.book_uri, 'utf8');
-            console.log(t);
+            var t = await RNFS.readFile(route.params.book_uri, 'base64');
+            console.log(typeof t);
             
         } catch (err) {
             console.warn(err);
@@ -267,7 +269,7 @@ function Upload_book({navigation: {
                     onPress={() => {
                         console.log(route.params);
                         handlePublish(route.params);
-                        navigate("Complete", route.params);
+                        // navigate("Complete", route.params);
                     }}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>

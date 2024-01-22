@@ -1,20 +1,26 @@
-import React, { useCallback, useState } from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import DocumentPicker, { types } from 'react-native-document-picker';
-import { launchImageLibrary } from 'react-native-image-picker';
+import React from "react";
+import {
+    Image,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import { Publish_style } from "../../CSS/Publish_style";
+
 styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white'
     },
     back_image: {
+        flex:1,
         width: 152,
         height: 742,
         left: 221,
-        backgroundColor: 'white',
-        position: 'absolute',
-        zIndex: 0
+        zIndex: 0,
+        position:'absolute'
     },
     first_text: {
         color: 'black',
@@ -139,86 +145,73 @@ styles = StyleSheet.create({
 function Complete({navigation: {
         navigate
     }, route}) {
-    const [fileResponse, setFileResponse] = useState([]);
-    const [showView1, setShowView1] = useState(false);
-
-    const handleDocumentSelection = useCallback(async () => {
-        try {
-            const response = await DocumentPicker.pick({
-                presentationStyle: 'fullScreen',
-                type: [types.pdf]
-            });
-            setFileResponse(response);
-            setShowView1(true);
-        } catch (err) {
-            console.warn(err);
-        }
-    }, []);
-
-    const [response, setImageResponse] = useState(null);
-    const [showView1_image, setShowView1_image] = useState(false);
-    const image_pick = useCallback(async () => {
-        const pick_img = await launchImageLibrary();
-        console.log(pick_img["assets"]);
-        setShowView1_image(true);
-        setImageResponse(pick_img["assets"]);
-    })
+    console.log("Complete page");
 
     return (
+
         <View style={styles.container}>
-            <Image
-                source={require("../../image/sell/complete_back.png")}
-                resizeMode="cover"
-                style={styles.back_image}/>
-            <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
             <View style={{
-                    flexDirection: 'row'
+                    zIndex: 0
                 }}>
-                <Text style={styles.second_text}>Books are finally registered{"\n"}after
-                </Text>
-                <Text style={styles.tiger_text}>review by the administrator</Text>
+                <ImageBackground
+                    source={require("../../image/sell/complete_back.png")}
+                    style={styles.back_image}></ImageBackground>
             </View>
-
             <View style={{
-                    height: 20
-                }}></View>
-            <View style={{
-                    flexDirection: 'row'
+                    zIndex: 1
                 }}>
-                <Text style={styles.second_text}>Administrator review takes{"\n"}approximately
-                </Text>
-                <Text
+                <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
+                <View
                     style={{
-                        color: '#387BFF',
-                        fontSize: 16,
-                        fontFamily: 'NanumSquareOTF_ac',
-                        fontWeight: '700',
-                        left: -147,
-                        top: 160
-                    }}>2 days to a week</Text>
-            </View>
-
-            <Image
-                style={styles.book_img}
-                source={{
-                    uri: route.params.cover_img
-                }}/>
-            <Text style={styles.author_text}>{route.params.Author}</Text>
-            <Text style={styles.publisher_text}>/ {route.params.Publisher}</Text>
-            <View style={{
-                    height: 180
-                }}></View>
-            <View style={Publish_style.next_button}>
-                <TouchableOpacity
-                    style={Publish_style.Touchable}
-                    title="Confirm"
-                    onPress={() => {
-                        console.log(route.params)
-                        navigate("Sell_2")
+                        flexDirection: 'row'
                     }}>
-                    <Text style={Publish_style.button_style}>Next
+                    <Text style={styles.second_text}>Books are finally registered{"\n"}after
                     </Text>
-                </TouchableOpacity>
+                    <Text style={styles.tiger_text}>review by the administrator</Text>
+                </View>
+
+                <View style={{
+                        height: 20
+                    }}></View>
+                <View
+                    style={{
+                        flexDirection: 'row'
+                    }}>
+                    <Text style={styles.second_text}>Administrator review takes{"\n"}approximately
+                    </Text>
+                    <Text
+                        style={{
+                            color: '#387BFF',
+                            fontSize: 16,
+                            fontFamily: 'NanumSquareOTF_ac',
+                            fontWeight: '700',
+                            left: -147,
+                            top: 160
+                        }}>2 days to a week</Text>
+                </View>
+
+                <Image
+                    style={styles.book_img}
+                    source={{
+                        uri: route.params.cover_img
+                    }}/>
+                <Text style={styles.author_text}>{route.params.Author}</Text>
+                <Text style={styles.publisher_text}>/ {route.params.Publisher}</Text>
+                <View style={{
+                        height: 180
+                    }}></View>
+                <View style={Publish_style.next_button}>
+                    <TouchableOpacity
+                        style={Publish_style.Touchable}
+                        title="Confirm"
+                        onPress={() => {
+                            console.log(route.params)
+                            navigate("Sell_2")
+                        }}>
+                        <Text style={Publish_style.button_style}>Next
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
