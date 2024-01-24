@@ -1,9 +1,49 @@
-import React from "react";
-import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+    FlatList,
+    Image,
+    ImageBackground,
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import { home_styles } from "../CSS/Home_style";
 import GradientText from "../CSS/gradient_text";
+import httpCli from "../http";
 
 function Home({navigation}) {
+
+    const [book_sell_list, setbook_list] = useState();
+
+    useEffect(() => {
+        let res;
+        async function data_() {
+            console.log("useEffect check")
+            res = await httpCli.get('content/list');
+            console.log(Object.keys(res.data[0]))
+            setbook_list(res)
+        }
+        data_();
+    }, []);
+
+    const render_image = ({item}) => (
+        <View style={home_styles.flat_list}>
+            <TouchableOpacity onPress={() => navigation.navigate("Buy_book")}>
+                <Image
+                    style={[home_styles.render_img, home_styles.image_shadow]}
+                    source={{
+                        uri: item.image_data
+                    }}/>
+                <Text style={home_styles.author_style}>{item.author}</Text>
+                <Text style={home_styles.publisher_style}>/ {item.publisher}</Text>
+                <Text style={home_styles.price_style}>${item.fee}
+                </Text>
+            </TouchableOpacity>
+
+        </View>
+    )
+
     return (
         <View style={home_styles.scrollViewContainer}>
             <ScrollView
@@ -46,14 +86,34 @@ function Home({navigation}) {
                     <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
                 </View>
                 {/* <Text style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</Text> */}
+                <View style={{
+                        height: -10
+                    }}/>
                 <Text style={home_styles.bestseller_text}>Bestsellers</Text>
                 <View style={home_styles.bar_2}/>
                 <View style={home_styles.bar}/>
                 <Text style={home_styles.slider_page_num}>1/3</Text>
+
                 <Image
                     style={home_styles.slider_triangle}
                     source={require('../image/Polygon.png')}/>
-                <Image style={home_styles.Best_seller} source={require('../image/test.png')}/>
+                <View style={{
+                        height: 645
+                    }}></View>
+
+                <View>
+                    {
+                        book_sell_list
+                            ? (
+                                <FlatList
+                                    horizontal={true}
+                                    data={book_sell_list.data}
+                                    renderItem={render_image}/>
+                            )
+                            : <Text>wait</Text>
+                    }
+                </View>
+
                 <Image
                     style={home_styles.Keyword_img}
                     source={require('../image/Keywords_for_you.png')}/>
@@ -66,7 +126,7 @@ function Home({navigation}) {
                 <View
                     style={{
                         borderColor: 'white',
-                        height: 1050
+                        height: 50
                     }}></View>
 
             </ScrollView>

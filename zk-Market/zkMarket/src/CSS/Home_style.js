@@ -3,13 +3,13 @@ export const home_styles = StyleSheet.create({
     scrollViewContainer: {
         // flexGrow: 1,
         backgroundColor: 'white',
-        flex: 1,
+        flex: 1
     },
     container: {
-        flex: 1,
+        flex: 1
     },
     backgroundImage: {
-                flex: 1,
+        flex: 1,
         width: '100%',
         height: 607,
         backgroundColor: 'rgba(0, 0, 0, 0.70)',
@@ -164,10 +164,10 @@ export const home_styles = StyleSheet.create({
         color: '#232323',
         fontSize: 24,
         fontFamily: 'NanumSquareOTF_ac',
-        fontWeight: '700',
+        fontWeight: '600',
         position: 'absolute',
         left: 16,
-        top: 633
+        top: 632
     },
     text_6: {
         textAlign: 'right',
@@ -229,25 +229,69 @@ export const home_styles = StyleSheet.create({
         width: 400,
         height: 300,
         left: 5,
-        top: 633,
+        top: 633
     },
     Keyword_img: {
         // position: 'absolute',
         width: 400,
         height: 600,
         left: -2,
-        top: 964.13,
+        top: 10
     },
     Times_Best_sellers: {
         width: 400,
         height: 300,
         left: -8,
-        top: 1000,
+        top: 30
     },
     Award_winners: {
         width: 400,
         height: 300,
         left: -2,
-        top: 1021,
+        top: 41
+    },
+    flat_list: {
+        margin: 13
+    },
+    render_img: {
+        width: 93,
+        height: 139,
+        borderRadius: 5
+    },
+    image_shadow: {
+        shadowColor: 'red',
+        shadowOpacity: 1,
+        shadowRadius: 5,
+        shadowOffset: {
+            height: 10,
+            width: 10
+        }
+    },
+    author_style: {
+        color: '#232323',
+        fontSize: 14,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '600',
+        top: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 93,
+        left: 8
+    },
+    publisher_style: {
+        color: '#909398',
+        fontSize: 12,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '400',
+        top: 3,
+        left: 8
+    },
+    price_style: {
+        color: '#232323',
+        fontSize: 14,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '700',
+        top: 4,
+        left: 8
     }
 })

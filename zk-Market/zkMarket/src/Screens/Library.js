@@ -1,9 +1,8 @@
 import React from "react";
 import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { Library_style } from "../CSS/Library_style";
-import DrawerNavigationApp from "../Component/Library/DrawerNavigationApp";
 
-function Library({navigation}) {
+function Library({navigation : {navigate}}) {
 
     return (
         <SafeAreaView style={Library_style.container}>
@@ -16,7 +15,7 @@ function Library({navigation}) {
                 <Image
                     style={Library_style.card_style}
                     source={require("../image/Library/Card.png")}/>
-                <TouchableOpacity onPress={() => DrawerNavigationApp()}><Image
+                <TouchableOpacity onPress={() => navigate("Library_2")}><Image
                     style={Library_style.menu_style}
                     source={require("../image/Library/menu.png")}/>
                 </TouchableOpacity>

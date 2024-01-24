@@ -94,6 +94,8 @@ function Upload_book({navigation: {
     const [fileResponse, setFileResponse] = useState([]);
     const [showView1, setShowView1] = useState(false);
 
+
+
     const handleDocumentSelection = useCallback(async () => {
         try {
             const response = await DocumentPicker.pickSingle({
@@ -108,23 +110,26 @@ function Upload_book({navigation: {
 
             var t = await RNFS.readFile(route.params.book_uri, 'base64');
             console.log(typeof t);
-            
+            console.log("book data uri : ",route.params.book_uri)
         } catch (err) {
             console.warn(err);
         }
     }, []);
 
+    var cat;
+
     const [response, setImageResponse] = useState(null);
     const [showView1_image, setShowView1_image] = useState(false);
     const image_pick = useCallback(async () => {
-        const pick_img = await launchImageLibrary();
-        console.log(pick_img["assets"]);
+        const pick_img = await launchImageLibrary({ incluedBase64 : true });
+        console.log("check pick_img",pick_img);
         setShowView1_image(true);
-        setImageResponse(pick_img["assets"]);
+        setImageResponse(pick_img.assets[0].uri);
         const localUri = pick_img.assets[0].uri;
-        const uriPath = localUri.split("//").pop();
-        const imageName = localUri.split("/").pop();
         route.params.cover_img = localUri;
+        console.log("image uri : ", localUri);
+        // cat = await RNFS.readFile(localUri, 'base64')
+        // console.log('image data : ',cat)
     })
 
     return (
@@ -204,7 +209,7 @@ function Upload_book({navigation: {
                     </View>
                 </TouchableOpacity>
             </View>
-            <View style={{height:150}} />
+            <View style={{ height: 150 }} />
 
             <Text style={styles.first_text}>Please upload{"\n"}
                 the PDF file of the book</Text>
@@ -252,7 +257,7 @@ function Upload_book({navigation: {
                                             <Image
                                                 style={styles.upload_img}
                                                 source={require('../../image/sell/upload.png')}/>
-                                            <Text style={styles.upload_text}>Upload the txt file</Text>
+                                            <Text style={styles.upload_text}>Upload the PDF file</Text>
                                         </View>
                                     </View>
 

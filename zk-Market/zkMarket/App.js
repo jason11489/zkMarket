@@ -6,13 +6,14 @@ import * as React from 'react';
 // import { useEffect } from 'react'; import SplashScreen from
 // 'react-native-splash-screen';
 
+
 import TabBarIcon from './src/Component/tabscreen';
-import Home from './src/Screens/Home';
-import Library from './src/Screens/Library';
 import Search from './src/Screens/Search';
 
 const Stack = createStackNavigator();
 
+import HomeStackScreen from './src/Component/Home';
+import LibraryStackScreen from './src/Component/Library';
 import PublishStackScreen from './src/Component/Sell/publish_book';
 
 // useEffect(() => {   setImmediate(() => {     SplashScreen.hide();   }, 1000)
@@ -55,10 +56,10 @@ function App() {
                         this.tabBarStyle.display = 'none'
                     }
                 })}>
-                <Tab.Screen name="Home" component={Home}/>
+                <Tab.Screen name="Home" component={HomeStackScreen}/>
                 <Tab.Screen name="Search" component={Search}/>
                 <Tab.Screen name="Sell" component={PublishStackScreen}/>
-                <Tab.Screen name="Library" component={Library}/>
+                <Tab.Screen name="Library" component={LibraryStackScreen}/>
             </Tab.Navigator>
         </NavigationContainer>
 
