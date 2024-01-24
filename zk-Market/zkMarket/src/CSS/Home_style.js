@@ -85,7 +85,7 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'Noto Serif',
         fontWeight: '600',
         position: 'absolute',
-        left: 71,
+        right:145,
         top: 335
     },
     text_5: {
@@ -145,20 +145,26 @@ export const home_styles = StyleSheet.create({
     bookcover_3: {
         borderRadius: 5,
         position: 'absolute',
-        left: 275,
-        top: 150
+        left: 300,
+        top: 170,
+        width: 240,
+        height: 338,
     },
     bookcover_4: {
         borderRadius: 5,
         position: 'absolute',
         left: 269,
-        top: 201
+        top: 201,
+        width: 240,
+        height: 338,
     },
     bookcover_5: {
         borderRadius: 5,
         position: 'absolute',
-        left: 319,
-        top: 121
+        left: 339,
+        top: 141,
+        width: 240,
+        height: 338,
     },
     bestseller_text: {
         color: '#232323',
@@ -176,8 +182,8 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'Noto Serif',
         fontWeight: '500',
         position: 'absolute',
-        top: 413,
-        left: 46
+        top: 423,
+        right:155
     },
     text_7: {
         textAlign: 'right',
@@ -258,6 +264,15 @@ export const home_styles = StyleSheet.create({
         height: 139,
         borderRadius: 5
     },
+    image_shadow_white: {
+        shadowColor: 'white',
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        shadowOffset: {
+            height: 7,
+            width: -7
+        }
+    },
     image_shadow: {
         shadowColor: '#000',
         shadowOpacity: 0.25,
@@ -293,5 +308,28 @@ export const home_styles = StyleSheet.create({
         fontWeight: '700',
         top: 4,
         left: 8
+    },
+    go_to_book_list: {
+        height: 20,
+        width:45,
+        borderRadius: 24,
+        // backgroundColor: 'red',
+        // position: 'absolute',
+        // top: 614,
+        // left: 323,
+        borderColor: '#0055FF',
+        borderWidth: 1,
+        backgroundColor:'transparent'
+    },
+    more_text: {
+        color: '#0055FF',
+        fontSize: 13,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '400',
+        height: 15,
+        width:35,
+        position: 'absolute',
+        top: 1,
+        left: 7
     }
 })
