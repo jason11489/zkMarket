@@ -259,12 +259,12 @@ export const home_styles = StyleSheet.create({
         borderRadius: 5
     },
     image_shadow: {
-        shadowColor: 'red',
-        shadowOpacity: 1,
+        shadowColor: '#000',
+        shadowOpacity: 0.25,
         shadowRadius: 5,
         shadowOffset: {
-            height: 10,
-            width: 10
+            height: 2,
+            width: 0
         }
     },
     author_style: {

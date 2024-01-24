@@ -30,11 +30,13 @@ function Home({navigation}) {
     const render_image = ({item}) => (
         <View style={home_styles.flat_list}>
             <TouchableOpacity onPress={() => navigation.navigate("Buy_book")}>
-                <Image
-                    style={[home_styles.render_img, home_styles.image_shadow]}
-                    source={{
-                        uri: item.image_data
-                    }}/>
+                <View style={home_styles.image_shadow}>
+                    <Image
+                        style={[home_styles.render_img, home_styles.image_shadow]}
+                        source={{
+                            uri: item.image_data
+                        }}/>
+                </View>
                 <Text style={home_styles.author_style}>{item.author}</Text>
                 <Text style={home_styles.publisher_style}>/ {item.publisher}</Text>
                 <Text style={home_styles.price_style}>${item.fee}
