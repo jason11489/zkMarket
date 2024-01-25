@@ -31,7 +31,7 @@ function Home({navigation}) {
 
     const render_image = ({item}) => (
         <View style={home_styles.flat_list}>
-            <TouchableOpacity onPress={() => navigation.navigate("Buy_book")}>
+            <TouchableOpacity onPress={() => navigation.navigate("Buy_book",item)}>
                 <View style={home_styles.image_shadow}>
                     <Image
                         style={[home_styles.render_img, home_styles.image_shadow]}
