@@ -6,7 +6,6 @@ import * as React from 'react';
 // import { useEffect } from 'react'; import SplashScreen from
 // 'react-native-splash-screen';
 
-
 import TabBarIcon from './src/Component/tabscreen';
 import Search from './src/Screens/Search';
 
@@ -27,9 +26,9 @@ function App() {
         <NavigationContainer>
             <Tab.Navigator
                 initialRouteName='Home'
-                screenOptions={({ route }) => ({
+                screenOptions={({route}) => ({
                     tabBarLabel: route.name,
-                    tabBarIcon: ({ focused }) => TabBarIcon(focused, route.name),
+                    tabBarIcon: ({focused}) => TabBarIcon(focused, route.name),
                     tabBarActiveBackgroundColor: '#FFF',
                     tabBarIconStyle: {
                         width: '50%',
@@ -38,12 +37,19 @@ function App() {
                     },
                     tabBarStyle: {
                         height: 95.7,
-                        shadowOpacity: 0.18,
-                        shadowRadius: 7,
-                        display: route.name == "Sell" ? 'none': 'flex'
+                        display: route.name == "Sell"
+                            ? 'none'
+                            : 'flex',
+                        shadowColor: 'gray',
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        shadowOffset: {
+                            height: -4,
+                            width: -4
+                        }
                     },
-                    tabBarActiveTintColor: "#0055FF",
-                    inactiveTintColor: "#232323",
+                    // tabBarActiveTintColor: "#0055FF",
+                    // inactiveTintColor: "#232323",
                     tabBarLabelStyle: {
                         fontSize: 12.09,
                         fontFamily: 'NanumSquareOTF_ac',
@@ -51,13 +57,7 @@ function App() {
                         marginBottom: 0,
                         position: 'absolute'
                     },
-                    headerShown: false,
-                    if(_route = "Sell") {
-                        this.tabBarStyle.display = 'none'
-                    },
-                    // if(_route = "Home_2/Buy_book") {
-                    //     this.tabBarStyle.display = 'none'
-                    // }
+                    headerShown: false
                 })}>
                 <Tab.Screen name="Home" component={HomeStackScreen}/>
                 <Tab.Screen name="Search" component={Search}/>

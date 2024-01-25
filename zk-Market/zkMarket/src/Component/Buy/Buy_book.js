@@ -7,11 +7,13 @@ import { buy_book } from "../../CSS/Buy_style";
 function Buy_book({navigation, route}) {
 
     console.log(Object.keys(route.params))
-
+    let tab_navi;
     useLayoutEffect(() => {
-        const tab_navi = navigation.getParent();
+        tab_navi = navigation.getParent();
         tab_navi.setOptions({
-            tabBarStyle : {display : 'none'}
+            tabBarStyle: {
+                display: 'none'
+            }
         })
         console.log(tab_navi)
     }, [navigation]);
@@ -19,7 +21,22 @@ function Buy_book({navigation, route}) {
     return (
         <SafeAreaView style={buy_book.container}>
             <View style={buy_book.first_line}>
-                <TouchableOpacity onPress={() => navigation.navigate("Home_2")}>
+                <TouchableOpacity
+                    onPress={() => {
+                        tab_navi.setOptions({
+                            tabBarStyle: {
+                                height: 95.7,
+                                shadowColor: 'gray',
+                                shadowOpacity: 0.25,
+                                shadowRadius: 4,
+                                shadowOffset: {
+                                    height: -4,
+                                    width: -4
+                                }
+                            }
+                        })
+                        navigation.navigate("Home_2")
+                    }}>
                     <Image
                         style={buy_book.back}
                         source={require('../../image/sell/arrow_back_ios.png')}/>
@@ -167,6 +184,77 @@ function Buy_book({navigation, route}) {
                     }}></View>
                 <View style={buy_book.keyword_circle}>
                     <Text style={buy_book.keyword_text}>{route.params.book_type_2}</Text>
+                </View>
+            </View>
+
+            <View style={{
+                    height: 50
+                }}></View>
+            <View
+                style={{
+                    shadowColor: 'gray',
+                    shadowOpacity: 0.25,
+                    shadowRadius: 4,
+                    shadowOffset: {
+                        height: -2,
+                        width: -2
+                    }
+                }}>
+                <View
+                    style={{
+                        width: "100%",
+                        height: 100,
+                        backgroundColor: 'white',
+                        borderWidth: 0,
+                        flexDirection: 'row'
+                    }}>
+                    <View
+                        style={{
+                            width: 52,
+                            height: 52,
+                            borderWidth: 1,
+                            borderColor: '#0055FF',
+                            borderRadius: 6,
+                            top: 10,
+                            left: 13
+                        }}>
+                        <Image
+                            style={{
+                                left: 13.5,
+                                top:12
+                            }}
+                            source={require("../../image/Buy/bag_blue.png")}/>
+                    </View>
+                    <View
+                        style={{
+                            // justifyContent: 'center', alignItems: 'center',
+                            display: 'inline-flex'
+                        }}>
+                        <TouchableOpacity
+                            title="Publishing my book"
+                            style={{
+                                width: 302,
+                                height: 53,
+                                backgroundColor: '#0055FF',
+                                borderRadius: 6.05,
+                                top: 10,
+                                left: 20
+                            }}
+                            backgroundColor='red'
+                            onPress={() => console.log("test")}>
+                            <Text
+                                style={{
+                                    textAlign: 'center',
+                                    color: 'white',
+                                    fontSize: 18.14,
+                                    fontFamily: 'Pretendard',
+                                    fontWeight: '700',
+                                    lineHeight: 19.65,
+                                    top: 15
+                                }}>Buy
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
 
             </View>

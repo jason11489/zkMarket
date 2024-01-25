@@ -20,6 +20,19 @@ function Home({navigation}) {
     useEffect(() => {
         let res;
         async function data_() {
+            const tab_navi = navigation.getParent();
+            tab_navi.setOptions({
+                tabBarStyle: {
+                        height: 95.7,
+                        shadowColor: 'gray',
+                        shadowOpacity: 0.25,
+                        shadowRadius: 4,
+                        shadowOffset: {
+                            height: -4,
+                            width: -4
+                        }
+                    }
+            })
             console.log("useEffect check")
             res = await httpCli.get('content/list');
             console.log(res.data[0].image_data)
