@@ -1,11 +1,20 @@
 import { SafeAreaView, Text } from "react-native";
 
+import { React, useLayoutEffect } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { buy_book } from "../../CSS/Buy_style";
 
 function Buy_book({navigation, route}) {
 
     console.log(Object.keys(route.params))
+
+    useLayoutEffect(() => {
+        const tab_navi = navigation.getParent();
+        tab_navi.setOptions({
+            tabBarStyle : {display : 'none'}
+        })
+        console.log(tab_navi)
+    }, [navigation]);
 
     return (
         <SafeAreaView style={buy_book.container}>
@@ -98,7 +107,7 @@ function Buy_book({navigation, route}) {
                             }}
                             source={require("../../image/Buy/paper.png")}/>
                         <Text style={buy_book.info_text}>Print length</Text>
-                        <Text style={buy_book.info_text_2}>{route.params.page_num}</Text>
+                        <Text style={buy_book.info_text_2}>{route.params.page_num}p</Text>
                     </View>
                     <View style={buy_book.line}></View>
                     <View
@@ -153,7 +162,9 @@ function Buy_book({navigation, route}) {
                 <View style={buy_book.keyword_circle}>
                     <Text style={buy_book.keyword_text}>{route.params.book_type_1}</Text>
                 </View>
-                <View style={{width:10}}></View>
+                <View style={{
+                        width: 10
+                    }}></View>
                 <View style={buy_book.keyword_circle}>
                     <Text style={buy_book.keyword_text}>{route.params.book_type_2}</Text>
                 </View>

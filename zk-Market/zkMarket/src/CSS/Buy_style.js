@@ -100,7 +100,6 @@ export const buy_book = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
         lineHeight: 19.60,
-        wordWrap: 'break-word',
         top: 17,
         textAlign: 'center',
         width: "100%",

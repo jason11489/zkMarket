@@ -19,7 +19,7 @@ import PublishStackScreen from './src/Component/Sell/publish_book';
 // useEffect(() => {   setImmediate(() => {     SplashScreen.hide();   }, 1000)
 // })
 
-const Tab = createBottomTabNavigator();
+export const Tab = createBottomTabNavigator();
 
 function App() {
 
@@ -54,7 +54,10 @@ function App() {
                     headerShown: false,
                     if(_route = "Sell") {
                         this.tabBarStyle.display = 'none'
-                    }
+                    },
+                    // if(_route = "Home_2/Buy_book") {
+                    //     this.tabBarStyle.display = 'none'
+                    // }
                 })}>
                 <Tab.Screen name="Home" component={HomeStackScreen}/>
                 <Tab.Screen name="Search" component={Search}/>
