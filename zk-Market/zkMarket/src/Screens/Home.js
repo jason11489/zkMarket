@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from "react";
 import {
     FlatList,
@@ -16,11 +17,10 @@ function Home({navigation}) {
 
     const [book_sell_list, setbook_list] = useState();
     const [isLogin, setIsLogin] = useState(false);
+    let value;
 
     useEffect(() => {
-        if (!isLogin) {
-            navigation.navigate("RegisterUser");
-        }
+        
         let res;
         async function data_() {
             const tab_navi = navigation.getParent();
@@ -40,10 +40,19 @@ function Home({navigation}) {
             res = await httpCli.get('content/list');
             // console.log(res.config.data)
             await setbook_list(res)
-
+            
         }
         data_();
-        // console.log("check response = ",book_sell_list)
+
+        async function check_info() {
+                value = await AsyncStorage.getItem('TASKS');
+            }
+        check_info()
+        console.log(value)
+
+        if (value === undefined) {
+            navigation.navigate("RegisterUser");
+        }
     }, []);
     const render_image = ({item}) => (
         <View style={home_styles.flat_list}>

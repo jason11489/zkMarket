@@ -7,7 +7,8 @@ import {
     View
 } from "react-native";
 
-import { React, useLayoutEffect } from "react";
+import { React } from "react";
+
 import { get_info } from "../../http/deeplink/get_info";
 
 const styles = StyleSheet.create({
@@ -20,10 +21,11 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '600',
-        width: 260,
-        height: 119,
+        width: 300,
+        height: 77,
         left: 27,
-        top: 165
+        top: 165,
+        textAlign:'center'
     },
     back_1: {
         width: 226,
@@ -76,24 +78,14 @@ const styles = StyleSheet.create({
     }
 });
 
-function RegisterUser({navigation}) {
+function RegisterDone({navigation, route}) {
 
-    let tab_navi;
-    useLayoutEffect(() => {
-        tab_navi = navigation.getParent();
-        tab_navi.setOptions({
-            tabBarStyle: {
-                display: 'none'
-            }
-        })
-        console.log(tab_navi)
-    }, [navigation]);
+    console.log(route);
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.text}>Good to see you!{"\n"}
-                Shall we register{"\n"}
-                the card first?</Text>
+            <Text style={styles.text}>Thank you!{"\n"}
+                Enjoy your Reading</Text>
             <View
                 style={{
                     shadowColor: 'gray',
@@ -119,8 +111,8 @@ function RegisterUser({navigation}) {
             </View>
             <TouchableOpacity
                 onPress={() => {
-                    console.log("tiger")
-                    get_info()
+                    console.log("tiger");
+                    get_info();
                 }}>
                 <View>
                     <View style={styles.account_block}>
@@ -138,10 +130,10 @@ function RegisterUser({navigation}) {
                     fontFamily: 'NanumSquareOTF_ac',
                     fontWeight: '400',
                     top: -70,
-                    left: 60
-                }}>You can register your card through zkwallet</Text>
+                    textAlign:'center'
+                }}>Let's start zkMarket</Text>
         </SafeAreaView>
     );
 }
 
-export default RegisterUser;
+export default RegisterDone;

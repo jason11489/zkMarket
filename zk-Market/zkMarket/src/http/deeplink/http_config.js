@@ -1,6 +1,0 @@
-
-
-
-export http_config: {
-    
-};
