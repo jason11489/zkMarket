@@ -9,7 +9,6 @@ import {
 
 import { React } from "react";
 
-import { get_info } from "../../http/deeplink/get_info";
 
 const styles = StyleSheet.create({
     container: {
@@ -23,9 +22,9 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         width: 300,
         height: 77,
-        left: 27,
+        left: 45,
         top: 165,
-        textAlign:'center'
+        textAlign: 'center'
     },
     back_1: {
         width: 226,
@@ -49,32 +48,29 @@ const styles = StyleSheet.create({
     account_block: {
         width: 345,
         height: 214,
-        borderRadius: 13,
-        borderColor: 'gray',
-        backgroundColor: 'transparent',
-        borderWidth: 0.5,
+
         left: 24,
         top: -210
     },
     add: {
         width: 24,
         height: 24,
-        top: 44,
-        left: 161
+        top: -383,
+        left: 184
     },
     add_2: {
-        width: 34,
-        height: 34,
-        top: 73,
-        left: 156
+        width: 17,
+        height: 17,
+        top: -363,
+        left: 187.5
     },
     text_2: {
         color: 'white',
         fontSize: 24,
         fontFamily: 'NanumSquareOTF_ac',
-        fontWeight: '800',
-        left: 102,
-        top: 54
+        fontWeight: '600',
+        textAlign: 'center',
+        top: -370
     }
 });
 
@@ -112,14 +108,35 @@ function RegisterDone({navigation, route}) {
             <TouchableOpacity
                 onPress={() => {
                     console.log("tiger");
-                    get_info();
+                    navigation.navigate("Home_2");
                 }}>
                 <View>
-                    <View style={styles.account_block}>
-                        <Image style={styles.add_2} source={require("../../image/Register/add_2.png")}/>
-                        <Image style={styles.add} source={require("../../image/Register/add.png")}/>
-                        <Text style={styles.text_2}>My accounts</Text>
-                    </View>
+                    <Image
+                        style={styles.account_block}
+                        source={require("../../image/Register/complete_back.png")}/>
+                    <Image
+                        style={styles.add_2}
+                        source={require("../../image/Register/unlock.png")}/>
+                    <Image style={styles.add} source={require("../../image/Register/tiger.png")}/>
+                    <Text style={styles.text_2}>My accounts</Text>
+                    <Text
+                        style={{
+                            color: 'white',
+                            fontSize: 14,
+                            fontFamily: 'NanumSquareOTF_ac',
+                            fontWeight: '400',
+                            top: -365,
+                            textAlign: 'center'
+                        }}>zkMarket's Wallet</Text>
+                    <Text
+                        style={{
+                            color: 'white',
+                            fontSize: 12,
+                            fontFamily: 'NanumSquareOTF_ac',
+                            fontWeight: '700',
+                            textAlign:'center',
+                            top: -355
+                        }}>{route.params.userEOA}</Text>
                 </View>
             </TouchableOpacity>
 
@@ -130,7 +147,7 @@ function RegisterDone({navigation, route}) {
                     fontFamily: 'NanumSquareOTF_ac',
                     fontWeight: '400',
                     top: -70,
-                    textAlign:'center'
+                    textAlign: 'center'
                 }}>Let's start zkMarket</Text>
         </SafeAreaView>
     );
