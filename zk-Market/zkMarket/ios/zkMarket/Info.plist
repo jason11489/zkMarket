@@ -23,16 +23,14 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>KSW_ZKMARKET</string>
+			<string>zkMarketv2</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>KSW_ZKMARKET</string>
+				<string>zkMarketv2</string>
 			</array>
-		</dict>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string></string>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>

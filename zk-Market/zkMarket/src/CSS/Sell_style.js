@@ -57,7 +57,6 @@ export const Sell_style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'inline-flex',
-        // left: 17,
         top: 510
     },
     button_style: {

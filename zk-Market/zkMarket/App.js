@@ -15,15 +15,63 @@ import HomeStackScreen from './src/Component/Home';
 import LibraryStackScreen from './src/Component/Library';
 import PublishStackScreen from './src/Component/Sell/publish_book';
 
-// useEffect(() => {   setImmediate(() => {     SplashScreen.hide();   }, 1000)
-// })
+import { Linking } from 'react-native';
 
 export const Tab = createBottomTabNavigator();
 
 function App() {
+    
+    const config = {
+        screens: {
+            Home: {
+                screens: {
+                    Book_flat: '/book_flat',
+                    Buy_book: '/buy_book'
+                }
+            },
+            Search: '/search',
+            Sell: {
+                screens: {
+                    Basic_information: '/Basic_information',
+                    Book_price: '/Book_price',
+                    Book_type: '/Book_type',
+                    Description_book: '/Description_book',
+                    Upload_book: '/Upload_book',
+                    Complete: '/Complete'
+                }
+            },
+            Library: {
+                screens: {
+                    Library: '/Library'
+                }
+            }
+        }
+    }
+    const linking = {
+        prefixes: ['zkmarketv2://'],
+        async getInitialURL() {
+            const url = await Linking.getInitialURL();
+            // if (url != null) {     return null; }
+            return url;
+        },
+        subscribe(listener) {
+            console.log('linking subscribe to ', listener);
+            const onReceiveURL = (event) => {
+                const {url} = event;
+                console.log('link has url', url, event);
+                return listener(url);
+            };
+            Linking.addEventListener('url', onReceiveURL);
+            return() => {
+                console.log('linking unsubscribe to ', listener);
+                Linking.removeEventListener('url', onReceiveURL);
+            };
+        },
+        config
+    }
 
     return (
-        <NavigationContainer>
+        <NavigationContainer linking={linking}>
             <Tab.Navigator
                 initialRouteName='Home'
                 screenOptions={({route}) => ({
@@ -48,8 +96,7 @@ function App() {
                             width: -4
                         }
                     },
-                    // tabBarActiveTintColor: "#0055FF",
-                    // inactiveTintColor: "#232323",
+                    // tabBarActiveTintColor: "#0055FF", inactiveTintColor: "#232323",
                     tabBarLabelStyle: {
                         fontSize: 12.09,
                         fontFamily: 'NanumSquareOTF_ac',

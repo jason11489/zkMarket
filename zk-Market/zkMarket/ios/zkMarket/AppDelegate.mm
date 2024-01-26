@@ -1,8 +1,9 @@
+#import <React/RCTLinkingManager.h>
+
 #import "AppDelegate.h"
 
-#import <React/RCTLinkingManager.h>
-#import <React/RCTBundleURLProvider.h>
 #import "RNSplashScreen.h"
+#import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
 
@@ -15,7 +16,6 @@
 
   return [super application:application
       didFinishLaunchingWithOptions:launchOptions];
-  [RNSplashScreen show];
 
   return YES;
 }
@@ -34,9 +34,11 @@
 #endif
 }
 - (BOOL)application:(UIApplication *)application
-   openURL:(NSURL *)url
-   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-{
-  return [RCTLinkingManager application:application openURL:url options:options];
+            openURL:(NSURL *)url
+            options:
+                (NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+  return [RCTLinkingManager application:application
+                                openURL:url
+                                options:options];
 }
 @end
