@@ -65,7 +65,7 @@ function App() {
             Linking.addEventListener('url', onReceiveURL);
             return() => {
                 console.log('linking unsubscribe to ', listener);
-                Linking.removeEventListener('url', onReceiveURL);
+                // Linking.removeEventListener('url', onReceiveURL);
             };
         },
         config

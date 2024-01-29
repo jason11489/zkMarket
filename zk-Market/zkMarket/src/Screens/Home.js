@@ -15,12 +15,12 @@ import httpCli from "../http";
 
 function Home({navigation}) {
 
-    const [book_sell_list, setbook_list] = useState();
+    const [book_sell_list, setbook_list] = useState([]);
+    const [VIEW, setVIEW] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     let value;
 
     useEffect(() => {
-        
         let res;
         async function data_() {
             const tab_navi = navigation.getParent();
@@ -36,47 +36,56 @@ function Home({navigation}) {
                         }
                     }
             })
-            console.log("useEffect check")
             res = await httpCli.get('content/list');
-            // console.log(res.config.data)
-            await setbook_list(res)
+            // console.log("check respone of server",res.data[1].title)
+            if (res.data !== false) {
+                setVIEW(true);
+            } else {
+                setVIEW(false);
+            }
+            await setbook_list(res.data[1])
+            // console.log("check book list = ",book_sell_list[0].title)
             
         }
+
         data_();
-
         async function check_info() {
-                value = await AsyncStorage.getItem('TASKS');
+            value = await AsyncStorage.getItem('userEOA');
+            // value = getData('userEOA');
+            if (value === null) {
+                console.log("tiger")
+                navigation.navigate("RegisterUser");
             }
-        check_info()
-        console.log(value)
-
-        if (value === undefined) {
-            navigation.navigate("RegisterUser");
         }
-    }, []);
-    const render_image = ({item}) => (
+        check_info()
+        
+    },[]);
+    
+
+    
+    
+    const render_image = ({ item }) => (
         <View style={home_styles.flat_list}>
-            <TouchableOpacity onPress={() => navigation.navigate("Buy_book",item)}>
+            <TouchableOpacity onPress={() => navigation.navigate("Buy_book", item)}>
                 <View style={home_styles.image_shadow}>
                     <Image
                         style={[home_styles.render_img, home_styles.image_shadow]}
                         source={{
-                            uri: item.image_data
-                        }}/>
+                            uri: `data:image/png;base64,${item.image_data}`
+                        }} />
                 </View>
                 <Text style={home_styles.author_style}>{item.author}</Text>
                 <Text style={home_styles.publisher_style}>/ {item.publisher}</Text>
                 <Text style={home_styles.price_style}>${item.fee}
                 </Text>
             </TouchableOpacity>
-
         </View>
     )
-
+    
     return (
         <View style={home_styles.scrollViewContainer}>
             {
-                book_sell_list
+                VIEW
                     ? (
                         <ScrollView
                             style={{
@@ -95,8 +104,8 @@ function Home({navigation}) {
                             </View>
                             <Text style={home_styles.text_3}>3 mystery novels, {"\n"}
                                 you'll fall in love{"\n"}with on a rainy day</Text>
-                            <Text style={home_styles.text_4}>{book_sell_list.data[0].title}</Text>
-                            <Text style={home_styles.text_5}>/ {book_sell_list.data[0].author}</Text>
+                            <Text style={home_styles.text_4}>{book_sell_list[0].title}</Text>
+                            <Text style={home_styles.text_5}>/ {book_sell_list[0].author}</Text>
                             <Text style={home_styles.rate}>4.6</Text>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_1}/>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_2}/>
@@ -104,21 +113,21 @@ function Home({navigation}) {
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_4}/>
                             <Image source={require('../image/star_half.png')} style={home_styles.star_5} />
                             {/* <Image
-                                source={{uri:book_sell_list.data[0].image_data}}
+                                source={{uri:book_sell_list[0].data[0].image_data}}
                                 style={home_styles.bookcover_5} /> */}
                             <View style={home_styles.image_shadow_white}>
                                 <Image
-                                    source={{uri : book_sell_list.data[0].image_data}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
                                     style={home_styles.bookcover_5}/>
                                 <Image
-                                    source={{uri : book_sell_list.data[0].image_data}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
                                     style={home_styles.bookcover_3}/>
                                 <Image
-                                    source={{uri : book_sell_list.data[0].image_data}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
                                         style={home_styles.bookcover_4} />
                             </View>
 
-                            <Text style={home_styles.text_6}>"{decodeURIComponent(book_sell_list.data[0].description)}"</Text>
+                            <Text style={home_styles.text_6}>"{book_sell_list[0].description}"</Text>
                             <View style={home_styles.gradient_box}>
                                 <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
                             </View>
@@ -151,9 +160,8 @@ function Home({navigation}) {
                             </TouchableOpacity>
                             <FlatList
                                 horizontal={true}
-                                data={book_sell_list.data}
+                                data={book_sell_list}
                                 renderItem={render_image}/>
-
                             <Image
                                 style={home_styles.Keyword_img}
                                 source={require('../image/Keywords_for_you.png')}/>

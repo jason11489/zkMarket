@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useCallback, useState } from "react";
 import {
     Image,
@@ -11,8 +12,7 @@ import DocumentPicker from 'react-native-document-picker';
 import RNFS from 'react-native-fs';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Publish_style } from "../../CSS/Publish_style";
-import { handlePublish } from "../../http/deeplink/register";
-
+import { registerDataQuery } from "../../http";
 
 styles = StyleSheet.create({
     first_text: {
@@ -33,7 +33,8 @@ styles = StyleSheet.create({
         left: 34,
         top: 20,
         flexDirection: 'row'
-    },upload_blue: {
+    },
+    upload_blue: {
         width: 321,
         height: 52,
         backgroundColor: '#F8FAFF',
@@ -42,7 +43,7 @@ styles = StyleSheet.create({
         left: 34,
         top: 20,
         flexDirection: 'row',
-        borderWidth:1.5,
+        borderWidth: 1.5
     },
     upload_text: {
         color: '#C7C8CC',
@@ -95,47 +96,74 @@ function Upload_book({navigation: {
     const [showView1, setShowView1] = useState(false);
 
 
+    console.log(route.params);
+
+    const query_publis = async () => {
+        try {
+            console.log("tiger 1");
+            const userENA = await AsyncStorage.getItem('userENA');
+            const pk_own = await AsyncStorage.getItem('pk_own');
+            const sk_enc = await AsyncStorage.getItem('sk_enc');
+            const pk_enc = await AsyncStorage.getItem('pk_enc');
+            const userEOA = await AsyncStorage.getItem('userEOA');
+
+            console.log("check = ", userENA);
+
+            const res = await registerDataQuery(
+                route.params.book_uri,
+                // 나중에 읽어서 하는걸로 고쳐아함.
+                userENA,
+                pk_own,
+                decodeURIComponent(pk_enc),
+                sk_enc,
+                userEOA,
+                route.params.Title,
+                route.params.description,
+                route.params.Author,
+                route.params.price,
+                route.params.localUrl,
+                route.params.Publisher,
+                route.params.Table_of_contents,
+                route.params.page_num,
+                route.params.book_type_1,
+                route.params.book_type_2
+            )
+        } catch (error) {
+            // console.log(error)
+        }
+    }
 
     const handleDocumentSelection = useCallback(async () => {
         try {
-            const response = await DocumentPicker.pickSingle({
-                copyTo : 'cachesDirectory',
-                presentationStyle: 'fullScreen',
-            });
+            const response = await DocumentPicker.pickSingle(
+                {copyTo: 'cachesDirectory', presentationStyle: 'fullScreen'}
+            );
             await setFileResponse(response);
             await setShowView1(true);
-            console.log("first tiger ",response);
-            route.params.book_uri = response.fileCopyUri;
-            console.log("PDF : ", response);
-
-            var t = await RNFS.readFile(route.params.book_uri, 'base64');
-            console.log(typeof t);
-            console.log("book data uri : ",route.params.book_uri)
+            route.params.book_uri = await RNFS.readFile(response.fileCopyUri, 'base64');
         } catch (err) {
             console.warn(err);
         }
     }, []);
 
-    var cat;
-
     const [response, setImageResponse] = useState(null);
     const [showView1_image, setShowView1_image] = useState(false);
     const image_pick = useCallback(async () => {
-        const pick_img = await launchImageLibrary({ incluedBase64 : true });
-        console.log("check pick_img",pick_img);
+        const pick_img = await launchImageLibrary({incluedBase64: true});
+        console.log("check pick_img", pick_img);
         setShowView1_image(true);
         setImageResponse(pick_img.assets[0].uri);
-        const localUri = pick_img.assets[0].uri;
-        route.params.cover_img = localUri;
-        console.log("image uri : ", localUri);
-        // cat = await RNFS.readFile(localUri, 'base64')
-        // console.log('image data : ',cat)
+        const localUri = pick_img
+            .assets[0]
+            .uri;
+        route.params.localUrl = await RNFS.readFile(localUri, 'base64')
+        console.log(route.params.localUrl)
     })
 
     return (
         <SafeAreaView style={Publish_style.container}>
             <View style={Publish_style.first_line}>
-                <TouchableOpacity onPress={() => navigate("Book_price",route.params)}>
+                <TouchableOpacity onPress={() => navigate("Book_price", route.params)}>
                     <Image
                         style={Publish_style.back}
                         source={require('../../image/sell/arrow_back_ios.png')}/>
@@ -167,7 +195,6 @@ function Upload_book({navigation: {
                     source={require('../../image/sell/blue.png')}/>
                 <Text style={styles.sub_text}>Up to 3 pages (500 kb) can be uploaded.</Text>
             </View>
-
             <View>
                 <TouchableOpacity
                     style={{
@@ -209,8 +236,9 @@ function Upload_book({navigation: {
                     </View>
                 </TouchableOpacity>
             </View>
-            <View style={{ height: 150 }} />
-
+            <View style={{
+                    height: 150
+                }}/>
             <Text style={styles.first_text}>Please upload{"\n"}
                 the PDF file of the book</Text>
             <View
@@ -224,7 +252,6 @@ function Upload_book({navigation: {
                     source={require('../../image/sell/blue.png')}/>
                 <Text style={styles.sub_text}>Up to 100mb can be uploaded.</Text>
             </View>
-
             <View>
                 <TouchableOpacity
                     style={{
@@ -272,9 +299,8 @@ function Upload_book({navigation: {
                     style={Publish_style.Touchable}
                     title="Next"
                     onPress={() => {
-                        console.log(route.params);
-                        handlePublish(route.params);
-                        // navigate("Complete", route.params);
+                        query_publis();
+                        navigate("Complete", route.params);
                     }}>
                     <Text style={Publish_style.button_style}>Next
                     </Text>

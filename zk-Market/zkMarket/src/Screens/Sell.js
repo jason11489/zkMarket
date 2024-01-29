@@ -50,10 +50,12 @@ function Sell({navigation}) {
                                 width: 361,
                                 height: 53,
                                 backgroundColor: '#387BFF',
-                                borderRadius: 6.05,
+                                borderRadius: 6.05
                             }}
                             backgroundColor='red'
-                            onPress={() => navigation.navigate("Basic_information")}>
+                            onPress={() => {
+                                navigation.navigate("Basic_information")
+                            }}>
                             <Text style={Sell_style.button_style}>Publishing my book
                             </Text>
                         </TouchableOpacity>

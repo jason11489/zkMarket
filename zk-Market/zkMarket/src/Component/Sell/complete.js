@@ -52,8 +52,9 @@ styles = StyleSheet.create({
     book_img: {
         width: 160,
         height: 250,
+        alignItems:'center',
         left: 110,
-        top: 230,
+        top: 200,
         zIndex: 1,
         borderRadius: 4.46,
         shadowColor: 'rgba(101.02, 117.92, 151.73, 0.50)',
@@ -70,8 +71,9 @@ styles = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '700',
         letterSpacing: 0.16,
-        left: 143,
-        top: 240
+        // left: 143,
+        top: 210,
+        textAlign:'center'
     },
     publisher_text: {
         color: '#909398',
@@ -79,8 +81,8 @@ styles = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
         letterSpacing: 0.16,
-        left: 143,
-        top: 240
+        textAlign:'center',
+        top: 210
     },
     upload: {
         width: 321,
@@ -145,14 +147,12 @@ styles = StyleSheet.create({
 function Complete({navigation: {
         navigate
     }, route}) {
-    console.log("Complete page");
+    console.log("Complete page",route.params.cover_img);
 
     return (
 
         <View style={styles.container}>
-            <View style={{
-                    zIndex: 0
-                }}>
+            <View >
                 <ImageBackground
                     source={require("../../image/sell/complete_back.png")}
                     style={styles.back_image}></ImageBackground>
@@ -193,7 +193,7 @@ function Complete({navigation: {
                 <Image
                     style={styles.book_img}
                     source={{
-                        uri: route.params.cover_img
+                        uri: `data:image/png;base64,${route.params.localUrl}`
                     }}/>
                 <Text style={styles.author_text}>{route.params.Author}</Text>
                 <Text style={styles.publisher_text}>/ {route.params.Publisher}</Text>

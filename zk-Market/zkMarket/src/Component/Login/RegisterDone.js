@@ -9,6 +9,7 @@ import {
 
 import { React } from "react";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const styles = StyleSheet.create({
     container: {
@@ -76,7 +77,39 @@ const styles = StyleSheet.create({
 
 function RegisterDone({navigation, route}) {
 
-    console.log(route);
+    console.log("check route = ", typeof route.params.userEOA);
+
+    async function setinfo() {
+        await AsyncStorage.setItem("pk_own", route.params.pk_own);
+        await AsyncStorage.setItem("pk_enc", route.params.pk_enc);
+        await AsyncStorage.setItem("sk_enc", route.params.userSk);
+        await AsyncStorage.setItem("userEOA", route.params.userEOA);
+        await AsyncStorage.setItem("userENA", route.params.userENA);
+    }
+    setinfo()
+
+    let value
+    async function check_info() {
+        value = await AsyncStorage.getItem("userEOA");
+    }
+    check_info()
+    console.log("check userEOA = ", value)
+
+    const tabbar_open = () => {
+        const tab_navi = navigation.getParent();
+        tab_navi.setOptions({
+            tabBarStyle: {
+                height: 95.7,
+                shadowColor: 'gray',
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+                shadowOffset: {
+                    height: -4,
+                    width: -4
+                }
+            }
+        })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -108,6 +141,7 @@ function RegisterDone({navigation, route}) {
             <TouchableOpacity
                 onPress={() => {
                     console.log("tiger");
+                    tabbar_open();
                     navigation.navigate("Home_2");
                 }}>
                 <View>
@@ -134,7 +168,7 @@ function RegisterDone({navigation, route}) {
                             fontSize: 12,
                             fontFamily: 'NanumSquareOTF_ac',
                             fontWeight: '700',
-                            textAlign:'center',
+                            textAlign: 'center',
                             top: -355
                         }}>{route.params.userEOA}</Text>
                 </View>

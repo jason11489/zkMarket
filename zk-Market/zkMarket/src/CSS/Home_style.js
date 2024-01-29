@@ -257,7 +257,7 @@ export const home_styles = StyleSheet.create({
         top: 41
     },
     flat_list: {
-        margin: 13
+        margin: 13,
     },
     render_img: {
         width: 93,

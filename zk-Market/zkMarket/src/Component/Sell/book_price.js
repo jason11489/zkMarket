@@ -232,7 +232,7 @@ function Book_price({navigation: {
                         route.params.price = Number(price)+1.99
                     }
                     navigate("Upload_book", route.params)
-                    console.log(route.params)
+                    // console.log(route.params)
                 }}/>
         </SafeAreaView>
     );
