@@ -37,14 +37,9 @@ function Home({navigation}) {
                     }
             })
             res = await httpCli.get('content/list');
-            // console.log("check respone of server",res.data[1].title)
-            if (res.data !== false) {
-                setVIEW(true);
-            } else {
-                setVIEW(false);
-            }
-            await setbook_list(res.data[1])
-            // console.log("check book list = ",book_sell_list[0].title)
+            console.log("check respone of server", res.data[0])
+            // console.log("check respone of 22222",Object.keys(res.data[1][0]))
+            await setbook_list(res.data)
             
         }
 
@@ -85,7 +80,7 @@ function Home({navigation}) {
     return (
         <View style={home_styles.scrollViewContainer}>
             {
-                VIEW
+                book_sell_list[0]
                     ? (
                         <ScrollView
                             style={{
@@ -104,8 +99,8 @@ function Home({navigation}) {
                             </View>
                             <Text style={home_styles.text_3}>3 mystery novels, {"\n"}
                                 you'll fall in love{"\n"}with on a rainy day</Text>
-                            <Text style={home_styles.text_4}>{book_sell_list[0].title}</Text>
-                            <Text style={home_styles.text_5}>/ {book_sell_list[0].author}</Text>
+                            <Text style={home_styles.text_4}>{book_sell_list[1][0].title}</Text>
+                            <Text style={home_styles.text_5}>/ {book_sell_list[1][0].author}</Text>
                             <Text style={home_styles.rate}>4.6</Text>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_1}/>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_2}/>
@@ -113,21 +108,21 @@ function Home({navigation}) {
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_4}/>
                             <Image source={require('../image/star_half.png')} style={home_styles.star_5} />
                             {/* <Image
-                                source={{uri:book_sell_list[0].data[0].image_data}}
+                                source={{uri:book_sell_list[1][0].data[0].image_data}}
                                 style={home_styles.bookcover_5} /> */}
                             <View style={home_styles.image_shadow_white}>
                                 <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
                                     style={home_styles.bookcover_5}/>
                                 <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
                                     style={home_styles.bookcover_3}/>
                                 <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[0].image_data}`}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
                                         style={home_styles.bookcover_4} />
                             </View>
 
-                            <Text style={home_styles.text_6}>"{book_sell_list[0].description}"</Text>
+                            <Text style={home_styles.text_6}>"{book_sell_list[1][0].description}"</Text>
                             <View style={home_styles.gradient_box}>
                                 <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
                             </View>
@@ -152,7 +147,7 @@ function Home({navigation}) {
                                 }}></View>
                             <TouchableOpacity
                                 style={{top: -6,left: 323,height: 20,width:45}}
-                                onPress={() => navigation.navigate("Book_flat")}>
+                                onPress={() => navigation.navigate("Library")}>
                                 <View style={home_styles.go_to_book_list}></View>
                                 <Text style={home_styles.more_text}>
                                     more
@@ -160,7 +155,7 @@ function Home({navigation}) {
                             </TouchableOpacity>
                             <FlatList
                                 horizontal={true}
-                                data={book_sell_list}
+                                data={book_sell_list[1]}
                                 renderItem={render_image}/>
                             <Image
                                 style={home_styles.Keyword_img}
@@ -196,8 +191,8 @@ function Home({navigation}) {
                             </View>
                             <Text style={home_styles.text_3}>3 mystery novels, {"\n"}
                                 you'll fall in love{"\n"}with on a rainy day</Text>
-                            <Text style={home_styles.text_4}>dddd</Text>
-                            <Text style={home_styles.text_5}>/ dddd</Text>
+                            <Text style={home_styles.text_4}>The Last Thing He Told Me</Text>
+                            <Text style={home_styles.text_5}>/ Laura Dave</Text>
                             <Text style={home_styles.rate}>4.6</Text>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_1}/>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_2}/>
@@ -219,7 +214,7 @@ function Home({navigation}) {
                                         style={home_styles.bookcover_4} />
                             </View>
 
-                            <Text style={home_styles.text_6}>"ddddd"</Text>
+                            <Text style={home_styles.text_6}>“Maybe we are all fools,{"\n"}one way or another.”</Text>
                             <View style={home_styles.gradient_box}>
                                 <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
                             </View>

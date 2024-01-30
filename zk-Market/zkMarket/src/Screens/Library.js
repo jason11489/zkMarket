@@ -1,8 +1,48 @@
-import React from "react";
-import { Image, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+    FlatList,
+    Image,
+    SafeAreaView,
+    Text,
+    TouchableOpacity,
+    View
+} from "react-native";
 import { Library_style } from "../CSS/Library_style";
+import httpCli from "../http";
+function Library({navigation: {
+        navigate
+    }}) {
 
-function Library({navigation : {navigate}}) {
+    const [book_sell_list, setbook_list] = useState([]);
+
+    useEffect(() => {
+        let res;
+        async function data_() {
+            res = await httpCli.get('content/list');
+            console.log("check respone of server", res.data[0])
+            // console.log("check respone of 22222",Object.keys(res.data[1][0]))
+            await setbook_list(res.data)
+
+        }
+
+        data_();
+
+    }, []);
+    const render_image = ({item}) => (
+        <View style={Library_style.flat_list}>
+            <TouchableOpacity onPress={() => console.log("check")}>
+                <View style={Library_style.image_shadow}>
+                    <Image
+                        style={[Library_style.render_img, Library_style.image_shadow]}
+                        source={{
+                            uri: `data:image/png;base64,${item.image_data}`
+                        }}/>
+                </View>
+                <Text style={Library_style.author_style}>{item.author}</Text>
+                <Text style={Library_style.publisher_style}>/ {item.publisher}</Text>
+            </TouchableOpacity>
+        </View>
+    )
 
     return (
         <SafeAreaView style={Library_style.container}>
@@ -10,7 +50,7 @@ function Library({navigation : {navigate}}) {
                     flexDirection: 'row'
                 }}>
                 <Text style={Library_style.title_style}>
-                    Library
+                    Bestsellers
                 </Text>
                 <Image
                     style={Library_style.card_style}
@@ -19,8 +59,56 @@ function Library({navigation : {navigate}}) {
                     style={Library_style.menu_style}
                     source={require("../image/Library/menu.png")}/>
                 </TouchableOpacity>
-                
             </View>
+            <View style={{
+                    height: 30
+                }}></View>
+            <View style={Library_style.BestSeller_box}>
+                <View
+                    style={{
+                        flexDirection: 'row'
+                    }}>
+                    <Text
+                        style={{
+                            color: '#232323',
+                            fontSize: 20,
+                            fontFamily: 'NanumSquareOTF_ac',
+                            fontWeight: '700',
+                            lineHeight: 27.70,
+                            left: 16,
+                            top: 10,
+                            width: 186
+                        }}>Bestsellers in Top 5</Text>
+                    <Image
+                        style={{
+                            top: 14,
+                            left: 20,
+                            width: 18,
+                            height: 17
+                        }}
+                        source={require("../image/Library/Star.png")}/>
+                </View>
+                <FlatList horizontal={true} data={book_sell_list[1]} renderItem={render_image}/>
+            </View>
+            <View
+                style={{
+                    width: 393,
+                    height: 48,
+                    borderBottomColor: '#F5F6F9',
+                    borderBottomWidth: 1
+                }}>
+                <Text
+                    style={{
+                        color: '#232323',
+                        fontSize: 16,
+                        fontFamily: 'NanumSquareOTF_ac',
+                        fontWeight: '600',
+                        letterSpacing: 0.16,
+                        textAlign: 'center',
+                        top:12
+                    }}>ALL</Text>
+            </View>
+            <FlatList numColumns={3} data={book_sell_list[1]} renderItem={render_image}/>
         </SafeAreaView>
 
     );

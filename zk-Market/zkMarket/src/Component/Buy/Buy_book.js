@@ -3,6 +3,7 @@ import { SafeAreaView, Text } from "react-native";
 import { React, useLayoutEffect } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { buy_book } from "../../CSS/Buy_style";
+import { gentrade } from "../../http/deeplink/gentrade";
 
 function Buy_book({navigation, route}) {
 
@@ -15,7 +16,6 @@ function Buy_book({navigation, route}) {
                 display: 'none'
             }
         })
-        console.log(tab_navi)
     }, [navigation]);
 
     return (
@@ -81,7 +81,7 @@ function Buy_book({navigation, route}) {
             <View style={buy_book.image_shadow}>
                 <Image
                     source={{
-                        uri: route.params.image_data
+                        uri: `data:image/png;base64,${route.params.image_data}`
                     }}
                     style={buy_book.book_cover}/>
             </View>
@@ -221,7 +221,7 @@ function Buy_book({navigation, route}) {
                         <Image
                             style={{
                                 left: 13.5,
-                                top:12
+                                top: 12
                             }}
                             source={require("../../image/Buy/bag_blue.png")}/>
                     </View>
@@ -241,7 +241,11 @@ function Buy_book({navigation, route}) {
                                 left: 20
                             }}
                             backgroundColor='red'
-                            onPress={() => console.log("test")}>
+                            onPress={() => {
+                                gentrade(route.params)
+                                navigation.navigate("Buycomplete", route.params);
+                            }
+}>
                             <Text
                                 style={{
                                     textAlign: 'center',

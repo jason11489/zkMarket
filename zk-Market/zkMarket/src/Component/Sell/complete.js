@@ -155,11 +155,9 @@ function Complete({navigation: {
             <View >
                 <ImageBackground
                     source={require("../../image/sell/complete_back.png")}
-                    style={styles.back_image}></ImageBackground>
+                    style={styles.back_image}/>
             </View>
-            <View style={{
-                    zIndex: 1
-                }}>
+            <View>
                 <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
                 <View
                     style={{
