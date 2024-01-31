@@ -170,7 +170,7 @@ function RegisterDone({navigation, route}) {
                             fontWeight: '700',
                             textAlign: 'center',
                             top: -355
-                        }}>`{route.params.userEOA.substr(0,1)}...{route.params.userEOA.substr(0,-1)}`</Text>
+                        }}>`{route.params.userEOA.substr(0,5)}..`</Text>
                 </View>
             </TouchableOpacity>
 

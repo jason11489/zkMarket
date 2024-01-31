@@ -10,7 +10,7 @@ function Buycomplete({navigation, route}) {
 
     return (
         <SafeAreaView style={buy_book.container}>
-
+            <Text>lfjadk;</Text>
         </SafeAreaView>
     );
 }

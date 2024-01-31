@@ -8,6 +8,7 @@ import { gentrade } from "../../http/deeplink/gentrade";
 function Buy_book({navigation, route}) {
 
     console.log(Object.keys(route.params))
+    // console.log(route.params.image_data)
     let tab_navi;
     useLayoutEffect(() => {
         tab_navi = navigation.getParent();
@@ -43,7 +44,7 @@ function Buy_book({navigation, route}) {
                 </TouchableOpacity>
                 <View style={buy_book.slide_bar}/>
                 <View style={buy_book.slide_bar_2}/>
-                <Image source={require("../../image/Buy/heart.png")} style={buy_book.heart}/>
+                <Image source={require('../../image/Buy/heart.png')} style={buy_book.heart}/>
                 <Image source={require("../../image/Buy/bag.png")} style={buy_book.bag}/>
             </View>
             <View style={{
@@ -242,8 +243,9 @@ function Buy_book({navigation, route}) {
                             }}
                             backgroundColor='red'
                             onPress={() => {
+                                console.log(route.params.hK)
                                 gentrade(route.params)
-                                navigation.navigate("Buycomplete", route.params);
+                                // navigation.navigate("Buycomplete", route.params);
                             }
 }>
                             <Text

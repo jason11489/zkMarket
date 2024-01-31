@@ -30,7 +30,7 @@ function Library({navigation: {
     }, []);
     const render_image = ({item}) => (
         <View style={Library_style.flat_list}>
-            <TouchableOpacity onPress={() => console.log("check")}>
+            <TouchableOpacity onPress={() => navigate("Buy_book",item)}>
                 <View style={Library_style.image_shadow}>
                     <Image
                         style={[Library_style.render_img, Library_style.image_shadow]}

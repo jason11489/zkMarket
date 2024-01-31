@@ -94,30 +94,34 @@ const styles = StyleSheet.create({
         lineHeight: 25.20,
     },
     dollor: {
-        textAlign: 'right',
         color: 'black',
         fontSize: 18,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '500',
         lineHeight: 25.20,
-        right:-80
+        textAlign: 'right',
+        flex: 1,
+        right:10
     },
     dollor_2: {
-        textAlign: 'right',
         color: 'black',
         fontSize: 18,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '500',
         lineHeight: 25.20,
-        left:190
-    }, dollor_total: {
         textAlign: 'right',
+        flex: 1,
+        right:10
+
+    }, dollor_total: {
         color: '#387BFF',
         fontSize: 24,
         fontFamily: 'Noto Serif',
         fontWeight: '700',
         textTransform: 'uppercase',
-        left:105
+        textAlign: 'right',
+        flex: 1,
+        right:10
     }
 })
 
@@ -202,9 +206,8 @@ function Book_price({navigation: {
                     }}
                     source={require('../../image/sell/coin.png')}/>
                 <Text style={styles.alert_title}>Your Final Price is as follows</Text>
-            </View>
-                    <View>
-                    <View style={{flexDirection: 'row',top:10}}>
+                    </View>
+                    <View style={{flexDirection: 'row',top:10,width:'100%'}}>
                         <Text style={styles.alert_msg}>
                         Measured price
                         </Text>
@@ -214,22 +217,21 @@ function Book_price({navigation: {
                         <Text style={styles.alert_msg}>
                         Fee
                         </Text>
-                        <Text style={styles.dollor_2}>$ 1.99</Text>
+                        <Text style={styles.dollor_2}>$ 1</Text>
                     </View>
                     <View style={{backgroundColor: '#C7C8CC', border: '#C7C8CC',width:267,height:1,top:30,left:5}} />
                     <View style={{ flexDirection: 'row',top:50,left:10 }}>
                         <Text style={styles.alert_total}>
                         Subtotal
                         </Text>
-                        <Text style={styles.dollor_total}>$ {Number(price) + 1.99}</Text>
+                        <Text style={styles.dollor_total}>$ {Number(price) + 1}</Text>
                     </View>
-                        </View>
                         </View>
                 }
                 onConfirmPressed={() => {
                     setShowAlert(false)
                     if (price) {
-                        route.params.price = Number(price)+1.99
+                        route.params.price = Number(price)+1
                     }
                     navigate("Upload_book", route.params)
                     // console.log(route.params)

@@ -15,7 +15,6 @@ styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     back_image: {
-        flex:1,
         width: 152,
         height: 742,
         left: 221,
@@ -152,11 +151,9 @@ function Complete({navigation: {
     return (
 
         <View style={styles.container}>
-            <View >
-                <ImageBackground
-                    source={require("../../image/sell/complete_back.png")}
-                    style={styles.back_image}/>
-            </View>
+            <ImageBackground
+                source={require("../../image/sell/complete_back.png")}
+                style={styles.back_image}/>
             <View>
                 <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
                 <View

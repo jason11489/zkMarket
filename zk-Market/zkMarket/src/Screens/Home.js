@@ -4,6 +4,7 @@ import {
     FlatList,
     Image,
     ImageBackground,
+    RefreshControl,
     ScrollView,
     Text,
     TouchableOpacity,
@@ -16,8 +17,7 @@ import httpCli from "../http";
 function Home({navigation}) {
 
     const [book_sell_list, setbook_list] = useState([]);
-    const [VIEW, setVIEW] = useState(false);
-    const [isLogin, setIsLogin] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     let value;
 
     useEffect(() => {
@@ -37,7 +37,7 @@ function Home({navigation}) {
                     }
             })
             res = await httpCli.get('content/list');
-            console.log("check respone of server", res.data[0])
+            // console.log("check respone of server", res.data[0])
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
             
@@ -76,16 +76,32 @@ function Home({navigation}) {
             </TouchableOpacity>
         </View>
     )
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true)
+        console.log("tiger")
+        res = await httpCli.get('content/list');
+        // console.log("check respone of server", res.data[0])
+        // console.log("check respone of 22222",Object.keys(res.data[1][0]))
+        await setbook_list(res.data)
+        setIsRefreshing(false)
+    }
+
     
     return (
-        <View style={home_styles.scrollViewContainer}>
+        <ScrollView style={home_styles.scrollViewContainer}
+            refreshControl={
+                <RefreshControl refreshing={isRefreshing} onRefresh={() => handleRefresh()} />
+            }>
             {
                 book_sell_list[0]
                     ? (
                         <ScrollView
                             style={{
                                 backgroundColor: 'white'
-                            }}>
+                            }}
+                            
+                        >
                             <ImageBackground
                                 source={require('../image/Background.png')}
                                 style={home_styles.backgroundImage}></ImageBackground>
@@ -268,7 +284,7 @@ function Home({navigation}) {
                         </ScrollView>
             }
 
-        </View>
+        </ScrollView>
         // <View style={styles.container}>     <ImageBackground
         // source={require('../image/Background.png')} style={styles.backgroundImage}>
         // <Button title="Go to Login" onPress={() => navigation.navigate("Login")}/>
