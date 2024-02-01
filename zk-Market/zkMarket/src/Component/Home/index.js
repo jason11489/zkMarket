@@ -2,6 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 
 import Home from "../../Screens/Home";
+import Bestseller from "../Buy/Bestseller";
 import Buy_book from "../Buy/Buy_book";
 import Buycomplete from "../Buy/Buycomplete";
 import RegisterDone from "../Login/RegisterDone";
@@ -26,6 +27,7 @@ function HomeStackScreen() {
             <Homestack.Screen name="Buycomplete" component={Buycomplete}/>
             <Homestack.Screen name="RegisterUser" component={RegisterUser}/>
             <Homestack.Screen name="RegisterDone" component={RegisterDone} />
+            <Homestack.Screen name="Bestseller" component={Bestseller} />
         </Homestack.Navigator>
     );
 };

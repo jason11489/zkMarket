@@ -54,7 +54,7 @@ function Home({navigation}) {
         }
         check_info()
         
-    },[]);
+    },[navigation]);
     
 
     
@@ -163,7 +163,7 @@ function Home({navigation}) {
                                 }}></View>
                             <TouchableOpacity
                                 style={{top: -6,left: 323,height: 20,width:45}}
-                                onPress={() => navigation.navigate("Library")}>
+                                onPress={() => navigation.navigate("Bestseller")}>
                                 <View style={home_styles.go_to_book_list}></View>
                                 <Text style={home_styles.more_text}>
                                     more

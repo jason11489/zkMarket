@@ -27,7 +27,8 @@ function App() {
                 screens: {
                     Book_flat: '/book_flat',
                     Buy_book: '/buy_book',
-                    RegisterDone : '/registerDone/:userENA/:userEOA/:pk_own/:pk_enc/:userSk/:privateKey'
+                    RegisterDone: '/registerDone/:userENA/:userEOA/:pk_own/:pk_enc/:userSk/:privateKey',
+                    Buycomplete : '/buycomplete/:image_data/:Title/:Author'
                 }
             },
             Search: '/search',

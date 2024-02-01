@@ -7,10 +7,10 @@ let screenHeight = Dimensions
     .get('window')
     .height;
 
-export const Library_style = StyleSheet.create({
+export const Bestseller_style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: 'white'
     },
     title_style: {
         color: '#232323',
@@ -18,12 +18,12 @@ export const Library_style = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '700',
         letterSpacing: 0.16,
-        left: 160,
+        left: 122,
         top: 12,
         textAlign: 'center'
     },
     card_style: {
-        left: 248,
+        left: 215,
         top: 17,
         width: 20,
         height: 16

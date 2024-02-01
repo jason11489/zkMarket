@@ -1,30 +1,25 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import {
     FlatList,
     Image,
-    RefreshControl,
     SafeAreaView,
     Text,
     TouchableOpacity,
     View
 } from "react-native";
-import { Library_style } from "../CSS/Library_style";
-import httpCli from "../http";
-function Library({navigation: {
+import { Bestseller_style } from "../../CSS/Bestseller_style";
+import httpCli from "../../http";
+
+function Bestseller({navigation: {
         navigate
     }}) {
-
-    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [book_sell_list, setbook_list] = useState([]);
 
     useEffect(() => {
         let res;
         async function data_() {
-            const pk_enc = await AsyncStorage.getItem('userEOA');
-            console.log("buyer_addr = ", pk_enc)
-            res = await httpCli.get(`content/list/:${pk_enc}`);
+            res = await httpCli.get('content/list');
             console.log("check respone of server", res.data[0])
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
@@ -35,51 +30,54 @@ function Library({navigation: {
 
     }, []);
     const render_image = ({item}) => (
-        <View style={Library_style.flat_list}>
+        <View style={Bestseller_style.flat_list}>
             <TouchableOpacity onPress={() => navigate("Buy_book", item)}>
-                <View style={Library_style.image_shadow}>
+                <View style={Bestseller_style.image_shadow}>
                     <Image
-                        style={[Library_style.render_img, Library_style.image_shadow]}
+                        style={[Bestseller_style.render_img, Bestseller_style.image_shadow]}
                         source={{
                             uri: `data:image/png;base64,${item.image_data}`
                         }}/>
                 </View>
-                <Text style={Library_style.author_style}>{item.author}</Text>
-                <Text style={Library_style.publisher_style}>/ {item.publisher}</Text>
+                <Text style={Bestseller_style.author_style}>{item.author}</Text>
+                <Text style={Bestseller_style.publisher_style}>/ {item.publisher}</Text>
             </TouchableOpacity>
         </View>
     )
 
-    const handleRefresh = async () => {
-        setIsRefreshing(true)
-        console.log("tiger")
-        res = await httpCli.get('content/list');
-        // console.log("check respone of server", res.data[0]) console.log("check
-        // respone of 22222",Object.keys(res.data[1][0]))
-        await setbook_list(res.data)
-        setIsRefreshing(false)
-    }
-
     return (
-        <SafeAreaView style={Library_style.container}>
+        <SafeAreaView style={Bestseller_style.container}>
             <View style={{
                     flexDirection: 'row'
                 }}>
-                <Text style={Library_style.title_style}>
-                    Library
+                <TouchableOpacity
+                    onPress={() => {
+                        navigate("Home_2")
+                    }}>
+                    <Image
+                        style={{
+                            width: 24,
+                            height: 24,
+                            left: 20,
+                            top: 12
+                        }}
+                        source={require('../../image/sell/arrow_back_ios.png')}/>
+                </TouchableOpacity>
+                <Text style={Bestseller_style.title_style}>
+                    Bestsellers
                 </Text>
                 <Image
-                    style={Library_style.card_style}
-                    source={require("../image/Library/Card.png")}/>
+                    style={Bestseller_style.card_style}
+                    source={require("../../image/Library/Card.png")}/>
                 <TouchableOpacity onPress={() => navigate("Library_2")}><Image
-                    style={Library_style.menu_style}
-                    source={require("../image/Library/menu.png")}/>
+                    style={Bestseller_style.menu_style}
+                    source={require("../../image/Library/menu.png")}/>
                 </TouchableOpacity>
             </View>
             <View style={{
                     height: 30
                 }}></View>
-            <View style={Library_style.BestSeller_box}>
+            <View style={Bestseller_style.BestSeller_box}>
                 <View
                     style={{
                         flexDirection: 'row'
@@ -94,11 +92,16 @@ function Library({navigation: {
                             left: 16,
                             top: 10,
                             width: 186
-                        }}>Recent</Text>
+                        }}>Bestsellers in Top 5</Text>
+                    <Image
+                        style={{
+                            top: 14,
+                            left: 20,
+                            width: 18,
+                            height: 17
+                        }}
+                        source={require("../../image/Library/Star.png")}/>
                 </View>
-                <View style={{
-                        height: 5
-                    }}/>
                 <FlatList horizontal={true} data={book_sell_list[1]} renderItem={render_image}/>
             </View>
             <View
@@ -117,21 +120,12 @@ function Library({navigation: {
                         letterSpacing: 0.16,
                         textAlign: 'center',
                         top: 12
-                    }}>Buy List</Text>
+                    }}>ALL</Text>
             </View>
-            <FlatList
-                refreshControl={<RefreshControl refreshing = {
-                    isRefreshing
-                }
-                onRefresh = {
-                    () => handleRefresh()
-                } />}
-                numColumns={3}
-                data={book_sell_list[1]}
-                renderItem={render_image}/>
+            <FlatList numColumns={3} data={book_sell_list[1]} renderItem={render_image}/>
         </SafeAreaView>
 
     );
 }
 
-export default Library;
+export default Bestseller;
