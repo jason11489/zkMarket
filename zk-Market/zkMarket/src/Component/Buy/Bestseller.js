@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     FlatList,
     Image,
+    RefreshControl,
     SafeAreaView,
     Text,
     TouchableOpacity,
@@ -13,6 +14,7 @@ import httpCli from "../../http";
 function Bestseller({navigation: {
         navigate
     }}) {
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [book_sell_list, setbook_list] = useState([]);
 
@@ -44,6 +46,16 @@ function Bestseller({navigation: {
             </TouchableOpacity>
         </View>
     )
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true)
+        console.log("tiger")
+        res = await httpCli.get('content/list');
+        // console.log("check respone of server", res.data[0]) console.log("check
+        // respone of 22222",Object.keys(res.data[1][0]))
+        await setbook_list(res.data)
+        setIsRefreshing(false)
+    }
 
     return (
         <SafeAreaView style={Bestseller_style.container}>
@@ -122,7 +134,16 @@ function Bestseller({navigation: {
                         top: 12
                     }}>ALL</Text>
             </View>
-            <FlatList numColumns={3} data={book_sell_list[1]} renderItem={render_image}/>
+            <FlatList
+                refreshControl={<RefreshControl refreshing = {
+                    isRefreshing
+                }
+                onRefresh = {
+                    () => handleRefresh()
+                } />}
+                numColumns={3}
+                data={book_sell_list[1]}
+                renderItem={render_image}/>
         </SafeAreaView>
 
     );

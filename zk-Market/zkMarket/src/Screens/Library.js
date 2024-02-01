@@ -18,13 +18,15 @@ function Library({navigation: {
     const [isRefreshing, setIsRefreshing] = useState(false);
 
     const [book_sell_list, setbook_list] = useState([]);
+    const [buyer_addr, setbuyer_addr] = useState();
 
     useEffect(() => {
         let res;
         async function data_() {
-            const pk_enc = await AsyncStorage.getItem('userEOA');
-            console.log("buyer_addr = ", pk_enc)
-            res = await httpCli.get(`content/list/:${pk_enc}`);
+            const addr = await AsyncStorage.getItem('userEOA');
+            setbuyer_addr(addr)
+            console.log("buyer_addr = ", addr)
+            res = await httpCli.get(`content/list/${buyer_addr}`);
             console.log("check respone of server", res.data[0])
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
@@ -52,8 +54,10 @@ function Library({navigation: {
 
     const handleRefresh = async () => {
         setIsRefreshing(true)
-        console.log("tiger")
-        res = await httpCli.get('content/list');
+        console.log("refreshing")
+        console.log("buyer_addr = ", buyer_addr)
+
+        res = await httpCli.get(`content/list/${buyer_addr}`);
         // console.log("check respone of server", res.data[0]) console.log("check
         // respone of 22222",Object.keys(res.data[1][0]))
         await setbook_list(res.data)
