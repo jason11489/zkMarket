@@ -291,23 +291,23 @@ export const home_styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: 93,
-        left: 8
+        textAlign:'center'
     },
     publisher_style: {
         color: '#909398',
         fontSize: 12,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
-        top: 3,
-        left: 8
+        top: 4,
+        textAlign:'center'
     },
     price_style: {
         color: '#232323',
         fontSize: 14,
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '700',
-        top: 4,
-        left: 8
+        top: 5,
+        textAlign:'center'
     },
     go_to_book_list: {
         height: 20,

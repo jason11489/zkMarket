@@ -57,7 +57,7 @@ function Buycomplete({navigation, route}) {
                         width: 0
                     }
                 }}>
-                <View style={styles.book_cover}></View>
+                <Image style={styles.book_cover} source={{uri : `data:image/png;base64,${route.params.image_data}`}}/>
             </View>
             <Text style={styles.title}>{route.params.Title}</Text>
             <Text style={styles.author}>{route.params.Author}</Text>
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     book_cover: {
         height: 211,
         width: 143,
-        backgroundColor: 'blue',
         borderRadius: 5
     },
     title: {

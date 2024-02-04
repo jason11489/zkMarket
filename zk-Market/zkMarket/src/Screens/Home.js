@@ -69,8 +69,8 @@ function Home({navigation}) {
                             uri: `data:image/png;base64,${item.image_data}`
                         }} />
                 </View>
-                <Text style={home_styles.author_style}>{item.author}</Text>
-                <Text style={home_styles.publisher_style}>/ {item.publisher}</Text>
+                <Text style={home_styles.author_style}>{item.title}</Text>
+                <Text style={home_styles.publisher_style}>/ {item.author}</Text>
                 <Text style={home_styles.price_style}>${item.fee}
                 </Text>
             </TouchableOpacity>

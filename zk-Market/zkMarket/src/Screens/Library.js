@@ -26,8 +26,8 @@ function Library({navigation: {
             const addr = await AsyncStorage.getItem('userEOA');
             setbuyer_addr(addr)
             console.log("buyer_addr = ", addr)
-            res = await httpCli.get(`content/list/${buyer_addr}`);
-            console.log("check respone of server", res.data[0])
+            res = await httpCli.get(`content/list/${addr}`);
+            console.log("check respone of server", res.data[1][0].title)
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
 
@@ -38,7 +38,7 @@ function Library({navigation: {
     }, []);
     const render_image = ({item}) => (
         <View style={Library_style.flat_list}>
-            <TouchableOpacity onPress={() => navigate("Buy_book", item)}>
+            <TouchableOpacity onPress={() => navigate("Mybook", item)}>
                 <View style={Library_style.image_shadow}>
                     <Image
                         style={[Library_style.render_img, Library_style.image_shadow]}
@@ -46,8 +46,8 @@ function Library({navigation: {
                             uri: `data:image/png;base64,${item.image_data}`
                         }}/>
                 </View>
-                <Text style={Library_style.author_style}>{item.author}</Text>
-                <Text style={Library_style.publisher_style}>/ {item.publisher}</Text>
+                <Text style={Library_style.author_style}>{item.title}</Text>
+                <Text style={Library_style.publisher_style}>/ {item.author}</Text>
             </TouchableOpacity>
         </View>
     )
@@ -58,8 +58,7 @@ function Library({navigation: {
         console.log("buyer_addr = ", buyer_addr)
 
         res = await httpCli.get(`content/list/${buyer_addr}`);
-        // console.log("check respone of server", res.data[0]) console.log("check
-        // respone of 22222",Object.keys(res.data[1][0]))
+        console.log("check = ",res.data[0].title)
         await setbook_list(res.data)
         setIsRefreshing(false)
     }
