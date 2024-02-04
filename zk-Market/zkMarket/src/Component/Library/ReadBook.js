@@ -15,6 +15,9 @@ import httpCli from '../../http';
 function ReadBook({navigation, route}) {
 
     const [bookdata, setbookdata] = useState();
+    const [page, setpage] = useState();
+    const [totalpage, settotalpage] = useState();
+
     // console.log(route.params.title)
 
     useEffect(() => {
@@ -68,6 +71,9 @@ function ReadBook({navigation, route}) {
 
     return (
         <SafeAreaView style={ReadBook_style.container}>
+            <View style={{
+                    height: 90
+                }}/>
             <View
                 style={{
                     flex: 1,
@@ -81,14 +87,54 @@ function ReadBook({navigation, route}) {
                         uri: `data:application/pdf;base64,${bookdata}`
                     }}
                     horizontal={true}
+                    onLoadComplete={(numberOfPages, filePath) => {
+                        console.log(`Number of pages: ${numberOfPages}`);
+                        settotalpage(numberOfPages)
+                    }}
+                    onPageChanged={(page, numberOfPages) => {
+                        console.log(`Current page: ${page}`);
+                        setpage(page);
+                    }}
                     style={{
                         flex: 1,
                         width: Dimensions
                             .get('window')
                             .width,
-                        height: "100%",
+                        height: Dimensions
+                            .get('window')
+                            .height,
                         backgroundColor: 'white'
                     }}/>
+            </View>
+
+            <View
+                style={{
+                    shadowColor: 'gray',
+                    shadowOpacity: 0.25,
+                    shadowRadius: 4,
+                    shadowOffset: {
+                        height: -1,
+                        width: -1
+                    }
+                }}>
+                <View
+                    style={{
+                        width: "100%",
+                        height: 71,
+                        backgroundColor: 'white',
+                        top: 30,
+                        textAlign: 'center'
+                    }}>
+                    <Text
+                        style={{
+                            color: '#232323',
+                            fontSize: 14,
+                            fontFamily: 'NanumSquareOTF_ac',
+                            fontWeight: '400',
+                            textAlign: 'center',
+                            top:15
+                        }}>{page} / {totalpage}</Text>
+                </View>
 
             </View>
         </SafeAreaView>
