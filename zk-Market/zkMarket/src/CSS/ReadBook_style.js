@@ -2,7 +2,6 @@ import { StyleSheet } from "react-native";
 
 
 
-
 export const ReadBook_style = StyleSheet.create({
     container: {
         flex: 1,
@@ -19,6 +18,7 @@ export const ReadBook_style = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '700',
         letterSpacing: 0.16,
-        left: 137
+        textAlign: 'center',
+        top:-3
     },
 })
