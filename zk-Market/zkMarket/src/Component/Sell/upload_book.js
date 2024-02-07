@@ -140,7 +140,9 @@ function Upload_book({navigation: {
             );
             await setFileResponse(response);
             await setShowView1(true);
-            route.params.book_uri = await RNFS.readFile(response.fileCopyUri, 'base64');
+            console.log("tiger = ", response.fileCopyUri);
+            route.params.book_uri = await RNFS.readFile(decodeURIComponent(response.fileCopyUri), 'base64');
+            console.log(typeof route.params.book_uri)
         } catch (err) {
             console.warn(err);
         }

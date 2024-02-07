@@ -22,7 +22,7 @@ function Sell({navigation}) {
                         source={require('../image/sell/arrow_back_ios.png')}/>
                 </TouchableOpacity>
                 <View style={Sell_style.slide_bar}/>
-                <View style={Sell_style.slide_bar_2}/>
+                {/* <View style={Sell_style.slide_bar_2}/> */}
             </View>
             <ScrollView
                 horizontal={true}
@@ -40,7 +40,7 @@ function Sell({navigation}) {
                             Shall we start{"\n"}publishing books{"\n"}conveniently?
                         </Text>
                         <Text style={Sell_style.des_text_2}>
-                            It takes about 20 minutes to register{"\n"}for book publication.
+                            It takes about 10 minutes to register{"\n"}for book publication.
                         </Text>
                     </View>
                     <View style={Sell_style.publish_book}>
