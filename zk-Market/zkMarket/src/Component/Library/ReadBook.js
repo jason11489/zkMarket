@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     Dimensions,
     Image,
     SafeAreaView,
@@ -17,19 +18,11 @@ function ReadBook({navigation, route}) {
     const [bookdata, setbookdata] = useState();
     const [page, setpage] = useState();
     const [totalpage, settotalpage] = useState();
+    const [isLoading, setisLoading] = useState(false);
 
     // console.log(route.params.title)
-
-    useEffect(() => {
-        async function data_() {
-            const _t = await AsyncStorage.getItem('pk_enc')
-            res = await httpCli.get(`content/getData/${route.params.hK}/${_t}`)
-            setbookdata(res.data.text)
-        }
-        data_();
-
-    }, [])
     let tab_navi;
+
     useLayoutEffect(() => {
         tab_navi = navigation.getParent();
         tab_navi.setOptions({
@@ -67,7 +60,33 @@ function ReadBook({navigation, route}) {
                 </TouchableOpacity>
             )
         })
-    }, [navigation]);
+
+    }, []);
+
+    useEffect(() => {
+        async function data_() {
+            setisLoading(true);
+            const _t = await AsyncStorage.getItem('pk_enc')
+            res = await httpCli.get(`content/getData/${route.params.hK}/${_t}`)
+            setbookdata(res.data.text)
+            setisLoading(false);
+        }
+        data_();
+
+    }, [])
+
+    if (isLoading) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <ActivityIndicator size={'large'} color="#5500dc"/>
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView style={ReadBook_style.container}>
@@ -132,8 +151,9 @@ function ReadBook({navigation, route}) {
                             fontFamily: 'NanumSquareOTF_ac',
                             fontWeight: '400',
                             textAlign: 'center',
-                            top:15
-                        }}>{page} / {totalpage}</Text>
+                            top: 15
+                        }}>{page}
+                        / {totalpage}</Text>
                 </View>
 
             </View>

@@ -146,14 +146,17 @@ styles = StyleSheet.create({
 function Complete({navigation: {
         navigate
     }, route}) {
-    console.log("Complete page",route.params.cover_img);
+    // console.log("Complete page",route.params.cover_img);
+
+    const image_source = require("../../image/sell/complete_back.png");
 
     return (
 
         <View style={styles.container}>
             <ImageBackground
-                source={require("../../image/sell/complete_back.png")}
-                style={styles.back_image}/>
+                source={image_source}
+                style={styles.back_image}
+            onError={(error) => console.log("error in image background ",error)}/>
             <View>
                 <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
                 <View
@@ -200,7 +203,7 @@ function Complete({navigation: {
                         style={Publish_style.Touchable}
                         title="Confirm"
                         onPress={() => {
-                            console.log(route.params)
+                            // console.log(route.params)
                             navigate("Sell_2")
                         }}>
                         <Text style={Publish_style.button_style}>Next

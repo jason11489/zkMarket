@@ -85,7 +85,7 @@ styles = StyleSheet.create({
 })
 
 function file(fileResponse) {
-    console.log(fileResponse[0].name)
+    // console.log(fileResponse[0].name)
     return (<Text style={styles.upload_text}>{fileResponse[0].name}</Text>)
 }
 
@@ -96,11 +96,11 @@ function Upload_book({navigation: {
     const [showView1, setShowView1] = useState(false);
 
 
-    console.log(route.params);
+    // console.log(route.params);
 
     const query_publis = async () => {
         try {
-            console.log("tiger 1");
+            // console.log("tiger 1");
             const userENA = await AsyncStorage.getItem('userENA');
             const pk_own = await AsyncStorage.getItem('pk_own');
             const sk_enc = await AsyncStorage.getItem('sk_enc');
@@ -150,14 +150,14 @@ function Upload_book({navigation: {
     const [showView1_image, setShowView1_image] = useState(false);
     const image_pick = useCallback(async () => {
         const pick_img = await launchImageLibrary({incluedBase64: true});
-        console.log("check pick_img", pick_img);
+        // console.log("check pick_img", pick_img);
         setShowView1_image(true);
         setImageResponse(pick_img.assets[0].uri);
         const localUri = pick_img
             .assets[0]
             .uri;
         route.params.localUrl = await RNFS.readFile(localUri, 'base64')
-        console.log(route.params.localUrl)
+        // console.log(route.params.localUrl)
     })
 
     return (

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+    ActivityIndicator,
     Image,
     SafeAreaView,
     ScrollView,
@@ -7,12 +8,49 @@ import {
     TextInput,
     View
 } from "react-native";
+import httpCli from "../http";
 
 import { Search_stytle } from "../CSS/Search_sytle";
 
 function Search() {
 
-    const [text, settext] = useState('hello');
+    const [data, setData] = useState([]);
+    const [seacrhQuery, setSearchQuery] = useState("");
+    const [isLoading, setisLoading] = useState(false);
+
+    useEffect(() => {
+        setisLoading(true);
+        fetchData();
+    }, [])
+
+    const fetchData = async () => {
+        try {
+            const res = await httpCli.get('content/list');
+            setData(res.data[1][0]);
+            // console.log(Object.keys(data));
+
+            setisLoading(false);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+    }
+
+    if (isLoading) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <ActivityIndicator size={'large'} color="#5500dc"/>
+            </View>
+        )
+    }
 
     return (
         <SafeAreaView style={Search_stytle.container}>
@@ -33,13 +71,20 @@ function Search() {
                     <TextInput
                         style={Search_stytle.Search_bar}
                         placeholder="Search for what you want"
-                        placeholderTextColor = '#909398'
-                        onChangeText={(text) => {
-                            settext(text)
+                        placeholderTextColor='#909398'
+                        value={seacrhQuery}
+                        onChangeText={(query) => {
+                            handleSearch(query)
                         }}/>
                 </View>
                 <View style={Search_stytle.last_line}>
-                <Image style={Search_stytle.img} source={require('../image/search_img.png')} />
+                    {
+                        seacrhQuery
+                            ? (<Text>dsfaasdf</Text>)
+                            : (
+                                <Image style={Search_stytle.img} source={require('../image/search_img.png')}/>
+                            )
+                    }
                 </View>
             </ScrollView>
         </SafeAreaView>
