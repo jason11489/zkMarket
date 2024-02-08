@@ -18,6 +18,7 @@ function Search({navigation}) {
     const [data, setData] = useState([]);
     const [seacrhQuery, setSearchQuery] = useState("");
     const [isLoading, setisLoading] = useState(false);
+    const [searchbook, setsearchbook] = useState([]);
 
     useEffect(() => {
         setisLoading(true);
@@ -28,7 +29,7 @@ function Search({navigation}) {
         try {
             const res = await httpCli.get('content/list');
             setData(res.data[1]);
-            // console.log(Object.keys(data));
+            // console.log(data[0].title);
 
             setisLoading(false);
         } catch (error) {
@@ -38,6 +39,14 @@ function Search({navigation}) {
 
     const handleSearch = (query) => {
         setSearchQuery(query);
+        handleFilter(seacrhQuery);
+        console.log("result about search book = ", Object.keys(searchbook))
+    }
+
+    function handleFilter(searchBook) {
+        setsearchbook(
+            data.filter((data) => data.title.toUpperCase().includes(searchBook.toUpperCase()))
+        )
     }
 
     if (isLoading) {
@@ -52,6 +61,59 @@ function Search({navigation}) {
             </View>
         )
     }
+    const render_search_result = (item, index) => (
+
+        <View style={Search_stytle.flat_list}>
+            <Text
+                style={{
+                    color: '#C7C8CC',
+                    fontSize: 14,
+                    fontFamily: 'NanumSquareOTF_ac',
+                    fontWeight: '700',
+                    top: 35
+                }}>0{index + 1}</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Buy_book", item)}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        left: 20
+                    }}>
+                    <View style={Search_stytle.image_shadow}>
+                        <Image
+                            style={[Search_stytle.render_img, Search_stytle.image_shadow]}
+                            source={{
+                                uri: `data:image/png;base64,${item.image_data}`
+                            }}/>
+                    </View>
+                    <View
+                        style={{
+                            left: 17,
+                            top: 17
+                        }}>
+                        <Text
+                            style={{
+                                color: '#232323',
+                                fontSize: 14,
+                                fontFamily: 'NanumSquareOTF_ac',
+                                fontWeight: '600',
+                                width: 200
+                            }}>{item.title}</Text>
+                        <Text
+                            style={{
+                                width: '100%',
+                                color: '#C7C8CC',
+                                fontSize: 12,
+                                fontFamily: 'NanumSquareOTF_ac',
+                                fontWeight: '600',
+                                top: 5
+                            }}>{item.author}</Text>
+                    </View>
+                </View>
+
+            </TouchableOpacity>
+        </View>
+
+    )
 
     const render_image = (item, index) => (
         <View style={Search_stytle.flat_list}>
@@ -96,7 +158,7 @@ function Search({navigation}) {
                                 fontSize: 12,
                                 fontFamily: 'NanumSquareOTF_ac',
                                 fontWeight: '600',
-                                top:5
+                                top: 5
                             }}>{item.author}</Text>
                     </View>
                 </View>
@@ -149,10 +211,41 @@ function Search({navigation}) {
                                 </Text>
                                 <View
                                     style={{
+                                        height: 10
+                                    }} />
+                                {
+                                    searchbook.length == 0
+                                        ? (
+                                            <View style={{height:100}}>
+                                                <Text
+                                                    style={{
+                                                        color: '#909398',
+                                                        fontSize: 16,
+                                                        fontFamily: 'NanumSquareOTF_ac',
+                                                        fontWeight: '400',
+                                                        textAlign: 'center',
+                                                        top:40
+                                                    }}>
+                                                    No Book
+                                                </Text>
+                                            </View>
+                                        )
+                                        : (
+                                            <FlatList
+                                                data={searchbook}
+                                                renderItem={({item, index}) => render_search_result(item, index)}/>
+                                        )
+                                }
+                                <View
+                                    style={{
+                                        height: 20
+                                    }}/>
+                                <View
+                                    style={{
                                         width: 362,
                                         backgroundColor: '#E6E9EE',
                                         height: 1,
-                                        left: -21
+                                        left: -7
                                     }}/>
                                 <View
                                     style={{
@@ -255,7 +348,7 @@ function Search({navigation}) {
                 }
             </View>
         </SafeAreaView>
-    );
+    )
 }
 
 export default Search;
