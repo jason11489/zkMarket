@@ -116,55 +116,54 @@ function Search({navigation}) {
     )
 
     const render_image = (item, index) => (
-        <View style={Search_stytle.flat_list}>
-            <Text
-                style={{
-                    color: '#C7C8CC',
-                    fontSize: 14,
-                    fontFamily: 'NanumSquareOTF_ac',
-                    fontWeight: '700',
-                    top: 35
-                }}>0{index + 1}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Buy_book", item)}>
-                <View
+            <View style={Search_stytle.flat_list}>
+                <Text
                     style={{
-                        flexDirection: 'row',
-                        left: 20
-                    }}>
-                    <View style={Search_stytle.image_shadow}>
-                        <Image
-                            style={[Search_stytle.render_img, Search_stytle.image_shadow]}
-                            source={{
-                                uri: `data:image/png;base64,${item.image_data}`
-                            }}/>
-                    </View>
+                        color: '#C7C8CC',
+                        fontSize: 14,
+                        fontFamily: 'NanumSquareOTF_ac',
+                        fontWeight: '700',
+                        top: 35
+                    }}>0{index + 1}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Buy_book", item)}>
                     <View
                         style={{
-                            left: 17,
-                            top: 17
+                            flexDirection: 'row',
+                            left: 20,
                         }}>
-                        <Text
+                        <View style={Search_stytle.image_shadow}>
+                            <Image
+                                style={[Search_stytle.render_img, Search_stytle.image_shadow]}
+                                source={{
+                                    uri: `data:image/png;base64,${item.image_data}`
+                                }}/>
+                        </View>
+                        <View
                             style={{
-                                color: '#232323',
-                                fontSize: 14,
-                                fontFamily: 'NanumSquareOTF_ac',
-                                fontWeight: '600',
-                                width: 200
-                            }}>{item.title}</Text>
-                        <Text
-                            style={{
-                                width: '100%',
-                                color: '#C7C8CC',
-                                fontSize: 12,
-                                fontFamily: 'NanumSquareOTF_ac',
-                                fontWeight: '600',
-                                top: 5
-                            }}>{item.author}</Text>
+                                left: 17,
+                                top: 17
+                            }}>
+                            <Text
+                                style={{
+                                    color: '#232323',
+                                    fontSize: 14,
+                                    fontFamily: 'NanumSquareOTF_ac',
+                                    fontWeight: '600',
+                                    width: 200
+                                }}>{item.title}</Text>
+                            <Text
+                                style={{
+                                    width: '100%',
+                                    color: '#C7C8CC',
+                                    fontSize: 12,
+                                    fontFamily: 'NanumSquareOTF_ac',
+                                    fontWeight: '600',
+                                    top: 5
+                                }}>{item.author}</Text>
+                        </View>
                     </View>
-                </View>
-
-            </TouchableOpacity>
-        </View>
+                </TouchableOpacity>
+            </View>
     )
 
     return (
@@ -216,7 +215,10 @@ function Search({navigation}) {
                                 {
                                     searchbook.length == 0
                                         ? (
-                                            <View style={{height:100}}>
+                                            <View
+                                                style={{
+                                                    height: 100
+                                                }}>
                                                 <Text
                                                     style={{
                                                         color: '#909398',
@@ -224,7 +226,7 @@ function Search({navigation}) {
                                                         fontFamily: 'NanumSquareOTF_ac',
                                                         fontWeight: '400',
                                                         textAlign: 'center',
-                                                        top:40
+                                                        top: 40
                                                     }}>
                                                     No Book
                                                 </Text>
@@ -263,10 +265,11 @@ function Search({navigation}) {
                                 <View
                                     style={{
                                         height: 15
-                                    }}/>
+                                    }} />
                                 <FlatList
                                     data={data}
-                                    renderItem={({item, index}) => render_image(item, index)}/>
+                                    renderItem={({ item, index }) => render_image(item, index)}
+                                    />
                             </View>
                         )
                         : (

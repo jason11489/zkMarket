@@ -86,7 +86,8 @@ export const Search_stytle = StyleSheet.create({
         flex:1
     },flat_list: {
         margin: 13,
-        flexDirection:'row'
+        flexDirection: 'row',
+        // height:100
     },
     image_shadow: {
         shadowColor: '#000',

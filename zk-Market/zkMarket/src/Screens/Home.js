@@ -18,7 +18,15 @@ function Home({navigation}) {
 
     const [book_sell_list, setbook_list] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [rand_book, setrand_book] = useState(0);
     let value;
+
+    function getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+    }
+
 
     useEffect(() => {
         let res;
@@ -40,7 +48,9 @@ function Home({navigation}) {
             // console.log("check respone of server", res.data[0])
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
-            
+            // console.log(Object.keys(res.data[1]).length)
+            setrand_book(getRandomIntInclusive(0,Object.keys(res.data[1]).length+1))
+            // console.log(getRandomIntInclusive(0,Object.keys(res.data[1]).length+1))
         }
 
         data_();
@@ -53,9 +63,15 @@ function Home({navigation}) {
             }
         }
         check_info()
-        
+
     },[navigation]);
     
+    function get_rand_num() {
+        let max = Object.keys(book_sell_list[1]).length-1
+        let num = getRandomIntInclusive(0, max);
+        console.log("num = ",num)
+        return num;
+    }
 
     
     
@@ -83,6 +99,7 @@ function Home({navigation}) {
         res = await httpCli.get('content/list');
         // console.log("check respone of server", res.data[0])
         // console.log("check respone of 22222",Object.keys(res.data[1][0]))
+        setrand_book(getRandomIntInclusive(0,Object.keys(book_sell_list[1]).length))
         await setbook_list(res.data)
         setIsRefreshing(false)
     }
@@ -94,7 +111,7 @@ function Home({navigation}) {
                 <RefreshControl refreshing={isRefreshing} onRefresh={() => handleRefresh()} />
             }>
             {
-                book_sell_list[0]
+                book_sell_list.length === 2
                     ? (
                         <ScrollView
                             style={{
@@ -115,8 +132,8 @@ function Home({navigation}) {
                             </View>
                             <Text style={home_styles.text_3}>3 mystery novels, {"\n"}
                                 you'll fall in love{"\n"}with on a rainy day</Text>
-                            <Text style={home_styles.text_4}>{book_sell_list[1][0].title}</Text>
-                            <Text style={home_styles.text_5}>/ {book_sell_list[1][0].author}</Text>
+                            <Text style={home_styles.text_4}>{book_sell_list[1][rand_book].title}</Text>
+                            <Text style={home_styles.text_5}>/ {book_sell_list[1][rand_book].author}</Text>
                             <Text style={home_styles.rate}>4.6</Text>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_1}/>
                             <Image source={require('../image/star_fill.png')} style={home_styles.star_2}/>
@@ -127,18 +144,30 @@ function Home({navigation}) {
                                 source={{uri:book_sell_list[1][0].data[0].image_data}}
                                 style={home_styles.bookcover_5} /> */}
                             <View style={home_styles.image_shadow_white}>
+                                <TouchableOpacity
+                                    onPress={() => { navigation.navigate("Buy_book",book_sell_list[1][rand_book]) }}>
+                                    <View>
+                                        <Image
+                                        source={{uri : `data:image/png;base64,${book_sell_list[1][rand_book].image_data}`}}
+                                        style={home_styles.bookcover_5}
+                                        />
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={() => { navigation.navigate("Buy_book",book_sell_list[1][(rand_book + 1)%Object.keys(book_sell_list[1]).length]) }}>
                                 <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
-                                    style={home_styles.bookcover_5}/>
-                                <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
-                                    style={home_styles.bookcover_3}/>
-                                <Image
-                                    source={{uri : `data:image/png;base64,${book_sell_list[1][0].image_data}`}}
+                                    source={{uri : `data:image/png;base64,${book_sell_list[1][(rand_book + 1)%Object.keys(book_sell_list[1]).length].image_data}`}}
+                                        style={home_styles.bookcover_3} />
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={() => {navigation.navigate("Buy_book",book_sell_list[1][(rand_book + 2)%Object.keys(book_sell_list[1]).length])}}>
+                                    <Image
+                                    source={{uri : `data:image/png;base64,${book_sell_list[1][(rand_book + 2)%Object.keys(book_sell_list[1]).length].image_data}`}}
                                         style={home_styles.bookcover_4} />
+                                </TouchableOpacity>
                             </View>
 
-                            <Text style={home_styles.text_6}>"{book_sell_list[1][0].description}"</Text>
+                            <Text style={home_styles.text_6}>"{book_sell_list[1][rand_book].description}"</Text>
                             <View style={home_styles.gradient_box}>
                                 <GradientText style={home_styles.text_7}>2019: Under cover of darkness,{"\n"}Kate flees London for ramshackle{"\n"}Weyward Cottage, inherited from a{"\n"}great aunt she barely remembers.{"\n"}With its tumbling ivy and{"\n"}overgrown garden, the cottage is{"\n"}worlds away from the abusive{"\n"}partner who tormented Kate. But{"\n"}she begins to suspect that her great{"\n"}aunt had a secret. One that lurks in{"\n"}the bones of the cottage,</GradientText>
                             </View>
@@ -148,18 +177,16 @@ function Home({navigation}) {
                                     height: -10
                                 }}/>
                             <Text style={home_styles.bestseller_text}>Bestsellers</Text>
-                            <View style={home_styles.bar_2}/>
+                            {/* <View style={home_styles.bar_2}/>
                             <View style={home_styles.bar}/>
                             <Text style={home_styles.slider_page_num}>1/3</Text>
 
-                            
-
                             <Image
                                 style={home_styles.slider_triangle}
-                                source={require('../image/Polygon.png')}/>
+                                source={require('../image/Polygon.png')}/> */}
                             <View
                                 style={{
-                                    height: 625
+                                    height: 650
                                 }}></View>
                             <TouchableOpacity
                                 style={{top: -6,left: 323,height: 20,width:45}}
@@ -173,21 +200,118 @@ function Home({navigation}) {
                                 horizontal={true}
                                 data={book_sell_list[1]}
                                 renderItem={render_image}/>
-                            <Image
-                                style={home_styles.Keyword_img}
-                                source={require('../image/Keywords_for_you.png')}/>
-                            <Image
-                                style={home_styles.Times_Best_sellers}
-                                source={require('../image/Times_Best_sellers.png')}/>
-                            <Image
-                                style={home_styles.Award_winners}
-                                source={require('../image/Award_winners.png')}/>
-                            <View
-                                style={{
-                                    borderColor: 'white',
-                                    height: 50
-                                }}></View>
+                            <View style={{ height: 15 }} />
 
+                            <ImageBackground style={{
+                                width: 353,
+                                height: 543,
+                                position:'absolute',
+                                zIndex: -1,
+                                top: 925,
+                                left:19
+                            }} source={require("../image/keword_back.png")} >
+
+                            <Text style={home_styles.keword_text}>Keywords for you</Text>
+                                <View style={{height:33}} />
+                                <View style={{flexDirection:'row'}}>
+                                    <View style={{
+                                        width: 83,
+                                        height: 24,
+                                        borderWidth: 1,
+                                        borderRadius: 67,
+                                        borderColor: '#F8FAFF',
+                                        left:19
+                                        }}>
+                                            <Text style={
+                                                home_styles.keyword_text
+                                            }>
+                                                Metro city
+                                            </Text>
+                                        </View>
+                                        <View style={{
+                                        width: 61,
+                                        height: 24,
+                                        borderWidth: 1,
+                                        borderRadius: 67,
+                                        borderColor: '#F8FAFF',
+                                        left:25
+                                        }}>
+                                            <Text style={
+                                                home_styles.keyword_text
+                                            }>
+                                                Winter
+                                            </Text>
+                                        </View>
+                                        <View style={{
+                                        width: 56,
+                                        height: 24,
+                                        borderWidth: 1,
+                                        borderRadius: 67,
+                                        borderColor: '#F8FAFF',
+                                        left:29
+                                        }}>
+                                            <Text style={
+                                                home_styles.keyword_text
+                                            }>
+                                                Warm
+                                            </Text>
+                                        </View>
+                                        <View style={{
+                                        width: 101,
+                                        height: 24,
+                                        borderWidth: 1,
+                                        borderRadius: 67,
+                                        borderColor: '#F8FAFF',
+                                        left:34
+                                        }}>
+                                            <Text style={
+                                                home_styles.keyword_text
+                                            }>
+                                                Environment
+                                            </Text>
+                                    </View>
+                                </View>
+                                
+                                <View style={{ height: 22 }} />
+                                <View style={{
+                                    flexDirection: 'row'
+                                }}>
+                                    <View>
+                                        <Image
+                                            style={{
+                                                width: 138,
+                                                height: 185,
+                                                left: 19,
+                                                borderRadius:8
+                                            }}
+                                            source={{ uri: `data:image/png;base64,${book_sell_list[1][get_rand_num()].image_data}` }} />
+                                        <Text style={home_styles.keyword_title}>
+                                            {book_sell_list[1][get_rand_num()].title}
+                                        </Text>
+                                    </View>
+                                    <View>
+                                        <Image
+                                            style={{
+                                                width: 80,
+                                                height: 81,
+                                                left: 28,
+                                                borderRadius:8
+                                            }}
+                                            source={{ uri: `data:image/png;base64,${book_sell_list[1][get_rand_num()].image_data}` }} />
+                                        <Text style={home_styles.keyword_title_2}>
+                                            {book_sell_list[1][get_rand_num()].title}
+                                        </Text>
+                                    </View>
+                                    <View>
+
+                                    </View>
+                                </View>
+
+
+                            </ImageBackground>
+                            
+                            
+                            <View style={{height:555}} />
                         </ScrollView>
                     )
                     :<ScrollView

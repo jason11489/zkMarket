@@ -2,6 +2,7 @@ import React from "react";
 import {
     Image,
     ImageBackground,
+    SafeAreaView,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -12,7 +13,8 @@ import { Publish_style } from "../../CSS/Publish_style";
 styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        top:-55
     },
     back_image: {
         width: 152,
@@ -152,11 +154,13 @@ function Complete({navigation: {
 
     return (
 
-        <View style={styles.container}>
-            <ImageBackground
-                source={image_source}
-                style={styles.back_image}
-            onError={(error) => console.log("error in image background ",error)}/>
+        <SafeAreaView style={styles.container}>
+            <View>
+                <ImageBackground
+                    source={image_source}
+                    style={styles.back_image}
+                    onError={(error) => console.log("error in image background ", error)} />
+            </View>
             <View>
                 <Text style={styles.first_text}>Sales registration{"\n"}has been completed!</Text>
                 <View
@@ -211,7 +215,7 @@ function Complete({navigation: {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

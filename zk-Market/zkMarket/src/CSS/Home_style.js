@@ -85,7 +85,7 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'Noto Serif',
         fontWeight: '600',
         position: 'absolute',
-        right:145,
+        right: 145,
         top: 335
     },
     text_5: {
@@ -148,7 +148,7 @@ export const home_styles = StyleSheet.create({
         left: 300,
         top: 170,
         width: 240,
-        height: 338,
+        height: 338
     },
     bookcover_4: {
         borderRadius: 5,
@@ -156,7 +156,7 @@ export const home_styles = StyleSheet.create({
         left: 269,
         top: 201,
         width: 240,
-        height: 338,
+        height: 338
     },
     bookcover_5: {
         borderRadius: 5,
@@ -164,7 +164,7 @@ export const home_styles = StyleSheet.create({
         left: 339,
         top: 141,
         width: 240,
-        height: 338,
+        height: 338
     },
     bestseller_text: {
         color: '#232323',
@@ -183,7 +183,7 @@ export const home_styles = StyleSheet.create({
         fontWeight: '500',
         position: 'absolute',
         top: 423,
-        right:155
+        right: 155
     },
     text_7: {
         textAlign: 'right',
@@ -257,7 +257,7 @@ export const home_styles = StyleSheet.create({
         top: 41
     },
     flat_list: {
-        margin: 13,
+        margin: 13
     },
     render_img: {
         width: 93,
@@ -271,7 +271,8 @@ export const home_styles = StyleSheet.create({
         shadowOffset: {
             height: 7,
             width: -7
-        }
+        },
+        zIndex: 111
     },
     image_shadow: {
         shadowColor: '#000',
@@ -291,7 +292,7 @@ export const home_styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: 93,
-        textAlign:'center'
+        textAlign: 'center'
     },
     publisher_style: {
         color: '#909398',
@@ -299,7 +300,7 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
         top: 4,
-        textAlign:'center'
+        textAlign: 'center'
     },
     price_style: {
         color: '#232323',
@@ -307,19 +308,16 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '700',
         top: 5,
-        textAlign:'center'
+        textAlign: 'center'
     },
     go_to_book_list: {
         height: 20,
-        width:45,
+        width: 45,
         borderRadius: 24,
-        // backgroundColor: 'red',
-        // position: 'absolute',
-        // top: 614,
-        // left: 323,
+        // backgroundColor: 'red', position: 'absolute', top: 614, left: 323,
         borderColor: '#0055FF',
         borderWidth: 1,
-        backgroundColor:'transparent'
+        backgroundColor: 'transparent'
     },
     more_text: {
         color: '#0055FF',
@@ -327,9 +325,48 @@ export const home_styles = StyleSheet.create({
         fontFamily: 'NanumSquareOTF_ac',
         fontWeight: '400',
         height: 15,
-        width:35,
+        width: 35,
         position: 'absolute',
         top: 1,
         left: 7
+    },
+    keword_text: {
+        color: 'white',
+        fontSize: 24,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '700',
+        lineHeight: 33.60,
+        // left: 74,
+        top: 19,
+        textAlign: 'center'
+    },
+    keyword_text: {
+        color: '#F8FAFF',
+        fontSize: 14,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '700',
+        textAlign: 'center',
+        top: 2
+    },
+    keyword_title: {
+        color: 'white',
+        fontSize: 12.15,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '400',
+        lineHeight: 17.01,
+        textAlign: 'center',
+        top:5,
+        width: 138,
+        left:19
+    },keyword_title_2: {
+        color: 'white',
+        fontSize: 12.15,
+        fontFamily: 'NanumSquareOTF_ac',
+        fontWeight: '400',
+        lineHeight: 17.01,
+        textAlign: 'center',
+        top:5,
+        width: 80,
+        // left:19
     }
 })
