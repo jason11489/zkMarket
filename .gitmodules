@@ -1,0 +1,3 @@
+[submodule "zkWallet"]
+	path = zkWallet
+	url = git@github.com:zkrypto-inc/zkWallet.git
