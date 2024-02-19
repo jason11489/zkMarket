@@ -14,7 +14,9 @@ import { home_styles } from "../CSS/Home_style";
 import GradientText from "../CSS/gradient_text";
 import httpCli from "../http";
 
-function Home({navigation}) {
+function Home({ navigation }) {
+    
+    console.log("Home page")
 
     const [book_sell_list, setbook_list] = useState([]);
     const [isRefreshing, setIsRefreshing] = useState(false);
