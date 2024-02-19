@@ -23,10 +23,9 @@ function Home({ navigation }) {
     const [rand_book, setrand_book] = useState(0);
     let value;
 
-    function getRandomIntInclusive(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+    function getRandom(min, max)
+    {
+	    return Math.floor(Math.random() * (max - min) + min);
     }
 
 
@@ -51,7 +50,7 @@ function Home({ navigation }) {
             // console.log("check respone of 22222",Object.keys(res.data[1][0]))
             await setbook_list(res.data)
             // console.log(Object.keys(res.data[1]).length)
-            setrand_book(getRandomIntInclusive(0,Object.keys(res.data[1]).length+1))
+            setrand_book(getRandom(0,res.data[1].length))
             // console.log(getRandomIntInclusive(0,Object.keys(res.data[1]).length+1))
         }
 
@@ -65,13 +64,16 @@ function Home({ navigation }) {
             }
         }
         check_info()
+        console.log("check error  ",book_sell_list.length)
 
-    },[navigation]);
+    },[]);
     
     function get_rand_num() {
-        let max = Object.keys(book_sell_list[1]).length-1
-        let num = getRandomIntInclusive(0, max);
-        console.log("num = ",num)
+        let max = book_sell_list[1].length
+        console.log("max = ",max)
+        let num = getRandom(0, max);
+        console.log("num = ", num)
+        // console.log("data = ",book_sell_list[1][num])
         return num;
     }
 
@@ -101,7 +103,7 @@ function Home({ navigation }) {
         res = await httpCli.get('content/list');
         // console.log("check respone of server", res.data[0])
         // console.log("check respone of 22222",Object.keys(res.data[1][0]))
-        setrand_book(getRandomIntInclusive(0,Object.keys(book_sell_list[1]).length))
+        setrand_book(getRandomIntInclusive(0,Object.keys(book_sell_list[1]).length - 1))
         await setbook_list(res.data)
         setIsRefreshing(false)
     }
