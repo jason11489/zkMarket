@@ -81,7 +81,8 @@ function RegisterDone({navigation, route}) {
 
     async function setinfo() {
         await AsyncStorage.setItem("pk_own", route.params.pk_own);
-        await AsyncStorage.setItem("pk_enc", route.params.pk_enc);
+        await AsyncStorage.setItem("pk_enc_x", route.params.pk_enc_x);
+        await AsyncStorage.setItem("pk_enc_y", route.params.pk_enc_y);
         await AsyncStorage.setItem("sk_enc", route.params.userSk);
         await AsyncStorage.setItem("userEOA", route.params.userEOA);
         await AsyncStorage.setItem("userENA", route.params.userENA);

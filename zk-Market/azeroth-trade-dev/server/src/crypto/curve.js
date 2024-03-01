@@ -1,19 +1,17 @@
-import math from '../utils/math.js';
-import Config from '../config.js';
-import CurveParam from './curveParam.js';
-/* global BigInt */
+import math from '../utils/math';
+import CurveParam from './curveParam';
 
-BigInt.prototype.mod = function(n){
-    return ((this % n) + n)%n;
+BigInt.prototype.mod = function (n) {
+    return ((this % n) + n) % n;
 };
 
-class AffinePoint{
-    constructor(x , y ){
+class AffinePoint {
+    constructor(x, y) {
         try {
             this.x = BigInt(x);
             this.y = BigInt(y);
         } catch (e) {
-            if( e.name === 'SyntaxError') {
+            if (e.name === 'SyntaxError') {
                 this.x = BigInt('0x' + x);
                 this.y = BigInt('0x' + y);
             } else {
@@ -29,128 +27,23 @@ class AffinePoint{
         return pointJson;
     }
 
-    toXYJson() {
-        return {
-            x : '0x' + this.x.toString(16),
-            y : '0x' + this.y.toString(16)
-        }
-    }
-
     toHexArray() {
         return [this.x.toString(16), this.y.toString(16)];
     }
 
-    show() {
-        return '(' + this.x.toString(16) + ' , ' + this.y.toString(16) + ')';
+    static fromJson(pointJson) {
+        let dataJson = JSON.parse(pointJson);
+
+        return new AffinePoint(dataJson.x, dataJson.y);
     }
 }
 
-// class MontgomeryCurve{
-//     constructor(CurveParam){
-//         this.prime = CurveParam.prime;
-//         this.g = CurveParam.g;
-//         this.coefA = CurveParam.coefA;
-//         this.coefB = CurveParam.coefB;
-//     }
-
-//     preprocess(p, exp){
-//         let preTable = [p];
-
-//         for(let i =0;i<exp.toString(2).length; i+= 1){
-//             let baseP = preTable[preTable.length-1];
-//             preTable.push(this.doubleAffinePoint(baseP));
-//         }
-
-//         return preTable;
-//     }
-
-//     mul(preTable, exp) {
-//         let expBit = exp.toString(2).split('').reverse().join('');
-//         let result = preTable[preTable.length -1];
-
-//         for(const [i, value] of preTable.entries()){
-//             if(expBit[i] === '1'){
-//                 result = this.addAffinePoint(result, value);
-//             }
-//         }
-//         result = this.subAffinePoint(result, preTable[preTable.length -1]);
-
-//         return result;
-//     }
-
-//     preprocessBasePoint(p){
-//         let newX = math.mod(p.x, this.prime);
-//         let newY = math.mod(p.y, this.prime);
-
-//         return new AffinePoint(newX, newY);
-//     }
-
-//     doubleAffinePoint(p) {
-//         let tmpX = math.mod(BigInt('3') * p.x *p.x + BigInt('2')*p.x*this.coefA + BigInt('1'),this.prime);
-//         let l1 = this.fieldDivision(tmpX, p.y * BigInt('2') * this.coefB);
-//         let b_l2 = math.mod(l1 * l1 * this.coefB, this.prime);
-//         let tmp1 = b_l2 - this.coefA; // The wired bug exists, to be fixed it later (line 84 ~ 86)
-//         let tmp2 = BigInt('2') * p.x;
-//         let tmp3 = tmp1 - tmp2;
-//         let newX =  math.mod(tmp3, this.prime);
-//         let newY = math.mod(((p.x * BigInt('3') + this.coefA - b_l2) * l1 - p.y),this.prime);
-
-//         return new AffinePoint(newX, newY);
-//     }
-
-//     addAffinePoint(p1, p2){
-//         let diffY = math.mod((p1.y - p2.y) ,this.prime);
-//         let diffX = math.mod((p1.x - p2.x) ,this.prime);
-//         let q = this.fieldDivision(diffY, diffX);
-//         let b_q2 = math.mod(((q * q) * this.coefB) , this.prime);
-//         let newX = math.mod((b_q2 - this.coefA - p1.x - p2.x) , this.prime);
-//         let newY = math.mod((q * (p1.x - newX) - p1.y) , this.prime);
-
-//         return new AffinePoint(newX, newY);
-//     }
-
-//     subAffinePoint(p1, p2){
-//         let negP2 = new AffinePoint(p2.x, math.mod((-p2.y),this.prime));
-
-//         return this.addAffinePoint(p1, negP2);
-//     }
-
-//     fieldDivision(a, b) {
-//         return math.mod((a * math.modInv(b, this.prime)),this.prime);
-//     }
-
-//     checkScalar(value){
-//         return value.toString(2).length <= this.prime.toString(2).length;
-//     }
-
-//     computeYCoord(x) {
-//         let squared = math.mod(((x*x*x) + this.coefA * (x*x)+ x), this.prime);
-//         let ySquared = this.fieldDivision(squared, this.coefB);
-//         let y = math.modularSqrt(ySquared, this.prime);
-//         return y;
-//     }
-
-//     checkPointOnCurve(p) {
-//         let lhs = math.mod((math.modPow(p.y, BigInt('2'), this.prime) * this.coefB), this.prime);
-//         let rhs = math.mod((math.modPow(p.x , BigInt('3'), this.prime) + this.coefA * math.modPow(p.x, BigInt('2'), this.prime) + p.x), this.prime);
-//         console.assert(lhs === rhs, 'lsh != rhs');
-//     }
-
-//     computeScalarMul(p, exp) {
-//         let bp = this.preprocessBasePoint(p);
-//         this.checkPointOnCurve(bp);
-//         let preTable = this.preprocess(bp, exp);
-//         let output = this.mul(preTable, exp);
-//         return output;
-//     }
-// }
-
-class MontgomeryCurve {
+class TwistedEdwardsCurve {
     constructor(CurveParam) {
         this.prime = CurveParam.prime;
         this.g = CurveParam.g;
         this.coefA = CurveParam.coefA;
-        this.coefB = CurveParam.coefB;
+        this.coefD = CurveParam.coefD;
     }
 
     preprocess(p, exp) {
@@ -186,66 +79,71 @@ class MontgomeryCurve {
     }
 
     doubleAffinePoint(p) {
-        // tmpX = ( 3x^2 + 2Ax + 1 ) mod prime
-        let tmpX = math.mod(BigInt('3') * p.x *p.x + BigInt('2')*p.x*this.coefA + BigInt('1') ,this.prime);
+        // x3 = 2x1y1 / (ax1^2 + y1^2)
+        // y3 = (y1^2 - ax1^2) / (2 - ax1^2 - y1^2)
+        let x1y1 = math.mod(p.x * p.y, this.prime);
+        let x_square = math.modPow(p.x, BigInt('2'), this.prime);
+        let y_square = math.modPow(p.y, BigInt('2'), this.prime);
 
-        // l = ( tmpX / 2By ) mod prime
-        let l1 = this.fieldDivision(tmpX, p.y * BigInt('2') * this.coefB);
-
-        // b = Bl^2 mod prime
-        let b_l2 = math.mod(l1 * l1 * this.coefB, this.prime);
-
-        // tmp1 = b - A
-        let tmp1 = math.mod(b_l2 - this.coefA, this.prime);
-
-        // 2x
-        let tmp2 = math.mod(BigInt('2') * p.x, this.prime);
-
-        // tmp3 = x3 mod prime
-        let newX = math.mod(tmp1 - tmp2, this.prime);
-
-        //
-        let newY = math.mod(((p.x * BigInt('3') + this.coefA - b_l2) * l1 - p.y),this.prime);
+        let newX = this.fieldDivision(
+            BigInt('2') * x1y1,
+            this.coefA * x_square + y_square,
+        );
+        let newY = this.fieldDivision(
+            y_square - this.coefA * x_square,
+            BigInt('2') - this.coefA * x_square - y_square,
+        );
 
         return new AffinePoint(newX, newY);
     }
 
     addAffinePoint(p1, p2) {
-        let diffY = math.mod((p1.y - p2.y), this.prime);
-        let diffX = math.mod((p1.x - p2.x), this.prime);
-        let q = this.fieldDivision(diffY, diffX);
-        let b_q2 = math.mod(q * q * this.coefB, this.prime);
-        let newX = math.mod(b_q2 - this.coefA - p1.x - p2.x, this.prime);
-        let newY = math.mod((q * (p1.x - newX) - p1.y), this.prime);
+        // x3 = (x1y2 + y1x2) / (1 + dx1x2y1y2)
+        // y3 = (y1y2 - ax1x2) / (1 - dx1x2y1y2)
+        let x1x2 = math.mod(p1.x * p2.x, this.prime);
+        let x1y2 = math.mod(p1.x * p2.y, this.prime);
+        let x2y1 = math.mod(p2.x * p1.y, this.prime);
+        let y1y2 = math.mod(p1.y * p2.y, this.prime);
+        let dx1x2y1y2 = math.mod(this.coefD * x1x2 * y1y2, this.prime);
+
+        let newX = this.fieldDivision(x1y2 + x2y1, BigInt('1') + dx1x2y1y2);
+        let newY = this.fieldDivision(
+            y1y2 - this.coefA * x1x2,
+            BigInt('1') - dx1x2y1y2,
+        );
 
         return new AffinePoint(newX, newY);
     }
 
     subAffinePoint(p1, p2) {
-        let negP2 = new AffinePoint(p2.x, math.mod(-p2.y, this.prime));
+        let negP2 = new AffinePoint(math.mod(-p2.x, this.prime), p2.y);
         return this.addAffinePoint(p1, negP2);
     }
 
     fieldDivision(a, b) {
-        return math.mod((a * math.modInv(b, this.prime)), this.prime);
+        return math.mod(a * math.modInv(b, this.prime), this.prime);
     }
 
     checkScalar(value) {
         return value.toString(2).length <= this.prime.toString(2).length;
     }
 
-    computeYCoord(x) {
-        let x2 = math.mod(x * x, this.prime);
-        let x3 = math.mod(x2 * x, this.prime);
-        let squared = math.mod(x3 + this.coefA * x2 + x, this.prime);
-        let ySquared = this.fieldDivision(squared, this.coefB);
-        let y = math.modularSqrt(ySquared, this.prime);
-        return y;
-    }
+    // computeYCoord(x) {
+    //     let x2 = math.mod(x * x, this.prime);
+    //     let x3 = math.mod(x2 * x, this.prime);
+    //     let squared = math.mod(x3 + this.coefA * x2 + x, this.prime);
+    //     let ySquared = this.fieldDivision(squared, this.coefB);
+    //     let y = math.modularSqrt(ySquared, this.prime);
+    //     return y;
+    // }
 
     checkPointOnCurve(p) {
-        let lhs = math.mod((math.modPow(p.y, BigInt('2'), this.prime) * this.coefB), this.prime);
-        let rhs = math.mod((math.modPow(p.x, BigInt('3'), this.prime) + this.coefA * math.modPow(p.x, BigInt('2'), this.prime) + p.x), this.prime);
+        let x2 = math.modPow(p.x, BigInt('2'), this.prime);
+        let y2 = math.modPow(p.y, BigInt('2'), this.prime);
+
+        let lhs = math.mod(x2 * this.coefA + y2, this.prime);
+        let rhs = math.mod(this.coefD * x2 * y2 + BigInt('1'), this.prime);
+
         console.assert(lhs === rhs, p.toJson());
     }
 
@@ -260,32 +158,17 @@ class MontgomeryCurve {
 
 /**
  *
- * @param {BigInt}      baseX       base point's 'x' coord
- * @param {BigInt}      exp         expo value
- * @returns {BigInt}                computed point's 'x' coord
+ * @param {bigint}      exp         expo value
+ * @param curveOption
+ * @returns {{x: bigint, y: bigint}}                computed point {x, y}
  */
-export function multscalar(baseX, exp, curveOption){
-    let cvParam = curveOption !== undefined ? CurveParam(curveOption) : CurveParam(Config.EC_TYPE);
-    let curve = new MontgomeryCurve(cvParam);
-    let baseY = curve.computeYCoord(baseX);
-    let bp = new AffinePoint(baseX, baseY);
-    curve.checkPointOnCurve(bp);
-    let result = curve.computeScalarMul(bp, exp);
-    curve.checkPointOnCurve(result);
-
-    return result.x;
-}
-
-/**
- *
- * @param {BigInt}      exp         expo value
- * @returns {BigInt}                computed point's 'x' coord
- */
-export function basePointMul(exp, curveOption){
-    let cvParam = curveOption !== undefined ? CurveParam(curveOption) : CurveParam(Config.EC_TYPE);
-    let curve = new MontgomeryCurve(cvParam);
-    let baseY = curve.computeYCoord(curve.g);
-    let bp = new AffinePoint(curve.g, baseY);
+export function basePointMul(exp, curveOption = undefined) {
+    let cvParam =
+        curveOption !== undefined
+            ? CurveParam(curveOption)
+            : CurveParam('EC_ALT_BN128');
+    let curve = new TwistedEdwardsCurve(cvParam);
+    let bp = new AffinePoint(curve.g.x, curve.g.y);
     curve.checkPointOnCurve(bp);
     let result = curve.computeScalarMul(bp, exp);
     curve.checkPointOnCurve(result);
@@ -294,9 +177,8 @@ export function basePointMul(exp, curveOption){
 
 const Curve = {
     AffinePoint,
-    MontgomeryCurve,
-    multscalar,
-    basePointMul
+    TwistedEdwardsCurve,
+    basePointMul,
 };
 
 export default Curve;

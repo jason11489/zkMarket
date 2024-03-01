@@ -9,14 +9,10 @@
  */
 
 import _ from 'lodash';
-import contracts from "../contracts";
 import { web3 } from "../contracts/web3";
 import Encryption from "../crypto/encryption";
 import db from "../db";
-import snarks from "../snarks";
-import { generateNotesFromAcceptInput } from '../snarks/note';
 import { addPrefixHex } from "../utils/types";
-import wallet from "../wallet";
 import { toFrontFormat } from './contentRouterController';
 
 /**
@@ -78,48 +74,7 @@ const acceptTradeController = async (req, res) => {
         // acceptTrade start
         console.log("==========================acceptTrade start==========================")
 
-        const acceptTradeSnarkInputs = new snarks.acceptTradeInput(
-            wallet.delegateServerKey.pk.ena,
-            _.get(writerInfo, 'addr_'),
-            pk_enc_cons,
-            _.get(writerInfo, 'enc_key'),
-            r_cm,
-            fee_peer,
-            fee_del
-        )
-        console.log('accept Trade input : ', acceptTradeSnarkInputs.toSnarkInputFormat())
 
-        // below is to TEST
-        // const acceptTradeSnarkInputs = new snarks.acceptTradeInput(
-        //     wallet.delegateServerKey.pk.ena,
-        //     writerKeys.pk.ena,
-        //     pk_enc_cons,
-        //     getDataEncKey(),
-        //     r_cm,
-        //     fee_peer,
-        //     fee_del
-        // )
-        
-        snarks.acceptTradeProver.uploadInputAndRunProof(acceptTradeSnarkInputs.toSnarkInputFormat(), '_' + acceptTradeSnarkInputs.gethk());
-        
-        console.log("Check tx input = ",acceptTradeSnarkInputs.toSnarkVerifyFormat())
-
-        const acceptTradeReceipt = await contracts.tradeContract.acceptTrade(
-            acceptTradeSnarkInputs.gethk(),
-            acceptTradeSnarkInputs
-        )
-        console.log(acceptTradeReceipt);
-        
-        console.log('parseTxLog(acceptTradeReceipt) : ', parseTxLog(acceptTradeReceipt))
-
-
-        // update note DB
-
-        const notes = generateNotesFromAcceptInput(
-            acceptTradeSnarkInputs,
-            parseTxLog(acceptTradeReceipt)[0],
-            _.get(writerInfo, 'sk_enc').toLocaleLowerCase()
-        )
 
         console.log('notes : ', notes)
 

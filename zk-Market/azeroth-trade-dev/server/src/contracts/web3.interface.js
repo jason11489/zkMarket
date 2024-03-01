@@ -1,6 +1,6 @@
-import Web3 from 'web3';
-import types, { addPrefixHex } from '../utils/types'
 import _ from 'lodash';
+import Web3 from 'web3';
+import types, { addPrefixHex } from '../utils/types';
 
 export default class Web3Interface extends Web3 {
     /**

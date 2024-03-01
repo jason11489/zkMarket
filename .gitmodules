@@ -1,3 +1,9 @@
 [submodule "zkWallet"]
 	path = zkWallet
 	url = git@github.com:zkrypto-inc/zkWallet.git
+[submodule "zk-Market/azeroth-trade-dev/zkWallet_contract"]
+	path = zk-Market/azeroth-trade-dev/zkWallet_contract
+	url = git@github.com:zkrypto-inc/contract-manager.git
+[submodule "zk-Market/azeroth-trade-dev/snark"]
+	path = zk-Market/azeroth-trade-dev/snark
+	url = git@github.com:zkrypto-inc/zkrypto-circuits.git

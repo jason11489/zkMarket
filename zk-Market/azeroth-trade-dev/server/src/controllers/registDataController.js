@@ -1,10 +1,14 @@
 import fs from 'fs';
 import _ from 'lodash';
-import { dbPath } from "../config";
+import { dbPath } from '../config';
 import { default as contracts } from "../contracts";
-import db from "../db";
-import snarks from "../snarks";
-import types, { hexToInt } from '../utils/types';
+import { hexToDec } from '../contracts/utils';
+import Encryption from '../crypto/encryption';
+import mimc from '../crypto/mimc';
+import db from '../db';
+import { hexStringToBigIntArr } from '../utils/file';
+import { randomFieldElement } from '../utils/math';
+import { decStrToHex } from '../utils/types';
 /**
  * 
  * body : {
@@ -23,84 +27,96 @@ import types, { hexToInt } from '../utils/types';
  * }
  */
 
-// 1. proof 생성 
-// 2. tx전송 
+// 1. proof 생성
+// 2. tx전송
 // 3. db에 저장
+
+
+    
 const registDataController = async (req, res) => {
     try {
         console.log("tiger is best");
-        console.log("req.bod : ", req.body)
+        console.log("addr_peer : ", req.body.addr_peer)
         
-        const isRegistered = await contracts.tradeContract.isRegisteredUser(types.addPrefixAndPadHex(req.body.addr_peer))
-        if(!isRegistered) {
-            try {
-                const registUserReceipt = await contracts.tradeContract.zkMarketRegisterUser(
-                    req.body.addr_peer,
-                    req.body.pk_own,
-                    JSON.parse(req.body.pk_enc),
-                    req.body.eoa
-                )
-                console.log(registUserReceipt)
-                if(!_.get(registUserReceipt, 'status')) return res.send(false);
-            } catch (error) {
-                console.log(error)
-                return res.send(false);
-            }
-        }
-
-        // register data tx data =================================
-        const snarkInput = new snarks.registDataInput();
-
-        snarkInput.uploadDataFromStr(req.body.data);
-
-        snarkInput.uploadAddrPeer(req.body.addr_peer);
-
-        snarkInput.encryptData();
-
-        snarkInput.makeSnarkInput();
-
-        // await snarks.registDataProver.uploadInputAndRunProof(snarkInput.toSnarkInputFormat(),'_'+snarkInput.gethK());
-
         // CONTRACT ==============================
-        // const contractFormatProof = getContractFormatProof(snarkInput.gethK(), snarks.registDataProver.CircuitType)
-        const contractFormatInputs= snarkInput.toSnarkVerifyFormat();
-        console.log("contractFormatInputs = ", contractFormatInputs);
+
+        // Todo
+        // make CT
+        // const registData_input = new RegistDataInputs();
+        // registData_input.uploadDataFromHexStr(req.body.data);
+        // registData_input.encryptData();
+
+        const buffer = Buffer.from(req.body.data, 'base64');
+        const data_hex = buffer.toString('hex');
+        const data_slice = hexStringToBigIntArr(data_hex);
+
+        console.log("data_slice length  = ",  data_slice)
+
+        const data_key = decStrToHex(randomFieldElement())
+        const registerData_enc = new Encryption.symmetricKeyEncryption(data_key);
+        console.log("data_key = ", data_key)
+        const CT_data = registerData_enc.Enc(...data_slice)
+
+        // make h_ct
+
+        const mimc7 = new mimc.MiMC7();
+        const h_ct = mimc7.hash(...CT_data.ct);
+        console.log("h_ct = ",h_ct)
+        // maek h_K
+
+        const h_k = mimc7.hash(...data_key);
+        console.log("h_k = ",typeof h_k)
+
+        
         
         try {
-            await sendRegisterDataTx(contractFormatInputs)
+            await sendRegisterDataTx(hexToDec(h_ct))
         } catch (error) {
             console.log(error)
+            console.log("tiger 2222")
+            return res.send(false);
+        }
+        try {
+            await checkRegisterDataTx(hexToDec(h_ct))
+        } catch (error) {
+            console.log(error)
+            console.log("tiger 2222")
             return res.send(false);
         }
         
-        console.log(req.body, hexToInt(req.body.eoa).toString(16).toLocaleLowerCase());
+        // console.log(req.body, hexToInt(req.body.eoa).toString(16).toLocaleLowerCase());
         
-        let pkEnc = JSON.parse(req.body.pk_enc);
+        let pkEnc_x = req.body.pk_enc_x;
+        let pkEnc_y = req.body.pk_enc_y;
+        
+        console.log("pkEnc1 = ",req.body.pk_enc)
         db.data.insertData(
             req.body.title,
             req.body.desc,
             req.body.author,
             req.body.pk_own,
             req.body.sk_enc,
-            _.get(pkEnc, 'x'),
+            pkEnc_x,
             req.body.addr_peer,
-            hexToInt(req.body.eoa).toString(16).toLocaleLowerCase(),
-            snarkInput.gethK(),
-            snarkInput.gethCt(),
+            req.body.eoa,
+            h_k,
+            h_ct,
             req.body.fee,
-            snarkInput.getEncKey(),
-            dbPath + 'data/' + snarkInput.gethK() + '.json',
+            data_key,
+            dbPath + 'data/' + h_k + '.json',
             1
         )
 
         let registerDataJson =  _.merge(
             {
                 "text" : req.body.data,
-                "ct_data" : JSON.parse(snarkInput.getsCtData()),
-                'enc_key' : snarkInput.getEncKey(),
-                'h_ct'  : snarkInput.gethCt(),
-                'data_path' : dbPath  + 'data/' + snarkInput.gethK() + '.json',
-                'h_k': snarkInput.gethK(),
+                "ct_data" : CT_data,
+                'enc_key': data_key,
+                'pk_enc_x' : pkEnc_x,
+                'pk_enc_y' : pkEnc_y,
+                'h_ct'  : h_ct,
+                'data_path' : dbPath  + 'data/' + h_k + '.json',
+                'h_k': h_k,
                 'title': req.body.title,
                 'desc': req.body.desc,
                 'author' : req.body.author,
@@ -114,7 +130,7 @@ const registDataController = async (req, res) => {
             },
         req.body)
 
-        fs.writeFileSync(dbPath + 'data/' + snarkInput.gethK().toLocaleLowerCase() + '.json', JSON.stringify(registerDataJson));
+        fs.writeFileSync(dbPath + 'data/' + h_k + '.json', JSON.stringify(registerDataJson));
         console.log("good!!")
         res.send(true);
     } catch (error) {
@@ -124,12 +140,25 @@ const registDataController = async (req, res) => {
     
 }
 
-const sendRegisterDataTx = async (proof, inputs) =>{
+const sendRegisterDataTx = async (inputs) =>{
     try {
         const receipt = await contracts.tradeContract.registData(
-            proof,
-            inputs,
+            inputs
         )
+        console.log("check receipt = ",receipt)
+        return _.get(receipt, 'status');
+    } catch (error) {
+        return undefined;
+    }
+}
+
+
+const checkRegisterDataTx = async (inputs) =>{
+    try {
+        const receipt = await contracts.tradeContract.isRegisteredData(
+            inputs
+        )
+        console.log("check receipt = ",receipt)
         return _.get(receipt, 'status');
     } catch (error) {
         return undefined;
@@ -140,8 +169,6 @@ const getPkEncX = (pk_enc) => {
     return JSON.parse(pk_enc)['x'];
 }
 
-const parseReq = (req) => {
 
-}
 
 export default registDataController;

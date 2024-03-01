@@ -1,11 +1,7 @@
-/* global BigInt */
 import { keccak256 } from '@ethersproject/keccak256';
 import { toUtf8Bytes } from '@ethersproject/strings';
-import Config from '../config.js';
-import math from '../utils/math.js';
-import types from '../utils/types.js';
-import CurveParam from './curveParam.js';
-
+import math from '../utils/math';
+import types from '../utils/types';
 
 const SEED = 'mimc7_seed';
 const BN256_FIELD_PRIME = BigInt('21888242871839275222246405745257275088548364400416034343698204186575808495617');
@@ -26,11 +22,10 @@ class MiMCBase{
      * @param {BigInt} prime        modulo prime
      * @param {int} num_rounds      # of MiMC's round
      */
-    constructor(seed_str = SEED, prime =CurveParam(Config.EC_TYPE).prime, num_rounds){
+    constructor(seed_str = SEED, prime =BN256_FIELD_PRIME, num_rounds){
         this.seed = keccak256(toUtf8Bytes(seed_str));
         this.prime = prime;
         this.num_rounds = num_rounds;
-        this.tmp =[];
     }
 
     /**
@@ -81,28 +76,6 @@ class MiMCBase{
             }
             return BigInt(result).toString(16);
         }
-    }
-
-    // update tmp
-    hashUpdate(arg){
-        this.tmp.push(arg);
-        return ;
-    }
-    hashGetOuptut(){
-        if (this.tmp.length == 0){return -1;}
-        var args = types.hexListToIntList(this.tmp);
-        var ans;
-        if(args.length == 1)
-            ans = BigInt(this._hash(args[0], args[0])).toString(16);
-        else{
-            let result = this._hash(args[0], args[1]);
-            for(let i = 0;i<args.length-2;i++){
-                result = this._hash(result, args[i+2]);
-            }
-            ans = BigInt(result).toString(16);
-        }
-        this.tmp = [];
-        return ans;
     }
 }
 

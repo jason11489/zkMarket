@@ -101,9 +101,7 @@ function Home({ navigation }) {
         setIsRefreshing(true)
         console.log("tiger")
         res = await httpCli.get('content/list');
-        // console.log("check respone of server", res.data[0])
-        // console.log("check respone of 22222",Object.keys(res.data[1][0]))
-        setrand_book(getRandomIntInclusive(0,Object.keys(book_sell_list[1]).length - 1))
+        setrand_book(0)
         await setbook_list(res.data)
         setIsRefreshing(false)
     }

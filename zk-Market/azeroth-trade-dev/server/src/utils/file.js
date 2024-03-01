@@ -4,6 +4,7 @@ import config from '../config.js';
 import CurveParam from '../crypto/curveParam.js';
 import Encryption from '../crypto/encryption.js';
 import mimc from '../crypto/mimc.js';
+import { addPrefixHex } from './types.js';
 
 
 class peerEncData{
@@ -145,7 +146,7 @@ export function hexStringToBigIntArr(hexStr){
     const bigIntArr = [];
     const blockSize= CurveParam().blockBytes * 2
     for(let i=0; i<config.dataBlockNum; i++){
-        bigIntArr.push(hexStr.slice(i*blockSize, (i+1)*blockSize));
+        bigIntArr.push(addPrefixHex(hexStr.slice(i*blockSize, (i+1)*blockSize)));
     }
     return bigIntArr;
 }

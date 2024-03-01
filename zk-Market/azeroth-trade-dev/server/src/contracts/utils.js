@@ -1,49 +1,50 @@
 import fs from 'fs';
-import { crsPath, snarkPath } from '../config';
 
-export function getContractFormatProof(proofId, circuitType){
-    const proofJson = JSON.parse(
-        fs.readFileSync(snarkPath + circuitType+'_' + proofId + '_proof.json', 'utf-8')
-    )
+export function getContractFormatProof(proofId, circuitType) {
+    const proofJson = JSON.parse(fs.readFileSync(
+        snarkPath + circuitType + '_' + proofId + '_proof.json',
+        'utf-8'
+    ))
     return proofFlat(proofJson);
 }
 
-export function getContractFormatVk(circuitName='RegistData', digit=10){
+export function getContractFormatVk(circuitName = 'RegistData', digit = 10) {
     const vkJson = getVk(circuitName);
     let tmp = [];
     for (let i = 0; i < 2; i++) {
-      tmp.push(hexToDec(vkJson['alpha'][i]))
+        tmp.push(hexToDec(vkJson['alpha'][i]))
     }
-    
+
     // reversed
     for (let i = 0; i < 4; i++) {
-      tmp.push(hexToDec(vkJson['beta'][Number.parseInt(i / 2)][(i+1) % 2]))
+        tmp.push(hexToDec(vkJson['beta'][Number.parseInt(i / 2)][(i + 1) % 2]))
     }
-    
+
     // reversed
     for (let i = 0; i < 4; i++) {
-      tmp.push(hexToDec(vkJson['delta'][Number.parseInt(i / 2)][(i+1) % 2]))
+        tmp.push(hexToDec(vkJson['delta'][Number.parseInt(i / 2)][(i + 1) % 2]))
     }
-    
+
     // console.log("ABC len : ", vkJson['ABC'].length)
-    for (let i = 0; i < vkJson['ABC'].length*2; i++) {
-      tmp.push(hexToDec(vkJson['ABC'][Number.parseInt(i / 2)][i % 2]))
+    for (let i = 0; i < vkJson['ABC'].length * 2; i++) {
+        tmp.push(hexToDec(vkJson['ABC'][Number.parseInt(i / 2)][i % 2]))
     }
     const vk = tmp;
     return vk;
 }
 
-export function getVk(circuitName='RegistData'){
-    return JSON.parse(
-        fs.readFileSync(crsPath + circuitName + '_crs_vk.json', 'utf-8')
-    );
+export function getVk(circuitName = 'RegistData') {
+    return JSON.parse(fs.readFileSync(
+        crsPath + circuitName + '_crs_vk.json',
+        'utf-8'
+    ));
 }
 
 /**
- * 
- * @param {String} hexStr 
+ *
+ * @param {String} hexStr
  * @returns {String}  hex to Dec
- * 
+ *
  */
 export function hexToDec(hexStr) {
     if (hexStr.slice(0, 2) !== '0x') {
@@ -53,14 +54,14 @@ export function hexToDec(hexStr) {
 }
 
 /**
- * 
- * @param {JSON} proofJson 
+ *
+ * @param {JSON} proofJson
  * @returns {Array}
- * 
+ *
  */
 export function proofFlat(proofJson) {
     let tmp = []
-    try{
+    try {
         for (let i = 0; i < 2; i++) {
             tmp.push(hexToDec(proofJson['a'][i]));
         }
@@ -72,11 +73,10 @@ export function proofFlat(proofJson) {
             tmp.push(hexToDec(proofJson['c'][i]));
         }
         return tmp;
-    }
-    catch(err){
+    } catch (err) {
         console.log(err.message);
         return null;
-    } 
+    }
 }
 
 export function registDataInputJsonToContractFormat(inputJson) {
@@ -96,7 +96,7 @@ export function acceptTradeInputJsonToContractFormat(inputJson) {
     tmp.push(hexToDec(_.get(inputJson, 'cm_own')))
 
     const ecryptedDataEncKey = _.get(inputJson, 'ecryptedDataEncKey')
-    for (let i = 0; i < 3; i++)
+    for (let i = 0; i < 3; i++) 
         tmp.push(hexToDec(ecryptedDataEncKey[i]))
 
     return tmp

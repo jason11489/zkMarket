@@ -104,17 +104,20 @@ function Upload_book({navigation: {
             const userENA = await AsyncStorage.getItem('userENA');
             const pk_own = await AsyncStorage.getItem('pk_own');
             const sk_enc = await AsyncStorage.getItem('sk_enc');
-            const pk_enc = await AsyncStorage.getItem('pk_enc');
+            const pk_enc_x = await AsyncStorage.getItem('pk_enc_x');
+            const pk_enc_y= await AsyncStorage.getItem('pk_enc_y');
             const userEOA = await AsyncStorage.getItem('userEOA');
 
-            console.log("check = ", userENA);
+            console.log("pk_enc_x = ", pk_enc_x);
+            console.log("pk_enc_y = ", pk_enc_y);
 
             const res = await registerDataQuery(
                 route.params.book_uri,
                 // 나중에 읽어서 하는걸로 고쳐아함.
                 userENA,
                 pk_own,
-                decodeURIComponent(pk_enc),
+                pk_enc_x,
+                pk_enc_y,
                 sk_enc,
                 userEOA,
                 route.params.Title,
@@ -140,9 +143,9 @@ function Upload_book({navigation: {
             );
             await setFileResponse(response);
             await setShowView1(true);
-            console.log("tiger = ", response.fileCopyUri);
+            // console.log("tiger = ", response.fileCopyUri);
             route.params.book_uri = await RNFS.readFile(decodeURIComponent(response.fileCopyUri), 'base64');
-            console.log(typeof route.params.book_uri)
+            // console.log(typeof route.params.book_uri)
         } catch (err) {
             console.warn(err);
         }

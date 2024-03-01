@@ -1,7 +1,6 @@
 const KEY = {
-    CONTRACT_ADDRESS : "0x3C01F044f6b75281e794223ec5F04d0cB6878c30",
-    DELEGATE_SERVER_SK : "2d799f573e90a505b9e76bcfb8429683b06ab4cdc870d1b2f2f1a6a0eb8d6a1",
-    AUDITOR_SK : "51e4f292876f647a1388669547168f7faecb7e8eeb1ded5f542dfaa5ba01341",
-    WRITER_SK : "dddfd0f4fef377a0dd04864266b24573fd152ff59b7fd9d70a2b8f43b9da36",
-}
-export default KEY;
+    CONTRACT_ADDRESS : "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+    endpoint_url : "[object Object]",
+    chain_id : "31337",
+    }
+    export default KEY;

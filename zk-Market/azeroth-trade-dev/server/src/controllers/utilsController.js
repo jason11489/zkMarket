@@ -1,11 +1,6 @@
-import _ from 'lodash'
-import Config from "../config"
-import contracts, { writerKeys } from "../contracts"
-import Ganache from "../contracts/ganahce"
-import web3 from "../contracts/web3"
-import db from "../db"
-import snarks from "../snarks"
-import wallet from "../wallet"
+import _ from 'lodash';
+import contracts from "../contracts";
+import db from "../db";
 
 export const TEST_DATA = '123 123\n fds fds \n';
 
@@ -17,39 +12,6 @@ export const getContractAddressController = (req, res) => {
 }
 
 
-export const getExampleGenTradeParamsController = async (req, res) => {
-    
-    
-    // to make GenTrade parameters
-    const RegisterDataSnarkInputs = new snarks.registDataInput();
-
-    RegisterDataSnarkInputs.uploadDataFromStr(TEST_DATA);
-
-    RegisterDataSnarkInputs.uploadAddrPeer(writerKeys.pk.ena);
-
-    RegisterDataSnarkInputs.encryptData();
-
-    RegisterDataSnarkInputs.makeSnarkInput();
-
-    const hK = RegisterDataSnarkInputs.gethK();
-    const addrPeer = writerKeys.pk.ena;
-    const pkEnc = writerKeys.pk.pkEnc;
-
-    DATA_ENC_KEY = RegisterDataSnarkInputs.getEncKey();
-
-    // console.log(hK, addrPeer, pkEnc)
-
-
-
-    res.send({
-        hK          : hK,
-        pkEncPeer   : pkEnc.toXYJson(),
-        addrPeer    : addrPeer,
-        addrDel     : wallet.delegateServerKey.pk.ena,
-        feeDel      : BigInt(web3.web3.utils.toWei('0.1', 'ether')).toString(16),
-        feePeer     : BigInt(web3.web3.utils.toWei('0.9', 'ether')).toString(16),
-    })
-}
 
 export const getNotesController = async (req, res) => {
     console.log(req.param, req.params)
@@ -74,6 +36,5 @@ export const getAllTrade = async (req, res) => {
 
 export default {
     getContractAddressController,
-    getExampleGenTradeParamsController,
     getDataEncKey
 }

@@ -36,10 +36,9 @@ export const mysqlConfig = {
     Promise : bluebird,
 };
 
-export let crsPath = Config.homePath + 'src/snarks/crs/'
 export let snarkPath = Config.homePath + 'db/proof/'
 export let dbPath = Config.homePath + 'db/'
-export let ganacheAccountKeyPath = Config.homePath + '../tradeContract/keys.json'
-export let contractsBuildPath = Config.homePath + '../tradeContract/build/contracts/'
+export let ganacheAccountKeyPath = Config.homePath + '../zkWallet_contract/zkwallet/scripts/keys.json'
+export let contractsBuildPath = Config.homePath + '../zkWallet_contract/zkwallet/artifacts/contracts/DataTradeContract.sol/'
 
 export default Config;

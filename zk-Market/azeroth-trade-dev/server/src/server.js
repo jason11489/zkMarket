@@ -1,7 +1,7 @@
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import path from 'path';
-import cors from 'cors';
-import bodyParser from 'body-parser';
 
 import rootRouter from './routers';
 
@@ -14,7 +14,7 @@ const server = async (initDB=false) => {
         origin: '*', 
     }));
     
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit:'50mb'}));
     app.use('/', rootRouter);  
     
     app.set('port', port);

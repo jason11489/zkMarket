@@ -2,7 +2,6 @@ import fs from 'fs';
 import _ from "lodash";
 import { dbPath } from "../config";
 import db from "../db";
-import wallet from "../wallet";
 
 /*
     send Info list :
@@ -21,7 +20,7 @@ export const getContentListController = async (req, res) => {
     const pk_enc = _.get(req.params, 'pk_enc');
 
     let dataInfoList = []
-    if (pk_enc == undefined) {
+    if (pk_enc === undefined) {
         dataInfoList = await db
             .data
             .getAllDataInfo();
@@ -31,15 +30,9 @@ export const getContentListController = async (req, res) => {
         console.log("pk_enc = ", pk)
         dataInfoList = await db.trade.SELECT_TRADE({ buyer_pk: pk });
         console.log("datalist = ",dataInfoList)
-        // for (
-        //     const [i, e] of(await db.trade.SELECT_TRADE({buyer_addr: pk})).entries()
-        // ) {
-        //     dataInfoList.push(await db.data.getDataInfo('h_k', _.get(e, 'h_k')))
-        //     console.log("check for buyer list")
-        // }
     }
 
-    if (dataInfoList == undefined) {
+    if (dataInfoList === undefined) {
         console.log("check for buyer list fail")
         return res.send([false]);
     }
@@ -53,7 +46,12 @@ export const getContentListController = async (req, res) => {
         contentList.push(_data)
         // console.log("check data info list = ", _data)
     }
-    // console.log("check content list = ",contentList[0])
+    console.log("check content list = ",Object.keys(contentList[0]))
+    console.log("check content list = ", contentList[0].title)
+    
+
+
+    
     res.send([true,contentList]);
 }
 
@@ -104,6 +102,8 @@ export const toFrontFormat = async (data) => {
     let title_;
     let description_;
     let author_;
+    let pk_enc_x_;
+    let pk_enc_y_;
     console.log("check file path = ", _.get(data, 'h_k'));
     const dataPath = _.get(
         (await db.data.getDataPath(_.get(data, 'h_k'))),
@@ -120,6 +120,8 @@ export const toFrontFormat = async (data) => {
         title_ = _.get(JSON.parse(fileData), 'title')
         author_ = _.get(JSON.parse(fileData), 'author')
         description_ = _.get(JSON.parse(fileData), 'desc')
+        pk_enc_x_ = _.get(JSON.parse(fileData), 'pk_enc_x')
+        pk_enc_y_ = _.get(JSON.parse(fileData), 'pk_enc_y')
 
         // console.log(_.get(JSON.parse(fileData), 'text'))
     }
@@ -129,7 +131,6 @@ export const toFrontFormat = async (data) => {
         title: title_,
         description: description_,
         addrPeer: _.get(data, 'addr_'),
-        addrDel: wallet.delegateServerKey.pk.ena,
         pkEnc: _.get(data, 'pk_enc'),
         author: author_,
         hK: _.get(data, 'h_k'),
@@ -140,7 +141,9 @@ export const toFrontFormat = async (data) => {
         page_num: page_num_,
         book_type_1: book_type_1_,
         book_type_2: book_type_2_,
-        image_data : image_data_
+        image_data: image_data_,
+        pk_enc_x: pk_enc_x_,
+        pk_enc_y : pk_enc_y_
     }
 }
 
