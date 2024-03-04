@@ -7,3 +7,6 @@
 [submodule "zk-Market/azeroth-trade-dev/snark"]
 	path = zk-Market/azeroth-trade-dev/snark
 	url = git@github.com:zkrypto-inc/zkrypto-circuits.git
+[submodule "zk-Market/azeroth-trade-dev/server/src/npai_rs"]
+	path = zk-Market/azeroth-trade-dev/server/src/npai_rs
+	url = git@github.com:jason11489/napi_rs.git
