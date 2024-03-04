@@ -157,6 +157,39 @@ class pCT {
     }
 }
 
+class zkmarketpCT {
+    /**
+     *
+     * @param {AffinePoint}      c0      The ciphertext G^r
+     * @param {AffinePoint}      c1      The ciphertext k*(pk)^r
+     * @param {string[]}         c2      The ciphertext SE.Enc_k(msg)
+     */
+    constructor(c0, c1, c2) {
+        this.c0 =
+            typeof c0.x === 'bigint' ? c0 : new curve.AffinePoint(c0.x, c0.y);
+        this.c1 =
+            typeof c1.x === 'bigint' ? c1 : new curve.AffinePoint(c1.x, c1.y);
+        this.c2 = c2;
+    }
+    toJson() {
+        return JSON.stringify(this);
+    }
+
+    static fromJson(pCTJson) {
+        let dataJson = JSON.parse(pCTJson);
+
+        return new zkmarketpCT(dataJson.c2);
+    }
+
+    toList() {
+        return [
+            ...this.c0.toHexArray(),
+            ...this.c1.toHexArray(),
+            ...this.c2,
+        ];
+    }
+}
+
 class publicKeyEncryption {
     constructor() {
         this.EC_TYPE = 'EC_ALT_BN128';
@@ -205,8 +238,29 @@ class publicKeyEncryption {
         return [new pCT(c0, c1, c2, c3), r, k];
     }
 
-    zkMarketDec(upk, ...msg) {
-        
+    zkMarketDec(pct, privKey) {
+        let Curve = new curve.TwistedEdwardsCurve(
+            new CurveParam('EC_ALT_BN128'),
+        );
+        let mimc7 = new mimc.MiMC7();
+
+        let curveC0 = Curve.computeScalarMul(pct.c0, types.hexToInt(privKey));
+        let ciphertext = pct.c1;
+        let curveK = Curve.subAffinePoint(ciphertext, curveC0);
+
+        return (() => {
+            let ret = [];
+            for (const [i, e] of pct.c2.entries()) {
+                let hashInput = [curveK.x.toString(16), i.toString(16)];
+                let hashed = types.hexToInt(mimc7.hash(...hashInput));
+                ret.push(
+                    math
+                        .mod(types.hexToInt(e) - hashed, this.prime)
+                        .toString(16),
+                );
+            }
+            return ret;
+        })();
     }
 
     /**
@@ -246,6 +300,7 @@ const Encryption = {
     sCT,
     symmetricKeyEncryption,
     pCT,
+    zkmarketpCT,
     publicKeyEncryption,
 };
 

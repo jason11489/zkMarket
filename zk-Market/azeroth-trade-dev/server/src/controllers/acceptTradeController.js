@@ -11,9 +11,10 @@
 import _ from 'lodash';
 import { web3 } from "../contracts/web3";
 import Encryption from "../crypto/encryption";
-import db from "../db";
+import db from '../db';
 import { addPrefixHex } from "../utils/types";
-import { toFrontFormat } from './contentRouterController';
+
+import types from '../utils/types';
 
 /**
  * 
@@ -23,83 +24,115 @@ import { toFrontFormat } from './contentRouterController';
  */
 const acceptTradeController = async (req, res) => {
     const txHash = req.body.txHash;
-    console.log("req.body : ", req.body)
-    
+    console.log("txHash = ",txHash)
+
     web3.eth.getTransactionReceipt(addPrefixHex(txHash), async (err, receipt) => {
         if(err) {
             console.log(err);
             return res.send(false);
         }
-        if(_.get(receipt, 'status') == false){ return res.send(false) }
 
-        const hK = _.get(req.body,'hK')
-        if( hK == undefined)  return res.send(false);
+        // console.log("receipt = ",receipt)
 
-        const eoaAddr = getEoaAddrFromReceipt(receipt);
-        console.log("receipt = ", receipt)
-        console.log("eoaAddr = ",eoaAddr)
-
-        console.log("all data : ", await db.data.getAllDataInfo())
-        console.log("eoaAddr : ", eoaAddr.toLocaleLowerCase())
+        const hK = req.body.hK;
         const writerInfo = await db.data.getDataInfo(
             'h_k',
             hK.toLocaleLowerCase()
         )
-        
-        console.log("consumerInfo : ", writerInfo)
 
-        const [pk_enc_cons, r_cm, fee_peer, fee_del, h_k] = getGenTradeMsgFromReceipt(receipt, _.get(writerInfo, 'sk_enc'));
+        const ENA_writer = writerInfo.addr_;
+        console.log("ENA writer = ", ENA_writer)
+
+        const pk_peer = writerInfo.pk_enc;
+        console.log("pk_peer = ", types.decStrToHex(pk_peer))
+
+        console.log("writer info = ", writerInfo)
+        
+
+        const CT_order = parseTxLog(receipt)[0];
+        const G_r = {
+            "x" : CT_order[5], "y" : CT_order[6]
+        };
+        const c1 = {
+            "x" : CT_order[8], "y" : CT_order[9]
+        };
+        const c2 = [CT_order[11], CT_order[12], CT_order[13], CT_order[14], CT_order[15]];
+
+        
+        const pct = new Encryption.zkmarketpCT(G_r, c1, c2);
+        const sk_enc = writerInfo.sk_enc;
+        
+        console.log("CT Order = ", pct)
+        console.log("sk cons = ",  sk_enc);
+        const zkmarket_pct = new Encryption.publicKeyEncryption();
+
+        const Order = zkmarket_pct.zkMarketDec(pct, sk_enc);
+        
+        console.log("Order = ",Order)
+        
+
+
+        // const eoaAddr = getEoaAddrFromReceipt(receipt);
+        // console.log("receipt = ", receipt)
+        // console.log("eoaAddr = ",eoaAddr)
+
+        // console.log("all data : ", await db.data.getAllDataInfo())
+        // console.log("eoaAddr : ", eoaAddr.toLocaleLowerCase())
+        
+        // console.log("consumerInfo : ", writerInfo)
+
+        // const [pk_enc_cons, r_cm, fee_peer, fee_del, h_k] = getGenTradeMsgFromReceipt(receipt, _.get(writerInfo, 'sk_enc'));
         // const [pk_enc_cons, r_cm, fee_peer, fee_del, h_k] = getGenTradeMsgFromReceipt(receipt, writerKeys.sk);
 
         
-        if(pk_enc_cons == undefined) return res.send(false);
+        // if(pk_enc_cons == undefined) return res.send(false);
 
-        console.log(
-            wallet.delegateServerKey.pk.ena,
-            _.get(writerInfo, 'addr_'),
-            pk_enc_cons,
-            _.get(writerInfo, 'enc_key'),
-            r_cm,
-            fee_peer,
-            fee_del
-        )
-        console.log("wallet.delegateServerKey.pk.ena = ",wallet.delegateServerKey.pk.ena)
-        console.log("_.get(writerInfo, 'addr_') = ",_.get(writerInfo, 'addr_'))
-        console.log("pk_enc_cons = ",pk_enc_cons)
-        console.log("_.get(writerInfo, 'enc_key') = ",_.get(writerInfo, 'enc_key'))
-        console.log("r_cm = ",r_cm)
-        console.log("fee_peer = ",fee_peer)
-        console.log("fee_del = ", fee_del)
+        // console.log(
+        //     wallet.delegateServerKey.pk.ena,
+        //     _.get(writerInfo, 'addr_'),
+        //     pk_enc_cons,
+        //     _.get(writerInfo, 'enc_key'),
+        //     r_cm,
+        //     fee_peer,
+        //     fee_del
+        // )
+        // console.log("wallet.delegateServerKey.pk.ena = ",wallet.delegateServerKey.pk.ena)
+        // console.log("_.get(writerInfo, 'addr_') = ",_.get(writerInfo, 'addr_'))
+        // console.log("pk_enc_cons = ",pk_enc_cons)
+        // console.log("_.get(writerInfo, 'enc_key') = ",_.get(writerInfo, 'enc_key'))
+        // console.log("r_cm = ",r_cm)
+        // console.log("fee_peer = ",fee_peer)
+        // console.log("fee_del = ", fee_del)
         
         // acceptTrade start
         console.log("==========================acceptTrade start==========================")
 
 
 
-        console.log('notes : ', notes)
+        // console.log('notes : ', notes)
 
-        db.note.INSER_NOTES(...notes)
+        // db.note.INSER_NOTES(...notes)
 
-        console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())
+        // console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())
 
 
-        // update trade LOG DB
+        // // update trade LOG DB
 
-        db.trade.INSERT_TRADE({
-            buyer_addr : eoaAddr.toLocaleLowerCase(),
-            // buyer_sk : _.get(writerInfo, 'sk_enc'),
-            buyer_pk : pk_enc_cons.toLocaleLowerCase(),
-            title : _.get(writerInfo, 'title'),
-            h_k : h_k.toLocaleLowerCase(),
-        })
+        // db.trade.INSERT_TRADE({
+        //     buyer_addr : eoaAddr.toLocaleLowerCase(),
+        //     // buyer_sk : _.get(writerInfo, 'sk_enc'),
+        //     buyer_pk : pk_enc_cons.toLocaleLowerCase(),
+        //     title : _.get(writerInfo, 'title'),
+        //     h_k : h_k.toLocaleLowerCase(),
+        // })
 
-        const textInfo = await db.data.getDataInfo(
-            'h_k',
-            h_k
-        )
-        console.log("textInfo = ", textInfo)
-        console.log("format info = ",toFrontFormat(textInfo))
-        return res.send(toFrontFormat(textInfo))
+        // const textInfo = await db.data.getDataInfo(
+        //     'h_k',
+        //     h_k
+        // )
+        // console.log("textInfo = ", textInfo)
+        // console.log("format info = ",toFrontFormat(textInfo))
+        return res.send("hello")
     })
 
 }
