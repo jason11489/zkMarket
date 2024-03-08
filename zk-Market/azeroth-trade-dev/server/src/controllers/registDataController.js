@@ -64,7 +64,7 @@ const registDataController = async (req, res) => {
         console.log("h_ct = ",h_ct)
         // maek h_K
 
-        const h_k = mimc7.hash(...data_key);
+        const h_k = mimc7.hash(req.body.addr_peer,data_key);
         console.log("h_k = ",typeof h_k)
 
         

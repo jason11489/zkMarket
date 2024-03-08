@@ -1,178 +1,178 @@
-
-
 /**
- * 
+ *
  * txHash -> log 확인
  * 누군지 알려줘야함 : pk_enc ? sk_enc ? eoa
- * 
- * 
+ *
+ *
  */
 
 import _ from 'lodash';
+import { default as contracts } from "../contracts";
 import { web3 } from "../contracts/web3";
 import Encryption from "../crypto/encryption";
 import db from '../db';
 import { addPrefixHex } from "../utils/types";
 
+import mimc from '../crypto/mimc';
 import types from '../utils/types';
 
+import napi_func from '../npai_rs/index';
+
 /**
- * 
+ *
  * sk_enc
  * txHash
- * 
+ *
  */
 const acceptTradeController = async (req, res) => {
     const txHash = req.body.txHash;
-    console.log("txHash = ",txHash)
+    console.log("txHash = ", txHash)
 
-    web3.eth.getTransactionReceipt(addPrefixHex(txHash), async (err, receipt) => {
-        if(err) {
-            console.log(err);
-            return res.send(false);
-        }
+    web3
+        .eth
+        .getTransactionReceipt(addPrefixHex(txHash), async (err, receipt) => {
+            if (err) {
+                console.log(err);
+                return res.send(false);
+            }
 
-        // console.log("receipt = ",receipt)
+            // console.log("receipt = ",receipt)
 
-        const hK = req.body.hK;
-        const writerInfo = await db.data.getDataInfo(
-            'h_k',
-            hK.toLocaleLowerCase()
-        )
+            const hK = req.body.hK;
+            const writerInfo = await db
+                .data
+                .getDataInfo('h_k', hK.toLocaleLowerCase())
+            
+            console.log("check book exist = ",await checkRegisterDataTx(types.hexStrToDec(writerInfo.h_ct)))
+            
 
-        const ENA_writer = writerInfo.addr_;
-        console.log("ENA writer = ", ENA_writer)
+            const ENA_writer = writerInfo.addr_;
 
-        const pk_peer = writerInfo.pk_enc;
-        console.log("pk_peer = ", types.decStrToHex(pk_peer))
+            const pk_peer = writerInfo.pk_enc;
 
-        console.log("writer info = ", writerInfo)
-        
+            const CT_order = parseTxLog(receipt)[0];
+            const G_r = {
+                "x": CT_order[5],
+                "y": CT_order[6]
+            };
+            const c1 = {
+                "x": CT_order[8],
+                "y": CT_order[9]
+            };
+            const c2 = [
+                CT_order[11], CT_order[12], CT_order[13], CT_order[14], CT_order[15]
+            ];
 
-        const CT_order = parseTxLog(receipt)[0];
-        const G_r = {
-            "x" : CT_order[5], "y" : CT_order[6]
-        };
-        const c1 = {
-            "x" : CT_order[8], "y" : CT_order[9]
-        };
-        const c2 = [CT_order[11], CT_order[12], CT_order[13], CT_order[14], CT_order[15]];
+            const pct = new Encryption.zkmarketpCT(G_r, c1, c2);
+            const sk_enc = writerInfo.sk_enc;
 
-        
-        const pct = new Encryption.zkmarketpCT(G_r, c1, c2);
-        const sk_enc = writerInfo.sk_enc;
-        
-        console.log("CT Order = ", pct)
-        console.log("sk cons = ",  sk_enc);
-        const zkmarket_pct = new Encryption.publicKeyEncryption();
+            const zkmarket_pct = new Encryption.publicKeyEncryption();
 
-        const Order = zkmarket_pct.zkMarketDec(pct, sk_enc);
-        
-        console.log("Order = ",Order)
-        
+            const Order = zkmarket_pct.zkMarketDec(pct, sk_enc);
 
+            const mimc7 = new mimc.MiMC7();
+            const cm = mimc7.hash(ENA_writer, Order[2], Order[3], hK, Order[0]);
+            const o_wallet = mimc7.hash(Order[2], Order[3], hK, Order[0]);
+            const cm_wallet = mimc7.hash(0,0,ENA_writer, Order[3], o_wallet);
 
-        // const eoaAddr = getEoaAddrFromReceipt(receipt);
-        // console.log("receipt = ", receipt)
-        // console.log("eoaAddr = ",eoaAddr)
+            const penc = new Encryption.publicKeyEncryption();
 
-        // console.log("all data : ", await db.data.getAllDataInfo())
-        // console.log("eoaAddr : ", eoaAddr.toLocaleLowerCase())
-        
-        // console.log("consumerInfo : ", writerInfo)
+            const plaintext = [writerInfo.enc_key];
 
-        // const [pk_enc_cons, r_cm, fee_peer, fee_del, h_k] = getGenTradeMsgFromReceipt(receipt, _.get(writerInfo, 'sk_enc'));
-        // const [pk_enc_cons, r_cm, fee_peer, fee_del, h_k] = getGenTradeMsgFromReceipt(receipt, writerKeys.sk);
+            const pk_cons = {
+                "pkEnc": {
+                    "x": BigInt(types.hexStrToDec(Order[0])),
+                    "y": BigInt(types.hexStrToDec(Order[1]))
+                }
+            }
 
-        
-        // if(pk_enc_cons == undefined) return res.send(false);
-
-        // console.log(
-        //     wallet.delegateServerKey.pk.ena,
-        //     _.get(writerInfo, 'addr_'),
-        //     pk_enc_cons,
-        //     _.get(writerInfo, 'enc_key'),
-        //     r_cm,
-        //     fee_peer,
-        //     fee_del
-        // )
-        // console.log("wallet.delegateServerKey.pk.ena = ",wallet.delegateServerKey.pk.ena)
-        // console.log("_.get(writerInfo, 'addr_') = ",_.get(writerInfo, 'addr_'))
-        // console.log("pk_enc_cons = ",pk_enc_cons)
-        // console.log("_.get(writerInfo, 'enc_key') = ",_.get(writerInfo, 'enc_key'))
-        // console.log("r_cm = ",r_cm)
-        // console.log("fee_peer = ",fee_peer)
-        // console.log("fee_del = ", fee_del)
-        
-        // acceptTrade start
-        console.log("==========================acceptTrade start==========================")
+            const [CT_k, CT_k_r, CT_k_key] = penc.zkMarketEnc(pk_cons, ...plaintext);
 
 
+            const hk_tmp = mimc7.hash(writerInfo.addr_, writerInfo.enc_key);
 
-        // console.log('notes : ', notes)
+            const inputs = {
+                cm: types.hexStrToDec(cm).toString(),
+                cmWallet: types.hexStrToDec(cm_wallet).toString(),
+                gRX: CT_k.c0.x.toString(),
+                gRY: CT_k.c0.y.toString(),
+                c1X: CT_k.c1.x.toString(),
+                c1Y: CT_k.c1.y.toString(),
+                ctK: types.hexStrToDec(CT_k.c2[0]).toString(),
+                hK: types.hexStrToDec(hK).toString(),
+                kData: types.hexStrToDec(writerInfo.enc_key).toString(),
+                pkConsX: types.hexStrToDec(Order[0]).toString(),
+                pkConsY: types.hexStrToDec(Order[1]).toString(),
+                enaWriter: types.hexStrToDec(ENA_writer).toString(),
+                r: types.hexStrToDec(Order[2]).toString(),
+                fee: types.hexStrToDec(Order[3]).toString(),
+                ctKKeyX: CT_k_key.x.toString(),
+                ctKKeyY : CT_k_key.y.toString(),
+                ctKX: CT_k_key.x.toString(),
+                ctKR: types.hexStrToDec(CT_k_r).toString(),
+                tkAddr: "0",
+                tkId: "0"
+            }
 
-        // db.note.INSER_NOTES(...notes)
 
-        // console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())
+            console.log(
+                "==========================acceptTrade start=========================="
+            )
+
+            // console.log("zk snark init = ", napi_func.init());
+            const _proof = await napi_func.prove(inputs);
+            const proof = JSON.parse(_proof)
+            const contract_proof = [
+                types.addPrefixHex(proof.A[0]),
+                types.addPrefixHex(proof.A[1]),
+                types.addPrefixHex(proof.B[1]),
+                types.addPrefixHex(proof.B[0]),
+                types.addPrefixHex(proof.B[3]),
+                types.addPrefixHex(proof.B[2]),
+                types.addPrefixHex(proof.C[0]),
+                types.addPrefixHex(proof.C[1])
+            ]
+
+            const contract_input = [
+                types.addPrefixHex(types.decStrToHex(inputs.cm)),
+                types.addPrefixHex(types.decStrToHex(inputs.cmWallet)),
+                types.addPrefixHex(types.decStrToHex(inputs.ctK)),
+                types.addPrefixHex(types.decStrToHex(inputs.gRX)),
+                types.addPrefixHex(types.decStrToHex(inputs.gRY)),
+                types.addPrefixHex(types.decStrToHex(inputs.c1X)),
+                types.addPrefixHex(types.decStrToHex(inputs.c1Y))
+            ];
 
 
-        // // update trade LOG DB
+            try {
+                await sendacceptTx(contract_proof,contract_input)
+            } catch (error) {
+                console.log(error)
+                return res.send(false);
+            }
 
-        // db.trade.INSERT_TRADE({
-        //     buyer_addr : eoaAddr.toLocaleLowerCase(),
-        //     // buyer_sk : _.get(writerInfo, 'sk_enc'),
-        //     buyer_pk : pk_enc_cons.toLocaleLowerCase(),
-        //     title : _.get(writerInfo, 'title'),
-        //     h_k : h_k.toLocaleLowerCase(),
-        // })
+            console.log("check contract input = ",contract_input)
 
-        // const textInfo = await db.data.getDataInfo(
-        //     'h_k',
-        //     h_k
-        // )
-        // console.log("textInfo = ", textInfo)
-        // console.log("format info = ",toFrontFormat(textInfo))
-        return res.send("hello")
-    })
+            // console.log('notes : ', notes) db.note.INSER_NOTES(...notes)
+            // console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())  update trade LOG
+            // DB db.trade.INSERT_TRADE({     buyer_addr : eoaAddr.toLocaleLowerCase(),
+            // buyer_sk : _.get(writerInfo, 'sk_enc'),     buyer_pk :
+            // pk_enc_cons.toLocaleLowerCase(),     title : _.get(writerInfo, 'title'), h_k
+            // : h_k.toLocaleLowerCase(), }) const textInfo = await db.data.getDataInfo(
+            // 'h_k',     h_k ) console.log("textInfo = ", textInfo) console.log("format
+            // info = ",toFrontFormat(textInfo))
+            // return res.send("hello")
+        })
 
 }
 
-// msg 
-// 0 : pk_enc_cons
-// 1 : r_cm
-// 2 : fee_peer
-// 3 : fee_del
-// 4 : h_k
-const getGenTradeMsgFromReceipt = (receipt, skEnc) => {
-    console.log(receipt),
-    console.log(parseTxLog(receipt), skEnc)
-    console.log(skEnc)
-    try {
-        const logs = parseTxLog(receipt)[0];
-        console.log("check CT = ", logs);
-        const penc = new Encryption.publicKeyEncryption();
-        const msg = penc.Dec(
-            new Encryption.pCT(
-                logs[1],
-                logs[2],
-                logs.slice(5)
-            ),
-            skEnc
-        )
-        console.log('msg : ', msg)
-        return msg;
-    } catch (error) {
-        console.log(error);
-        return [undefined, undefined, undefined, undefined, undefined]
-    }
-}
 
 const getEoaAddrFromReceipt = (receipt) => {
     try {
         const logs = parseTxLog(receipt)[0][0];
-        console.log("logs = ",logs)
-        for(let i=0; i<logs.length; i++){
-            if(logs[i] != '0'){
+        console.log("logs = ", logs)
+        for (let i = 0; i < logs.length; i++) {
+            if (logs[i] != '0') {
                 return logs.slice(i);
             }
         }
@@ -183,10 +183,36 @@ const getEoaAddrFromReceipt = (receipt) => {
     }
 }
 
+const sendacceptTx = async (proof,inputs) => {
+    try {
+        const receipt = await contracts.tradeContract.acceptTrade(
+            proof,
+            inputs
+        )
+        console.log("check receipt in accept tx = ",receipt)
+        return receipt;
+    } catch (error) {
+        console.log("error in accetp tx = ",error)
+        return undefined;
+    }
+}
+
+const checkRegisterDataTx = async (inputs) =>{
+    try {
+        const receipt = await contracts.tradeContract.isRegisteredData(
+            inputs
+        )
+        console.log("check receipt = ",receipt)
+        return receipt;
+    } catch (error) {
+        return undefined;
+    }
+}
+
 const parseTxLog = (receipt) => {
     let tmp = []
     let logs = _.get(receipt, 'logs') ?? receipt
-    for(let i=0; i<logs.length; i++){
+    for (let i = 0; i < logs.length; i++) {
         tmp.push(parseData(logs[i].data))
     }
     return tmp
@@ -194,8 +220,8 @@ const parseTxLog = (receipt) => {
 
 const parseData = (data) => {
     let tmp = []
-    for(let i=0; i<Number.parseInt(data.length/64); i++){
-        tmp.push(data.slice(2+64*i, 2+64*(i+1)))
+    for (let i = 0; i < Number.parseInt(data.length / 64); i++) {
+        tmp.push(data.slice(2 + 64 * i, 2 + 64 * (i + 1)))
     }
     return tmp
 }

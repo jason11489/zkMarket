@@ -35,9 +35,7 @@ class sCT {
      */
     isEqual(sct) {
         return (
-            this.r === sct.r &&
-            Object.entries(this.ct).toString() ===
-                Object.entries(sct.ct).toString()
+            this.r === sct.r && Object.entries(this.ct).toString() === Object.entries(sct.ct).toString()
         );
     }
 
@@ -77,20 +75,14 @@ class symmetricKeyEncryption {
                 const hashed = types.hexToInt(
                     mimc7.hash(this.privKey.toString(16), hashInput),
                 );
-                ret.push(
-                    math
-                        .mod(types.hexToInt(e) + hashed, this.prime)
-                        .toString(16),
-                );
+                ret.push(math.mod(types.hexToInt(e) + hashed, this.prime).toString(16),);
             }
             return ret;
         })();
         return new sCT(r.toString(16), ct);
     }
 
-    zkmarket_data_enx(...msg) {
-
-    }
+    zkmarket_data_enx(...msg) {}
 
     /**
      *
@@ -109,11 +101,7 @@ class symmetricKeyEncryption {
                 const hashed = types.hexToInt(
                     mimc7.hash(this.privKey.toString(16), hashInput),
                 );
-                ret.push(
-                    math
-                        .mod(types.hexToInt(e) - hashed, this.prime)
-                        .toString(16),
-                );
+                ret.push(math.mod(types.hexToInt(e) - hashed, this.prime).toString(16),);
             }
             return ret;
         })();
@@ -129,12 +117,15 @@ class pCT {
      * @param {string[]}         c3      The ciphertext SE.Enc_k(msg)
      */
     constructor(c0, c1, c2, c3) {
-        this.c0 =
-            typeof c0.x === 'bigint' ? c0 : new curve.AffinePoint(c0.x, c0.y);
-        this.c1 =
-            typeof c1.x === 'bigint' ? c1 : new curve.AffinePoint(c1.x, c1.y);
-        this.c2 =
-            typeof c2.x === 'bigint' ? c2 : new curve.AffinePoint(c2.x, c2.y);
+        this.c0 = typeof c0.x === 'bigint'
+            ? c0
+            : new curve.AffinePoint(c0.x, c0.y);
+        this.c1 = typeof c1.x === 'bigint'
+            ? c1
+            : new curve.AffinePoint(c1.x, c1.y);
+        this.c2 = typeof c2.x === 'bigint'
+            ? c2
+            : new curve.AffinePoint(c2.x, c2.y);
         this.c3 = c3;
     }
     toJson() {
@@ -149,10 +140,16 @@ class pCT {
 
     toList() {
         return [
-            ...this.c0.toHexArray(),
-            ...this.c1.toHexArray(),
-            ...this.c2.toHexArray(),
-            ...this.c3,
+            ...this
+                .c0
+                .toHexArray(),
+            ...this
+                .c1
+                .toHexArray(),
+            ...this
+                .c2
+                .toHexArray(),
+            ...this.c3
         ];
     }
 }
@@ -165,10 +162,12 @@ class zkmarketpCT {
      * @param {string[]}         c2      The ciphertext SE.Enc_k(msg)
      */
     constructor(c0, c1, c2) {
-        this.c0 =
-            typeof c0.x === 'bigint' ? c0 : new curve.AffinePoint(c0.x, c0.y);
-        this.c1 =
-            typeof c1.x === 'bigint' ? c1 : new curve.AffinePoint(c1.x, c1.y);
+        this.c0 = typeof c0.x === 'bigint'
+            ? c0
+            : new curve.AffinePoint(c0.x, c0.y);
+        this.c1 = typeof c1.x === 'bigint'
+            ? c1
+            : new curve.AffinePoint(c1.x, c1.y);
         this.c2 = c2;
     }
     toJson() {
@@ -183,9 +182,13 @@ class zkmarketpCT {
 
     toList() {
         return [
-            ...this.c0.toHexArray(),
-            ...this.c1.toHexArray(),
-            ...this.c2,
+            ...this
+                .c0
+                .toHexArray(),
+            ...this
+                .c1
+                .toHexArray(),
+            ...this.c2
         ];
     }
 }
@@ -205,9 +208,7 @@ class publicKeyEncryption {
      * @returns
      */
     Enc(apk, upk, ...msg) {
-        let Curve = new curve.TwistedEdwardsCurve(
-            new CurveParam('EC_ALT_BN128'),
-        );
+        let Curve = new curve.TwistedEdwardsCurve(new CurveParam('EC_ALT_BN128'),);
         let r = math.randomFieldElement(this.prime);
         let k = math.randomFieldElement(this.prime);
 
@@ -223,25 +224,76 @@ class publicKeyEncryption {
             let ret = [];
             let mimc7 = new mimc.MiMC7();
             for (const [i, e] of msg.entries()) {
-                let hashInput = [curveK.x.toString(16), i.toString(16)];
-                let hashed = types.hexToInt(mimc7.hash(...hashInput));
-                ret.push(
-                    math
-                        .mod(types.hexToInt(e) + hashed, this.prime)
+                let hashInput = [
+                    curveK
+                        .x
                         .toString(16),
-                );
+                    i.toString(16)
+                ];
+                let hashed = types.hexToInt(mimc7.hash(...hashInput));
+                ret.push(math.mod(types.hexToInt(e) + hashed, this.prime).toString(16),);
             }
             return ret;
         })();
         r = r.toString(16);
         k = curveK;
-        return [new pCT(c0, c1, c2, c3), r, k];
+        return [
+            new pCT(c0, c1, c2, c3),
+            r,
+            k
+        ];
+    }
+
+    zkMarketEnc(upk, ...msg) {
+        let Curve = new curve.TwistedEdwardsCurve(new CurveParam('EC_ALT_BN128'),);
+        let r = math.randomFieldElement(this.prime);
+        let k = math.randomFieldElement(this.prime);
+
+        let curveK = curve.basePointMul(k);
+        let curvePk
+        try {
+
+            curvePk = Curve.computeScalarMul(upk.pkEnc, r);
+        } catch (err) {
+            console.log(err)
+        }
+
+        let c0 = curve.basePointMul(r);
+        let c1 = Curve.addAffinePoint(curveK, curvePk);
+
+        let c2 = (() => {
+            let ret = [];
+            let mimc7 = new mimc.MiMC7();
+            for (const [i, e] of msg.entries()) {
+                try {
+                    console.log("e = ", e)
+                    let hashInput = [
+                        curveK
+                            .x
+                            .toString(16),
+                        i.toString(16)
+                    ];
+                    let hashed = types.hexToInt(mimc7.hash(...hashInput));
+                    ret.push(math.mod(types.hexToInt(e) + hashed, this.prime).toString(16),);
+                } catch (err) {
+                    console.log(err)
+                }
+
+            }
+            return ret;
+        })();
+        r = r.toString(16);
+        k = curveK;
+        console.log("tiger")
+        return [
+            new zkmarketpCT(c0, c1, c2),
+            r,
+            k
+        ];
     }
 
     zkMarketDec(pct, privKey) {
-        let Curve = new curve.TwistedEdwardsCurve(
-            new CurveParam('EC_ALT_BN128'),
-        );
+        let Curve = new curve.TwistedEdwardsCurve(new CurveParam('EC_ALT_BN128'),);
         let mimc7 = new mimc.MiMC7();
 
         let curveC0 = Curve.computeScalarMul(pct.c0, types.hexToInt(privKey));
@@ -251,13 +303,14 @@ class publicKeyEncryption {
         return (() => {
             let ret = [];
             for (const [i, e] of pct.c2.entries()) {
-                let hashInput = [curveK.x.toString(16), i.toString(16)];
-                let hashed = types.hexToInt(mimc7.hash(...hashInput));
-                ret.push(
-                    math
-                        .mod(types.hexToInt(e) - hashed, this.prime)
+                let hashInput = [
+                    curveK
+                        .x
                         .toString(16),
-                );
+                    i.toString(16)
+                ];
+                let hashed = types.hexToInt(mimc7.hash(...hashInput));
+                ret.push(math.mod(types.hexToInt(e) - hashed, this.prime).toString(16),);
             }
             return ret;
         })();
@@ -271,25 +324,26 @@ class publicKeyEncryption {
      * @returns
      */
     Dec(pct, privKey, audit) {
-        let Curve = new curve.TwistedEdwardsCurve(
-            new CurveParam('EC_ALT_BN128'),
-        );
+        let Curve = new curve.TwistedEdwardsCurve(new CurveParam('EC_ALT_BN128'),);
         let mimc7 = new mimc.MiMC7();
 
         let curveC0 = Curve.computeScalarMul(pct.c0, types.hexToInt(privKey));
-        let ciphertext = audit === true ? pct.c2 : pct.c1;
+        let ciphertext = audit === true
+            ? pct.c2
+            : pct.c1;
         let curveK = Curve.subAffinePoint(ciphertext, curveC0);
 
         return (() => {
             let ret = [];
             for (const [i, e] of pct.c3.entries()) {
-                let hashInput = [curveK.x.toString(16), i.toString(16)];
-                let hashed = types.hexToInt(mimc7.hash(...hashInput));
-                ret.push(
-                    math
-                        .mod(types.hexToInt(e) - hashed, this.prime)
+                let hashInput = [
+                    curveK
+                        .x
                         .toString(16),
-                );
+                    i.toString(16)
+                ];
+                let hashed = types.hexToInt(mimc7.hash(...hashInput));
+                ret.push(math.mod(types.hexToInt(e) - hashed, this.prime).toString(16),);
             }
             return ret;
         })();
@@ -301,7 +355,7 @@ const Encryption = {
     symmetricKeyEncryption,
     pCT,
     zkmarketpCT,
-    publicKeyEncryption,
+    publicKeyEncryption
 };
 
 export default Encryption;
