@@ -17,6 +17,7 @@ import mimc from '../crypto/mimc';
 import types from '../utils/types';
 
 import napi_func from '../npai_rs/index';
+import { toFrontFormat } from './contentRouterController';
 
 /**
  *
@@ -25,6 +26,7 @@ import napi_func from '../npai_rs/index';
  *
  */
 const acceptTradeController = async (req, res) => {
+    console.log("req.body = ", req.body)
     const txHash = req.body.txHash;
     console.log("txHash = ", txHash)
 
@@ -42,9 +44,11 @@ const acceptTradeController = async (req, res) => {
             const writerInfo = await db
                 .data
                 .getDataInfo('h_k', hK.toLocaleLowerCase())
-            
-            console.log("check book exist = ",await checkRegisterDataTx(types.hexStrToDec(writerInfo.h_ct)))
-            
+
+            console.log(
+                "check book exist = ",
+                await checkRegisterDataTx(types.hexStrToDec(writerInfo.h_ct))
+            )
 
             const ENA_writer = writerInfo.addr_;
 
@@ -73,7 +77,7 @@ const acceptTradeController = async (req, res) => {
             const mimc7 = new mimc.MiMC7();
             const cm = mimc7.hash(ENA_writer, Order[2], Order[3], hK, Order[0]);
             const o_wallet = mimc7.hash(Order[2], Order[3], hK, Order[0]);
-            const cm_wallet = mimc7.hash(0,0,ENA_writer, Order[3], o_wallet);
+            const cm_wallet = mimc7.hash(0, 0, ENA_writer, Order[3], o_wallet);
 
             const penc = new Encryption.publicKeyEncryption();
 
@@ -88,32 +92,70 @@ const acceptTradeController = async (req, res) => {
 
             const [CT_k, CT_k_r, CT_k_key] = penc.zkMarketEnc(pk_cons, ...plaintext);
 
-
             const hk_tmp = mimc7.hash(writerInfo.addr_, writerInfo.enc_key);
 
             const inputs = {
-                cm: types.hexStrToDec(cm).toString(),
-                cmWallet: types.hexStrToDec(cm_wallet).toString(),
-                gRX: CT_k.c0.x.toString(),
-                gRY: CT_k.c0.y.toString(),
-                c1X: CT_k.c1.x.toString(),
-                c1Y: CT_k.c1.y.toString(),
-                ctK: types.hexStrToDec(CT_k.c2[0]).toString(),
-                hK: types.hexStrToDec(hK).toString(),
-                kData: types.hexStrToDec(writerInfo.enc_key).toString(),
-                pkConsX: types.hexStrToDec(Order[0]).toString(),
-                pkConsY: types.hexStrToDec(Order[1]).toString(),
-                enaWriter: types.hexStrToDec(ENA_writer).toString(),
-                r: types.hexStrToDec(Order[2]).toString(),
-                fee: types.hexStrToDec(Order[3]).toString(),
-                ctKKeyX: CT_k_key.x.toString(),
-                ctKKeyY : CT_k_key.y.toString(),
-                ctKX: CT_k_key.x.toString(),
-                ctKR: types.hexStrToDec(CT_k_r).toString(),
+                cm: types
+                    .hexStrToDec(cm)
+                    .toString(),
+                cmWallet: types
+                    .hexStrToDec(cm_wallet)
+                    .toString(),
+                gRX: CT_k
+                    .c0
+                    .x
+                    .toString(),
+                gRY: CT_k
+                    .c0
+                    .y
+                    .toString(),
+                c1X: CT_k
+                    .c1
+                    .x
+                    .toString(),
+                c1Y: CT_k
+                    .c1
+                    .y
+                    .toString(),
+                ctK: types
+                    .hexStrToDec(CT_k.c2[0])
+                    .toString(),
+                hK: types
+                    .hexStrToDec(hK)
+                    .toString(),
+                kData: types
+                    .hexStrToDec(writerInfo.enc_key)
+                    .toString(),
+                pkConsX: types
+                    .hexStrToDec(Order[0])
+                    .toString(),
+                pkConsY: types
+                    .hexStrToDec(Order[1])
+                    .toString(),
+                enaWriter: types
+                    .hexStrToDec(ENA_writer)
+                    .toString(),
+                r: types
+                    .hexStrToDec(Order[2])
+                    .toString(),
+                fee: types
+                    .hexStrToDec(Order[3])
+                    .toString(),
+                ctKKeyX: CT_k_key
+                    .x
+                    .toString(),
+                ctKKeyY: CT_k_key
+                    .y
+                    .toString(),
+                ctKX: CT_k_key
+                    .x
+                    .toString(),
+                ctKR: types
+                    .hexStrToDec(CT_k_r)
+                    .toString(),
                 tkAddr: "0",
                 tkId: "0"
             }
-
 
             console.log(
                 "==========================acceptTrade start=========================="
@@ -143,29 +185,40 @@ const acceptTradeController = async (req, res) => {
                 types.addPrefixHex(types.decStrToHex(inputs.c1Y))
             ];
 
+            let _rec = await sendacceptTx(contract_proof, contract_input)
 
-            try {
-                await sendacceptTx(contract_proof,contract_input)
-            } catch (error) {
-                console.log(error)
-                return res.send(false);
-            }
+            console.log("??? = ", getEoaAddrFromReceipt(_rec))
 
-            console.log("check contract input = ",contract_input)
+            // update trade LOG DB
+
+            db
+                .trade
+                .INSERT_TRADE({
+                    buyer_addr: types.subtractPrefixHex(req.body.Addr),
+                    // buyer_sk : _.get(writerInfo, 'sk_enc'),
+                    buyer_pk: pk_cons.pkEnc.x.toString(16),
+                    title: _.get(writerInfo, 'title'),
+                    h_k: hK.toLocaleLowerCase()
+                })
+            
+            console.log("check addr in db = ", types.subtractPrefixHex(req.body.Addr));
+
+            const textInfo = await db
+                .data
+                .getDataInfo('h_k', hK.toLocaleLowerCase())
+            console.log(textInfo)
+            console.log("format info = ", toFrontFormat(textInfo))
 
             // console.log('notes : ', notes) db.note.INSER_NOTES(...notes)
             // console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())  update trade LOG
-            // DB db.trade.INSERT_TRADE({     buyer_addr : eoaAddr.toLocaleLowerCase(),
-            // buyer_sk : _.get(writerInfo, 'sk_enc'),     buyer_pk :
-            // pk_enc_cons.toLocaleLowerCase(),     title : _.get(writerInfo, 'title'), h_k
-            // : h_k.toLocaleLowerCase(), }) const textInfo = await db.data.getDataInfo(
-            // 'h_k',     h_k ) console.log("textInfo = ", textInfo) console.log("format
-            // info = ",toFrontFormat(textInfo))
-            // return res.send("hello")
+            // DB db     .trade     .INSERT_TRADE({         buyer_addr:
+            // eoaAddr.toLocaleLowerCase(),         buyer_sk: _.get(writerInfo, 'sk_enc'),
+            // buyer_pk: pk_enc_cons.toLocaleLowerCase(),         title: _.get(writerInfo,
+            // 'title'),         h_k: h_k.toLocaleLowerCase()     }); console.log("format
+            // info = ", toFrontFormat(textInfo))
+            return res.send("hello");
         })
-
 }
-
 
 const getEoaAddrFromReceipt = (receipt) => {
     try {
@@ -183,26 +236,25 @@ const getEoaAddrFromReceipt = (receipt) => {
     }
 }
 
-const sendacceptTx = async (proof,inputs) => {
+const sendacceptTx = async (proof, inputs) => {
     try {
-        const receipt = await contracts.tradeContract.acceptTrade(
-            proof,
-            inputs
-        )
-        console.log("check receipt in accept tx = ",receipt)
+        const receipt = await contracts
+            .tradeContract
+            .acceptTrade(proof, inputs)
+        console.log("check receipt in accept tx = ", receipt)
         return receipt;
     } catch (error) {
-        console.log("error in accetp tx = ",error)
+        console.log("error in accetp tx = ", error)
         return undefined;
     }
 }
 
-const checkRegisterDataTx = async (inputs) =>{
+const checkRegisterDataTx = async (inputs) => {
     try {
-        const receipt = await contracts.tradeContract.isRegisteredData(
-            inputs
-        )
-        console.log("check receipt = ",receipt)
+        const receipt = await contracts
+            .tradeContract
+            .isRegisteredData(inputs)
+        console.log("check receipt = ", receipt)
         return receipt;
     } catch (error) {
         return undefined;

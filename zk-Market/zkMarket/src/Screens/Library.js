@@ -23,7 +23,8 @@ function Library({navigation: {
     useEffect(() => {
         let res;
         async function data_() {
-            const addr = await AsyncStorage.getItem('userEOA');
+            const addr = await AsyncStorage.getItem('userENA');
+            const check_pk = await AsyncStorage.getItem('pk_enc_x');
             setbuyer_addr(addr)
             console.log("buyer_addr = ", addr)
             res = await httpCli.get(`content/list/${addr}`);

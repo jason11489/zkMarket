@@ -2,6 +2,7 @@ import fs from 'fs';
 import _ from "lodash";
 import { dbPath } from "../config";
 import db from "../db";
+import types from '../utils/types';
 
 /*
     send Info list :
@@ -14,21 +15,25 @@ import db from "../db";
 */
 export const getContentListController = async (req, res) => {
     console.log('getContentListController')
-    console.log("req = ", _.get(req.params, 'pk_enc'))
+    console.log("params = ",req.params)
+    console.log("req = ", _.get(req.params, 'addr'))
 
-    const sk_enc = _.get(req.query, 'sk_enc');
-    const pk_enc = _.get(req.params, 'pk_enc');
-
+    // const sk_enc = _.get(req.query, 'sk_enc');
+    // const pk_enc = _.get(req.params, 'pk_enc');
+    const Addr = _.get(req.params, 'addr');
+    
     let dataInfoList = []
-    if (pk_enc === undefined) {
+    if (Addr === undefined) {
         dataInfoList = await db
-            .data
-            .getAllDataInfo();
+        .data
+        .getAllDataInfo();
         console.log("Get all data")
     } else {
-        const pk = String(pk_enc).slice(2).toLowerCase()
-        console.log("pk_enc = ", pk)
-        dataInfoList = await db.trade.SELECT_TRADE({ buyer_pk: pk });
+        const _Addr = types.subtractPrefixHex(Addr).toLowerCase();
+        console.log("Addr = " ,_Addr)
+        // const pk = String(pk_enc).slice(2).toLowerCase()
+        // console.log("pk_enc = ", pk)
+        dataInfoList = await db.trade.SELECT_TRADE({ buyer_addr: _Addr });
         console.log("datalist = ",dataInfoList)
     }
 
@@ -41,13 +46,19 @@ export const getContentListController = async (req, res) => {
     // FormData();
     const contentList = []
 
+    loop1 :
     for (let i = 0; i < dataInfoList.length; i++) {
         const _data = await toFrontFormat(dataInfoList[i]);
+        for (let j = 0; j < contentList.length; j++){
+            if (contentList[j].hK == _data.hK) {
+                continue loop1;
+            }
+        }
         contentList.push(_data)
-        // console.log("check data info list = ", _data)
+        console.log("check data info list = ", _data.hK)
     }
-    console.log("check content list = ",Object.keys(contentList[0]))
-    console.log("check content list = ", contentList[0].title)
+    // console.log("check content list = ",Object.keys(contentList[0]))
+    // console.log("check content list = ", contentList[0].title)
     
 
 

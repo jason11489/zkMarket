@@ -4,7 +4,7 @@ import { getContentListController, getDataController } from '../controllers/cont
 const contentRouter = express.Router();
 
 // contentRouter.post('/publish',)
-contentRouter.get('/list/:pk_enc', getContentListController)
+contentRouter.get('/list/:addr', getContentListController)
 
 contentRouter.get('/list', getContentListController)
 

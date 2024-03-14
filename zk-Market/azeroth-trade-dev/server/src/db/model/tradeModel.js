@@ -20,12 +20,12 @@ export default class tradeDB extends DBinterface {
         )
     }
 
-    async SELECT_TRADE({ buyer_sk, buyer_pk }){
+    async SELECT_TRADE({ buyer_sk, buyer_addr }){
         try {
             return (await this.SELECT(
                 ['*'],
                 this.tableName,
-                {key: 'buyer_addr', value: buyer_pk}
+                {key: 'buyer_addr', value: buyer_addr}
             ))[0]
         } catch (error) {
             console.log(error)

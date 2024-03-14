@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Publish_style } from "../../CSS/Publish_style";
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -150,14 +150,12 @@ function Complete({navigation: {
     }, route}) {
     // console.log("Complete page",route.params.cover_img);
 
-    const image_source = require("../../image/sell/complete_back.png");
 
     return (
-
         <SafeAreaView style={styles.container}>
             <View>
                 <ImageBackground
-                    source={image_source}
+                    source={require("../../image/sell/complete_back.png")}
                     style={styles.back_image}
                     onError={(error) => console.log("error in image background ", error)} />
             </View>
@@ -207,7 +205,6 @@ function Complete({navigation: {
                         style={Publish_style.Touchable}
                         title="Confirm"
                         onPress={() => {
-                            // console.log(route.params)
                             navigate("Sell_2")
                         }}>
                         <Text style={Publish_style.button_style}>Next
