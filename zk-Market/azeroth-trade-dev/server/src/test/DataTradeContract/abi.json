@@ -284,6 +284,21 @@
         "internalType": "uint256[]",
         "name": "inputs",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "ct",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256",
+        "name": "addr",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "enaIndex",
+        "type": "uint256"
       }
     ],
     "name": "acceptOrder",

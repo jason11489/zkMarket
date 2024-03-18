@@ -97,6 +97,7 @@ const registDataController = async (req, res) => {
             req.body.pk_own,
             req.body.sk_enc,
             pkEnc_x,
+            pkEnc_y,
             req.body.addr_peer,
             req.body.eoa,
             h_k,

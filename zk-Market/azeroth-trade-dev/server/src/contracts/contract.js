@@ -45,20 +45,22 @@ export default class tradeContract extends Web3Interface {
     async acceptTrade(
         proof,
         snarkInput,
+        ct,
+        addr,
+        enaIndex,
         userEthAddress = Ganache.getAddress(),
         userEthPrivateKey = Ganache.getPrivateKey()
     ) {
-        console.log("error in here0")
 
         const gas = await this
             .contractMethod
-            .acceptOrder(proof, snarkInput)
+            .acceptOrder(proof, snarkInput,ct,addr,enaIndex)
             .estimateGas();
         
         console.log("error in here")
 
         return await this.sendContractCall(
-            this.contractMethod.acceptOrder(proof, snarkInput),
+            this.contractMethod.acceptOrder(proof, snarkInput,ct,addr,enaIndex),
             userEthAddress,
             userEthPrivateKey,
             gas,
