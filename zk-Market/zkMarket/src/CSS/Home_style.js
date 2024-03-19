@@ -367,6 +367,6 @@ export const home_styles = StyleSheet.create({
         textAlign: 'center',
         top:5,
         width: 80,
-        // left:19
+        left:28
     }
 })

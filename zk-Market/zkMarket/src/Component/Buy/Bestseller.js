@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Bestseller_style } from "../../CSS/Bestseller_style";
 import httpCli from "../../http";
+import { gozkWallet } from "../../http/deeplink/gozkWallet";
 
 function Bestseller({navigation: {
         navigate
@@ -78,9 +79,13 @@ function Bestseller({navigation: {
                 <Text style={Bestseller_style.title_style}>
                     Bestsellers
                 </Text>
-                <Image
-                    style={Bestseller_style.card_style}
-                    source={require("../../image/Library/Card.png")}/>
+                <TouchableOpacity
+                onPress={() => {gozkWallet()}}>
+                    <Image
+                        style={Bestseller_style.card_style}
+                        source={require("../../image/Library/Card.png")}/>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => navigate("Library_2")}><Image
                     style={Bestseller_style.menu_style}
                     source={require("../../image/Library/menu.png")}/>

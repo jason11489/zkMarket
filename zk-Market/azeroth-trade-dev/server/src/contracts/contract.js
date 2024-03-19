@@ -57,7 +57,6 @@ export default class tradeContract extends Web3Interface {
             .acceptOrder(proof, snarkInput,ct,addr,enaIndex)
             .estimateGas();
         
-        console.log("error in here")
 
         return await this.sendContractCall(
             this.contractMethod.acceptOrder(proof, snarkInput,ct,addr,enaIndex),

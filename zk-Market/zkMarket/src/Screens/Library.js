@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Library_style } from "../CSS/Library_style";
 import httpCli from "../http";
+import { gozkWallet } from "../http/deeplink/gozkWallet";
 function Library({navigation: {
         navigate
     }}) {
@@ -59,7 +60,7 @@ function Library({navigation: {
         console.log("buyer_addr = ", buyer_addr)
 
         res = await httpCli.get(`content/list/${buyer_addr}`);
-        console.log("check = ",res.data[0].title)
+        console.log("check = ", res.data[0].title)
         await setbook_list(res.data)
         setIsRefreshing(false)
     }
@@ -72,9 +73,12 @@ function Library({navigation: {
                 <Text style={Library_style.title_style}>
                     Library
                 </Text>
-                <Image
-                    style={Library_style.card_style}
-                    source={require("../image/Library/Card.png")}/>
+                <TouchableOpacity onPress={() => {gozkWallet()}}>
+                    <Image
+                        style={Library_style.card_style}
+                        source={require("../image/Library/Card.png")}/>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => navigate("Library_2")}><Image
                     style={Library_style.menu_style}
                     source={require("../image/Library/menu.png")}/>

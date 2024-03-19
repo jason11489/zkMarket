@@ -119,15 +119,17 @@ function Home({ navigation }) {
                             style={{
                                 backgroundColor: 'white'
                             }}
-                            
                         >
                             <ImageBackground
                                 source={require('../image/Background.png')}
                                 style={home_styles.backgroundImage}></ImageBackground>
                             <Text style={home_styles.zkMarket_text}>zkMarket</Text>
-                            <Image
+                            <TouchableOpacity
+                            onPress={() => console.log("???")}>
+                                <Image
                                 source={require('../image/shopping_bag.png')}
                                 style={home_styles.shopping}/>
+                            </TouchableOpacity>
                             <View style={home_styles.yellow_dot}/>
                             <View style={home_styles.Today_Special_circle}>
                                 <Text style={home_styles.Today_Special}>Today's Special</Text>
@@ -202,7 +204,7 @@ function Home({ navigation }) {
                                 horizontal={true}
                                 data={book_sell_list[1]}
                                 renderItem={render_image}/>
-                            <View style={{ height: 15 }} />
+                            <View style={{ height: 45 }} />
 
                             <ImageBackground style={{
                                 width: 353,
@@ -278,8 +280,17 @@ function Home({ navigation }) {
                                 <View style={{
                                     flexDirection: 'row'
                                 }}>
-                                    <View>
-                                        <Image
+                                    <View style={{ zIndex: 1 }}>
+                                        <TouchableOpacity
+                                            onPress={() => { navigation.navigate("Buy_book", book_sell_list[1][get_rand_num()]) }}>
+                                            {/* <View style={{
+                                                width: 138,
+                                                height: 185,
+                                                left: 19,
+                                                borderRadius: 8,
+                                                backgroundColor: 'red',
+                                            }}/> */}
+                                            <Image
                                             style={{
                                                 width: 138,
                                                 height: 185,
@@ -287,6 +298,7 @@ function Home({ navigation }) {
                                                 borderRadius:8
                                             }}
                                             source={{ uri: `data:image/png;base64,${book_sell_list[1][get_rand_num()].image_data}` }} />
+                                        </TouchableOpacity>
                                         <Text style={home_styles.keyword_title}>
                                             {book_sell_list[1][get_rand_num()].title}
                                         </Text>
@@ -297,6 +309,19 @@ function Home({ navigation }) {
                                                 width: 80,
                                                 height: 81,
                                                 left: 28,
+                                                borderRadius:8
+                                            }}
+                                            source={{ uri: `data:image/png;base64,${book_sell_list[1][get_rand_num()].image_data}` }} />
+                                        <Text style={home_styles.keyword_title_2}>
+                                            {book_sell_list[1][get_rand_num()].title}
+                                        </Text>
+                                    </View>
+                                    <View>
+                                        <Image
+                                            style={{
+                                                width: 80,
+                                                height: 81,
+                                                left: 37,
                                                 borderRadius:8
                                             }}
                                             source={{ uri: `data:image/png;base64,${book_sell_list[1][get_rand_num()].image_data}` }} />

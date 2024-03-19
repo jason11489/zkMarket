@@ -17,7 +17,6 @@ import mimc from '../crypto/mimc';
 import types from '../utils/types';
 
 import napi_func from '../npai_rs/index';
-import { toFrontFormat } from './contentRouterController';
 
 /**
  *
@@ -44,6 +43,12 @@ const acceptTradeController = async (req, res) => {
             const writerInfo = await db
                 .data
                 .getDataInfo('h_k', hK.toLocaleLowerCase())
+            
+            console.log(
+                "check book exist = ",
+                await checkRegisterDataTx(types.hexStrToDec(writerInfo.h_ct))
+            )
+
 
             const ENA_writer = writerInfo.addr_;
 
@@ -198,7 +203,7 @@ const acceptTradeController = async (req, res) => {
             console.log("Order[3]  = ",Order[3])
             console.log("ENA_writer  = ",ENA_writer)
 
-            const [cm_ct_k, cm_ct_k_r, cm_ct_k_key] = penc.Enc(audit_pk, pk_peer, o_wallet, "0", "0", Order[3],ENA_writer);
+            const [cm_ct_k, cm_ct_k_r, cm_ct_k_key] = penc.Enc(audit_pk, pk_peer, o_wallet, '0x0', '0x0', Order[3],ENA_writer);
             
             
             const check_dec_pCT = penc.Dec(cm_ct_k, writerInfo.sk_enc, false);
@@ -223,22 +228,8 @@ const acceptTradeController = async (req, res) => {
                     title: _.get(writerInfo, 'title'),
                     h_k: hK.toLocaleLowerCase()
                 })
-            
 
-            const textInfo = await db
-                .data
-                .getDataInfo('h_k', hK.toLocaleLowerCase())
-            console.log(textInfo)
-            console.log("format info = ", toFrontFormat(textInfo))
-
-            // console.log('notes : ', notes) db.note.INSER_NOTES(...notes)
-            // console.log('notes : ', await db.note.SELECT_NOTE_UNREAD())  update trade LOG
-            // DB db     .trade     .INSERT_TRADE({         buyer_addr:
-            // eoaAddr.toLocaleLowerCase(),         buyer_sk: _.get(writerInfo, 'sk_enc'),
-            // buyer_pk: pk_enc_cons.toLocaleLowerCase(),         title: _.get(writerInfo,
-            // 'title'),         h_k: h_k.toLocaleLowerCase()     }); console.log("format
-            // info = ", toFrontFormat(textInfo))
-            return res.send("hello");
+            return res.send("good!!");
         })
 }
 
@@ -266,7 +257,6 @@ const sendacceptTx = async (proof, inputs,ct,addr,enaIndex) => {
         console.log("check receipt in accept tx = ", receipt)
         return receipt;
     } catch (error) {
-        console.log("error in accetp tx = ", error)
         return undefined;
     }
 }
