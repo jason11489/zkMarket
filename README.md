@@ -21,7 +21,7 @@ smart contract
 * Compile contract
   * DIRECTORY_NAME=zkwallet npx hardhat compile
 * Deploy
-  * DIRECTORY_NAME=zkwallet npx hardhat run zkwallet/scripts/zkwallet
+  * DIRECTORY_NAME=zkwallet npx hardhat run zkwallet/scripts/zkwallet --network localhost
  
 
   
