@@ -1,0 +1,2 @@
+zk-Market/azeroth-trade-dev/server/src/snarks/crs/RegistData_crs_pk.dat filter=lfs diff=lfs merge=lfs -text
+zk-Market/azeroth-trade-dev/server/src/snarks/crs/RegistData_crs_pk.json filter=lfs diff=lfs merge=lfs -text
