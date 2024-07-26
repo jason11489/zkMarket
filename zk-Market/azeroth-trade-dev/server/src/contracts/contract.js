@@ -41,6 +41,14 @@ export default class tradeContract extends Web3Interface {
     async isRegisteredData(hCt) {
         return this.localContractCall(this.contractMethod.isRegistered(hCt))
     }
+    
+    async market_getRootTop() {
+        return this.localContractCall(this.contractMethod.market_getRootTop())
+    }
+
+    async market_getMerklePath(index) {
+        return this.localContractCall(this.contractMethod.market_getMerklePath(index))
+    }
 
     async acceptTrade(
         proof,
@@ -52,11 +60,12 @@ export default class tradeContract extends Web3Interface {
         userEthPrivateKey = Ganache.getPrivateKey()
     ) {
 
+        console.log("?")
         const gas = await this
             .contractMethod
             .acceptOrder(proof, snarkInput,ct,addr,enaIndex)
             .estimateGas();
-        
+        console.log("?")
 
         return await this.sendContractCall(
             this.contractMethod.acceptOrder(proof, snarkInput,ct,addr,enaIndex),

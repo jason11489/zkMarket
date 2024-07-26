@@ -64,13 +64,19 @@ const registDataController = async (req, res) => {
         console.log("h_ct = ",h_ct)
         // maek h_K
 
-        const h_k = mimc7.hash(req.body.addr_peer,data_key);
+        const h_k = mimc7.hash(req.body.sk_enc, data_key);
+        console.log("sk = ", req.body.sk_enc)
+        console.log("typeof sk = ", typeof req.body.sk_enc)
         console.log("h_k = ",typeof h_k)
 
         
+        const contract_input = [
+            hexToDec(h_ct),
+            hexToDec(h_k)
+        ];
         
         try {
-            await sendRegisterDataTx(hexToDec(h_ct))
+            await sendRegisterDataTx(contract_input)
         } catch (error) {
             console.log(error)
             console.log("tiger 2222")
