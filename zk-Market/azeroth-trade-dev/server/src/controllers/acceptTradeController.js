@@ -240,6 +240,8 @@ const acceptTradeController = async (req, res) => {
 
     // napi_func.init() 실행하게 되면 contract, sever 코드 고쳐야한다잉
     // console.log("zk snark init = ", napi_func.init());
+    // console.log(napi_func);
+    // let _ = await napi_func.init();
     const _proof = await napi_func.prove(inputs);
     const proof = JSON.parse(_proof)
     console.log("proof = ", proof);
@@ -312,18 +314,18 @@ const acceptTradeController = async (req, res) => {
     )
     console.log(_rec)
 
-    // db
-    //     .trade
-    //     .INSERT_TRADE({
-    //         buyer_addr: types.subtractPrefixHex(req.body.Addr),
-    //         buyer_sk: _.get(writerInfo, 'sk_enc'),
-    //         buyer_pk: pk_cons
-    //             .pkEnc
-    //             .x
-    //             .toString(16),
-    //         title: _.get(writerInfo, 'title'),
-    //         h_k: hK.toLocaleLowerCase()
-    //     })
+    db
+        .trade
+        .INSERT_TRADE({
+            buyer_addr: types.subtractPrefixHex(req.body.Addr),
+            buyer_sk: _.get(writerInfo, 'sk_enc'),
+            buyer_pk: pk_cons
+                .pkEnc
+                .x
+                .toString(16),
+            title: _.get(writerInfo, 'title'),
+            h_k: hK.toLocaleLowerCase()
+        })
 
     return res.send("good!!");
 }
